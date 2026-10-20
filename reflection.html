@@ -19,17 +19,60 @@ $('clear').onclick=()=>{for(let i=0;i<4;i++)selectScore(i,0);$('outcome').value=
 let userId='';try{userId=localStorage.getItem(key)||'';if(!/^[0-9a-f-]{36}$/i.test(userId)){userId=newAnonymousId();localStorage.setItem(key,userId);}}catch(e){userId=newAnonymousId();}
 if(!isLive()){$('modeNotice').hidden=false;$('modeNotice').textContent='Демонстрационный режим: адрес сервера еще не настроен, отправка и сбор ответов отключены. Организатор должен указать URL Google Apps Script в config.js.';}
 function wait(t){return new Promise(r=>setTimeout(r,t));}
-$('survey').addEventListener('submit',async ev=>{ev.preventDefault();if(values.some(v=>!v)){showMessage(status,'Пожалуйста, поставьте оценку в каждом из четырех секторов.','err');return;}
-if(!$('outcome').value||!$('next').value){showMessage(status,'Выберите достигнутый результат и следующий шаг.','err');return;}
-if(!isLive()){showMessage(status,'Мишень заполнена. Чтобы собирать реальные ответы, организатору нужно подключить Google Таблицу.','pending');return;}
-const button=$('send');button.disabled=true;showMessage(status,'Отправляем оценки и ожидаем подтверждения записи в таблице…','pending');
-try{const body=new URLSearchParams();const nonce=newAnonymousId();body.set('id',userId);body.set('nonce',nonce);values.forEach((v,i)=>body.set('q'+(i+1),String(v)));body.set('outcome',$('outcome').value);body.set('next',$('next').value);body.set('comment',$('comment').value.slice(0,350));
-// fetch no-cors: ответ скрыт браузером. Подтверждаем запись отдельным чтением receipt через JSONP.
-await fetch(endpoint(),{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:body.toString(),redirect:'follow'});
-let saved=false;for(let i=0;i<5;i++){await wait(1200+i*550);const result=await requestJsonp('receipt',{id:userId,nonce:nonce});if(result&&result.saved){saved=true;break;}}
-if(!saved)throw new Error('Запись пока не подтверждена. Проверьте соединение и попробуйте еще раз.');
-showMessage(status,'Спасибо! Оценки сохранены. Общая мишень ведущего обновится автоматически.','ok');
-}catch(e){showMessage(status,'Не удалось подтвердить отправку: '+e.message+' Если связь пропала, повторите попытку — ответ не будет задвоен.','err');}
-finally{button.disabled=false;}
+// Native form POST is a fallback for browsers that reject cross-site fetch.
+// It does not require JavaScript access to the cross-origin response.
+function postViaForm(params){return new Promise((resolve,reject)=>{
+  const frame=document.createElement('iframe'); const frameName='mk_upload_'+Date.now();
+  frame.name=frameName;frame.style.cssText='position:absolute;width:1px;height:1px;opacity:0;pointer-events:none;left:-9999px';frame.setAttribute('title','Фоновая отправка результатов');
+  const form=document.createElement('form');form.method='POST';form.action=endpoint();form.target=frameName;form.style.display='none';
+  params.forEach((v,k)=>{const input=document.createElement('input');input.type='hidden';input.name=k;input.value=v;form.append(input);});
+  let finished=false;
+  const cleanup=()=>{if(!finished){finished=true;form.remove();setTimeout(()=>frame.remove(),18000);}};
+  const timer=setTimeout(()=>{cleanup();resolve();},1200);
+  try{document.body.append(frame,form);form.submit();}catch(err){clearTimeout(timer);cleanup();reject(err);}
+});}
+async function checkReceipt(id,nonce){let errors=0;
+  for(let i=0;i<4;i++){
+    await wait(1100+i*550);
+    try{let data=await requestJsonp('receipt',{id:id,nonce:nonce});if(data?.ok&&data.saved)return true;}
+    catch(err){errors++;if(errors>=2)break;}
+  }
+  return false;
+}
+function addConnectionHint(){if(document.getElementById('connectionHint'))return;
+ const box=document.createElement('p');box.id='connectionHint';box.className='tiny';box.style.cssText='margin:8px 0 0;line-height:1.5';
+ box.append('Если Google не отвечает на телефоне, откройте сайт в Chrome (не во встроенном браузере приложения). ');
+ const a=document.createElement('a');a.target='_blank';a.rel='noopener noreferrer';a.textContent='Проверить доступ к Google';
+ const u=new URL(endpoint());u.searchParams.set('action','stats');a.href=u.toString();box.append(a,' — должна открыться страница с данными в формате JSON.');
+ status.after(box);
+}
+$('survey').addEventListener('submit',async ev=>{
+ ev.preventDefault();
+ if(values.some(v=>!v)){showMessage(status,'Пожалуйста, поставьте оценку в каждом из четырех секторов.','err');return;}
+ if(!$('outcome').value||!$('next').value){showMessage(status,'Выберите достигнутый результат и следующий шаг.','err');return;}
+ if(!isLive()){showMessage(status,'Адрес сервера Google пока не настроен.','err');return;}
+ const button=$('send');button.disabled=true;showMessage(status,'Отправляем оценки в Google Таблицу…','pending');
+ const body=new URLSearchParams();const nonce=newAnonymousId();body.set('id',userId);body.set('nonce',nonce);
+ values.forEach((v,i)=>body.set('q'+(i+1),String(v)));
+ body.set('outcome',$('outcome').value);body.set('next',$('next').value);body.set('comment',$('comment').value.slice(0,350));
+ try{
+   let fetchWorked=false;
+   try{
+     const timeout=new Promise((_,reject)=>setTimeout(()=>reject(new Error('Сеть не отвечает')),10000));
+     await Promise.race([fetch(endpoint(),{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:body.toString(),redirect:'follow'}),timeout]);
+     fetchWorked=true;
+   }catch(err){
+     showMessage(status,'Переходим к резервному способу отправки для телефона…','pending');
+     await postViaForm(body);
+   }
+   const saved=await checkReceipt(userId,nonce);
+   if(saved){showMessage(status,'Спасибо! Ответ подтвержден и сохранен в Google Таблице.','ok');}
+   else{
+     showMessage(status,'Отправка была выполнена, но телефон не смог получить подтверждение Google. Ответ МОГ сохраниться. Не отправляйте его повторно сразу: проверьте лист «Ответы МК» или общую мишень с компьютера.','pending');
+     addConnectionHint();
+   }
+ }catch(err){
+   showMessage(status,'Не удалось выполнить отправку: '+err.message+'. Проверьте интернет и попробуйте открыть страницу в Chrome.','err');addConnectionHint();
+ }finally{button.disabled=false;}
 });})();
 </script></body></html>
