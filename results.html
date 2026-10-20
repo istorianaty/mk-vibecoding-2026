@@ -6,6 +6,10 @@
 #refresh:disabled{cursor:wait;opacity:.72}
 .refreshHelp{margin:6px 0 15px;font-size:13px;color:#526f5c}
 @media(max-width:830px){.dash-header > #refresh{width:100%;min-height:50px;font-size:16px}}
+
+/* Мобильные элементы панели диагностики */
+#checkGoogleLink{display:inline-block;margin:0 0 18px;color:#0b6e58;font-weight:800;overflow-wrap:anywhere;font-size:14px}
+#refreshHelp{line-height:1.6}
 </style></head><body><header class="top"><div class="top-inner"><strong class="brand">ИСТОРИЯ НА ТЫ / ЖИВАЯ МИШЕНЬ</strong><a href="index.html">Вернуться на сайт МК</a></div></header>
 <main class="page"><div class="dash-header"><div><div class="tag">Экран ведущего · результаты участников</div><h1>Насколько мы попали в цель?</h1><p class="lead">Мишень заполняется по мере поступления анонимных ответов. Оценка 5 ближе к центру, 1 — у внешнего края.</p></div><button aria-describedby="refreshHelp" class="secondary" id="refresh" type="button">Обновить сейчас</button></div>
 <div class="notice" hidden="" id="modeNotice"></div><p aria-live="polite" class="refreshHelp" id="refreshHelp">Данные обновляются автоматически. На телефоне можно нажать кнопку для проверки вручную.</p><div class="dashboard"><section class="frame collective"><div class="dash-header"><h2>Общая мишень</h2><span class="chip" id="liveStatus">Ожидание</span></div><div id="groupTarget"></div><p class="tiny">Каждая точка — одна оценка участника в соответствующем секторе. Совпадающие оценки слегка разнесены для наглядности; точка не обозначает личность.</p><div class="qr-card"><img alt="QR-код на страницу рефлексии" src="reflection-qr.svg"/><div><strong>QR для участников</strong><p>Откройте на телефоне</p><p id="link">https://istorianaty.github.io/mk-vibecoding-2026/reflection.html</p></div></div></section>
@@ -22,6 +26,34 @@ const marks=$('collective-marks');marks.innerHTML='';const distribution=data.dis
    const [x,y]=polar(220,215,radius,theta);const circle=document.createElementNS('http://www.w3.org/2000/svg','circle');circle.setAttribute('cx',x);circle.setAttribute('cy',y);circle.setAttribute('r',n>70?'2.6':'4');circle.setAttribute('fill','#ae6b31');circle.setAttribute('opacity','.78');circle.setAttribute('pointer-events','none');marks.append(circle);
  }}}
 $('lastUpdated').textContent='Последнее обновление: '+new Date().toLocaleTimeString('ru-RU');$('liveStatus').textContent=total?'● Поступают ответы':'Ожидаем ответы';}
+// Отдельная загрузка статистики для экрана ведущего. У формы участника свой механизм,
+// поэтому ее, Apps Script и общую библиотеку не меняем.
+function loadDashboardStats(waitMs=35000){return new Promise((resolve,reject)=>{
+  const cb='mkCallback_dash_'+Date.now()+'_'+Math.random().toString(36).slice(2,10);
+  const tag=document.createElement('script');tag.async=true;
+  let settled=false,timer;
+  function finish(err,data){if(settled)return;settled=true;clearTimeout(timer);tag.onerror=null;tag.onload=null;tag.remove();try{delete window[cb];}catch(_){window[cb]=undefined;}if(err)reject(err);else resolve(data);}
+  window[cb]=(value)=>finish(null,value);
+  tag.onerror=()=>finish(new Error('Браузер не загрузил сценарий Google. Проверьте интернет и доступ к script.google.com и script.googleusercontent.com'));
+  tag.onload=()=>{if(!settled)finish(new Error('Google вернул страницу без данных. Проверьте, что доступ к Apps Script открыт для всех'))};
+  timer=setTimeout(()=>finish(new Error('Google не ответил за '+Math.round(waitMs/1000)+' секунд')),waitMs);
+  try{
+    const u=new URL(endpoint());u.searchParams.set('action','stats');u.searchParams.set('callback',cb);u.searchParams.set('_',String(Date.now()));
+    tag.src=u.toString();document.head.appendChild(tag);
+  }catch(e){finish(new Error('Неверная ссылка на статистику: '+e.message));}
+});}
+async function requestDashboardStats(){
+  try{return await loadDashboardStats(35000);}
+  catch(e){
+    if(/Браузер не загрузил|Google вернул страницу/.test(e.message)){
+      message('Повторная проверка соединения с Google…');
+      await new Promise(r=>setTimeout(r,1800));
+      return await loadDashboardStats(35000);
+    }
+    throw e;
+  }
+}
+
 let lastSnapshot=null;
 let lastCheck=0;
 function message(text){$('refreshHelp').textContent=text;}
@@ -42,7 +74,7 @@ async function update(trigger='auto'){
       message('Показаны демонстрационные результаты.');
       return;
     }
-    const data=await requestJsonp('stats');
+    const data=await requestDashboardStats();
     if(!data||!data.ok)throw new Error('Сервер не подтвердил получение статистики');
     const fingerprint=JSON.stringify({count:data.count,averages:data.averages,distribution:data.distribution,outcomes:data.outcomes,next:data.next});
     const changed=lastSnapshot!==null&&fingerprint!==lastSnapshot;
@@ -54,8 +86,8 @@ async function update(trigger='auto'){
     message(changed?'Статистика обновилась. Проверено в '+at+'.':'Связь работает. Новых ответов пока нет. Проверено в '+at+'.');
   }catch(e){
     $('liveStatus').textContent='Нет связи с таблицей';
-    $('lastUpdated').textContent='Ошибка: '+e.message;
-    message('Не удалось обновить: '+e.message+'. Попробуйте Chrome, а также проверьте доступ к Google по ссылке ниже.');
+    $('lastUpdated').textContent='Обновление не выполнено';
+    message('Не удалось получить статистику: '+e.message+'. Данные в Google Таблице не затронуты. Проверьте адрес Google ниже.');
     const info=$('refreshHelp');if(!document.getElementById('checkGoogleLink')){
       const a=document.createElement('a');a.id='checkGoogleLink';a.target='_blank';a.rel='noopener noreferrer';a.textContent='Проверить Google Apps Script';
       const u=new URL(endpoint());u.searchParams.set('action','stats');a.href=u.toString();info.after(a);
