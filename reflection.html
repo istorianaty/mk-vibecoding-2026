@@ -1,0 +1,35 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#163c33"><title>Мишень результата · История на Ты</title><link rel="stylesheet" href="reflection.css"></head><body>
+<header class="top"><div class="top-inner"><strong class="brand">ИСТОРИЯ НА ТЫ / МАСТЕР-КЛАСС</strong><a href="index.html">← Вернуться на сайт МК</a></div></header>
+<main class="page"><div class="tag">Анонимная рефлексия · 1 минута</div><h1>Попали в цель?</h1><p class="lead">Отметьте, насколько вы приблизились к своим целям на мастер-классе. Выберите оценку <b>в каждом секторе мишени</b>: 5 — в центре, 1 — у внешнего края. Можно нажимать на круги или на цифры справа.</p>
+<div id="modeNotice" class="notice" hidden></div>
+<form id="survey" autocomplete="off"><div class="layout"><section class="frame"><h2>Моя мишень</h2><div id="targetBox" class="target-wrap"></div><div class="scale"><span><b>5</b> — полностью уверен(а)</span><span><b>3</b> — частично</span><span><b>1</b> — нужна помощь</span></div><p class="tiny" style="text-align:center">Точка появится в каждом секторе после выбора оценки.</p></section>
+<section class="frame"><h2>Четыре результата</h2><div id="rates"></div><label class="field" for="outcome">Какого результата удалось достичь?</label><select required class="select" id="outcome"><option value="">Выберите один вариант</option><option value="prompt">Составил(а) промпт</option><option value="code">Получил(а) HTML-код</option><option value="opened">Открыл(а) готовый тренажер</option><option value="intro">Пока познакомился(ась) с алгоритмом</option></select>
+<label class="field" for="next">Что планируете сделать следующим?</label><select required class="select" id="next"><option value="">Выберите один вариант</option><option value="game">Создать учебную игру</option><option value="repeat">Сделать тренажер для повторения</option><option value="case">Разработать практические задания</option><option value="tech">Разобраться с техническими вопросами</option></select>
+<label class="field" for="comment">Что хотелось бы освоить дополнительно? <span class="tiny">(необязательно)</span></label><textarea id="comment" maxlength="350" placeholder="Одно предложение, без фамилий и персональных данных"></textarea>
+<div class="notice">ФИО и email не запрашиваются. Ответы в общем экране показываются только в обобщенном виде. Текст пожеланий виден организатору в закрытой таблице. После повторной отправки с того же браузера прежние оценки заменяются.</div>
+<div class="actions"><button id="send" type="submit" class="primary">Отправить рефлексию</button><button id="clear" type="button" class="secondary">Сбросить выбор</button></div><div id="status" role="status" aria-live="polite" class="msg"></div></section></div></form><p class="footer">«История на Ты» · Обратная связь о мастер-классе · Сушко Людмила Александровна</p></main>
+<script src="config.js"></script><script src="reflection_common.js"></script><script>
+(()=>{'use strict';const values=[0,0,0,0];const key='mk_reflection_anonymous_id_v1';const $=id=>document.getElementById(id);const status=$('status');$('targetBox').innerHTML=targetMarkup('myTarget');
+$('rates').innerHTML=CRITERIA.map((c,i)=>`<div class="criterion"><div class="criterion-title">${i+1}. ${escapeHtml(c.label)}</div><div class="rate" data-rate="${i}" role="group" aria-label="${escapeHtml(c.label)}">${[1,2,3,4,5].map(v=>`<button type="button" data-sector="${i}" data-score="${v}" aria-pressed="false" aria-label="Оценка ${v} из 5">${v}</button>`).join('')}</div></div>`).join('');
+function selectScore(sector,score){values[sector]=score;document.querySelectorAll(`#rates [data-sector="${sector}"]`).forEach(x=>x.setAttribute('aria-pressed',String(Number(x.dataset.score)===score)));drawMarkers('myTarget',values);}
+$('rates').addEventListener('click',ev=>{let b=ev.target.closest('[data-sector][data-score]');if(b)selectScore(Number(b.dataset.sector),Number(b.dataset.score));});
+$('myTarget').addEventListener('click',ev=>{const z=ev.target.closest('.zone');if(z)selectScore(Number(z.dataset.sector),Number(z.dataset.score));});
+$('myTarget').addEventListener('keydown',ev=>{if(ev.key==='Enter'||ev.key===' '){const z=ev.target.closest('.zone');if(z){ev.preventDefault();selectScore(Number(z.dataset.sector),Number(z.dataset.score));}}});
+$('clear').onclick=()=>{for(let i=0;i<4;i++)selectScore(i,0);$('outcome').value='';$('next').value='';$('comment').value='';status.className='msg';};
+let userId='';try{userId=localStorage.getItem(key)||'';if(!/^[0-9a-f-]{36}$/i.test(userId)){userId=newAnonymousId();localStorage.setItem(key,userId);}}catch(e){userId=newAnonymousId();}
+if(!isLive()){$('modeNotice').hidden=false;$('modeNotice').textContent='Демонстрационный режим: адрес сервера еще не настроен, отправка и сбор ответов отключены. Организатор должен указать URL Google Apps Script в config.js.';}
+function wait(t){return new Promise(r=>setTimeout(r,t));}
+$('survey').addEventListener('submit',async ev=>{ev.preventDefault();if(values.some(v=>!v)){showMessage(status,'Пожалуйста, поставьте оценку в каждом из четырех секторов.','err');return;}
+if(!$('outcome').value||!$('next').value){showMessage(status,'Выберите достигнутый результат и следующий шаг.','err');return;}
+if(!isLive()){showMessage(status,'Мишень заполнена. Чтобы собирать реальные ответы, организатору нужно подключить Google Таблицу.','pending');return;}
+const button=$('send');button.disabled=true;showMessage(status,'Отправляем оценки и ожидаем подтверждения записи в таблице…','pending');
+try{const body=new URLSearchParams();const nonce=newAnonymousId();body.set('id',userId);body.set('nonce',nonce);values.forEach((v,i)=>body.set('q'+(i+1),String(v)));body.set('outcome',$('outcome').value);body.set('next',$('next').value);body.set('comment',$('comment').value.slice(0,350));
+// fetch no-cors: ответ скрыт браузером. Подтверждаем запись отдельным чтением receipt через JSONP.
+await fetch(endpoint(),{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:body.toString(),redirect:'follow'});
+let saved=false;for(let i=0;i<5;i++){await wait(1200+i*550);const result=await requestJsonp('receipt',{id:userId,nonce:nonce});if(result&&result.saved){saved=true;break;}}
+if(!saved)throw new Error('Запись пока не подтверждена. Проверьте соединение и попробуйте еще раз.');
+showMessage(status,'Спасибо! Оценки сохранены. Общая мишень ведущего обновится автоматически.','ok');
+}catch(e){showMessage(status,'Не удалось подтвердить отправку: '+e.message+' Если связь пропала, повторите попытку — ответ не будет задвоен.','err');}
+finally{button.disabled=false;}
+});})();
+</script></body></html>

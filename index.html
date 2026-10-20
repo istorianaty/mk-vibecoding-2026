@@ -118,7 +118,7 @@ nav a{white-space:nowrap;padding:9px 8px;font-size:12px}
 </head>
 <body>
 <a class="skip" href="#home">К материалам</a>
-<header class="top"><div class="wrap bar"><a class="brand" href="#home"><span class="mark">И</span><span>История на Ты <span style="color:#779185;font-weight:550">/ Мастер-класс</span></span></a><nav aria-label="Разделы сайта"><a href="#myth">Миф или факт?</a><a href="#theory">Теория</a><a href="#showcase">Показ</a><a href="#practice">Практикум</a><a href="#handouts">Памятки</a><a href="#example">Пример</a><a href="#verification">Проверка</a><a href="#examples">Делюсь опытом</a><a href="#gifts">Подарки</a></nav></div></header>
+<header class="top"><div class="wrap bar"><a class="brand" href="#home"><span class="mark">И</span><span>История на Ты <span style="color:#779185;font-weight:550">/ Мастер-класс</span></span></a><nav aria-label="Разделы сайта"><a href="#myth">Миф или факт?</a><a href="#theory">Теория</a><a href="#showcase">Показ</a><a href="#practice">Практикум</a><a href="#handouts">Памятки</a><a href="#example">Пример</a><a href="#verification">Проверка</a><a href="#examples">Делюсь опытом</a><a href="#gifts">Подарки</a><a href="#reflection">Рефлексия</a></nav></div></header>
 <main id="home">
 <section class="hero"><div class="wrap heroGrid"><div><div class="heroBrand">ИСТОРИЯ НА ТЫ</div>
 <div class="eyebrow">МАСТЕР-КЛАСС</div>
@@ -234,4 +234,5 @@ document.getElementById('viewerNext').addEventListener('click',()=>show(current+
 dlg.addEventListener('click', e=>{if(e.target===dlg)dlg.close();});
 dlg.addEventListener('keydown',e=>{if(e.key==='ArrowLeft'){e.preventDefault();show(current-1)}if(e.key==='ArrowRight'){e.preventDefault();show(current+1)}});
 })();
-</script></body></html>
+</script><section id="reflection" style="background:#f4f2e9;padding:48px 20px;color:#1e3d31;font-family:Segoe UI,Arial,sans-serif"><div style="max-width:1120px;margin:auto;background:#fff;border:1px solid #d8e2d8;border-radius:22px;padding:30px"><div style="font-size:12px;font-weight:800;letter-spacing:.12em;color:#986e35">ФИНАЛ МАСТЕР-КЛАССА</div><h2 style="font:750 clamp(28px,4vw,40px) Georgia,serif;margin:10px 0">Попали в цель?</h2><p style="max-width:740px;line-height:1.6">Оцените четыре результата мастер-класса на интерактивной мишени. Ответы формируют общую мишень в прямом эфире и сохраняются в таблицу для методического анализа.</p><a href="reflection.html" style="display:inline-block;background:#214c3b;color:#fff;padding:13px 21px;border-radius:10px;text-decoration:none;font-weight:750;margin:8px 8px 8px 0">Заполнить мишень ↗</a></div></section>
+</body></html>
