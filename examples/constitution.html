@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тренажёр: Конституция РБ</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            color: #e0e0e0;
+        }
+        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+        .header { text-align: center; padding: 30px 0; border-bottom: 2px solid #e94560; margin-bottom: 20px; }
+        .header h1 { font-size: 2.5em; color: #fff; text-shadow: 0 0 20px rgba(233,69,96,0.5); margin-bottom: 10px; }
+        .header .subtitle { color: #a0a0a0; font-size: 1.1em; }
+        .nav-tabs { display: flex; gap: 10px; margin-bottom: 25px; flex-wrap: wrap; justify-content: center; }
+        .nav-tab {
+            padding: 12px 24px; background: rgba(255,255,255,0.05); border: 2px solid transparent;
+            border-radius: 12px; cursor: pointer; transition: all 0.3s ease; font-size: 0.95em;
+            font-weight: 600; color: #b0b0b0; white-space: nowrap;
+        }
+        .nav-tab:hover { background: rgba(233,69,96,0.15); color: #fff; transform: translateY(-2px); }
+        .nav-tab.active { background: #e94560; color: #fff; border-color: #e94560; box-shadow: 0 4px 15px rgba(233,69,96,0.4); }
+        .content-section { display: none; animation: fadeIn 0.4s ease; }
+        .content-section.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .theory-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 20px; }
+        .theory-card {
+            background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 16px; padding: 25px; transition: all 0.3s ease; cursor: pointer;
+        }
+        .theory-card:hover { background: rgba(255,255,255,0.06); border-color: #e94560; transform: translateY(-3px); box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+        .theory-card h3 { color: #e94560; margin-bottom: 12px; font-size: 1.2em; display: flex; align-items: center; gap: 10px; }
+        .theory-card .article-num { background: #e94560; color: #fff; padding: 2px 10px; border-radius: 20px; font-size: 0.75em; }
+        .theory-card p { line-height: 1.7; color: #c0c0c0; font-size: 0.95em; }
+        .theory-card .highlight { color: #ffd700; font-weight: 600; }
+        .flashcard-container { perspective: 1000px; max-width: 700px; margin: 0 auto; }
+        .flashcard {
+            width: 100%; height: 400px; position: relative; transform-style: preserve-3d;
+            transition: transform 0.6s; cursor: pointer;
+        }
+        .flashcard.flipped { transform: rotateY(180deg); }
+        .flashcard-face {
+            position: absolute; width: 100%; height: 100%; backface-visibility: hidden;
+            border-radius: 20px; display: flex; flex-direction: column;
+            justify-content: center; align-items: center; padding: 40px;
+            text-align: center; box-shadow: 0 15px 40px rgba(0,0,0,0.4);
+        }
+        .flashcard-front { background: linear-gradient(145deg, #1e3a5f 0%, #0f3460 100%); border: 2px solid #e94560; }
+        .flashcard-back { background: linear-gradient(145deg, #0f3460 0%, #1e3a5f 100%); border: 2px solid #ffd700; transform: rotateY(180deg); }
+        .flashcard-front h3 { color: #e94560; font-size: 1.3em; margin-bottom: 20px; }
+        .flashcard-front .question { font-size: 1.4em; color: #fff; line-height: 1.5; }
+        .flashcard-back .answer { font-size: 1.2em; color: #ffd700; line-height: 1.6; }
+        .flashcard-back .article-ref { margin-top: 20px; color: #a0a0a0; font-size: 0.9em; }
+        .flashcard-hint { position: absolute; bottom: 20px; font-size: 0.85em; color: #888; }
+        .flashcard-controls { display: flex; justify-content: center; gap: 15px; margin-top: 30px; flex-wrap: wrap; }
+        .btn {
+            padding: 12px 28px; border: none; border-radius: 10px; cursor: pointer;
+            font-size: 1em; font-weight: 600; transition: all 0.3s ease;
+            display: flex; align-items: center; gap: 8px;
+        }
+        .btn-primary { background: #e94560; color: #fff; }
+        .btn-primary:hover { background: #ff6b6b; transform: translateY(-2px); box-shadow: 0 5px 20px rgba(233,69,96,0.4); }
+        .btn-secondary { background: rgba(255,255,255,0.1); color: #fff; border: 2px solid rgba(255,255,255,0.2); }
+        .btn-secondary:hover { background: rgba(255,255,255,0.2); border-color: #fff; }
+        .btn-success { background: #2ecc71; color: #fff; }
+        .btn-success:hover { background: #27ae60; }
+        .btn-danger { background: #e74c3c; color: #fff; }
+        .btn-danger:hover { background: #c0392b; }
+        .progress-bar { width: 100%; height: 8px; background: rgba(255,255,255,0.1); border-radius: 4px; margin: 20px 0; overflow: hidden; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, #e94560, #ffd700); border-radius: 4px; transition: width 0.3s ease; }
+        .progress-text { text-align: center; margin-bottom: 15px; color: #a0a0a0; font-size: 0.95em; }
+        .matching-container { max-width: 900px; margin: 0 auto; }
+        .matching-instruction { text-align: center; margin-bottom: 25px; color: #c0c0c0; font-size: 1.1em; }
+        .matching-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
+        @media (max-width: 768px) { .matching-grid { grid-template-columns: 1fr; } }
+        .matching-column { display: flex; flex-direction: column; gap: 12px; }
+        .matching-item {
+            padding: 18px 20px; background: rgba(255,255,255,0.05); border: 2px solid rgba(255,255,255,0.1);
+            border-radius: 12px; cursor: pointer; transition: all 0.3s ease; font-size: 0.95em;
+            line-height: 1.5; position: relative; overflow: hidden;
+        }
+        .matching-item:hover { background: rgba(255,255,255,0.1); border-color: #e94560; transform: translateX(5px); }
+        .matching-item.selected { border-color: #e94560; background: rgba(233,69,96,0.15); box-shadow: 0 0 20px rgba(233,69,96,0.2); }
+        .matching-item.correct { border-color: #2ecc71; background: rgba(46,204,113,0.15); pointer-events: none; }
+        .matching-item.wrong { border-color: #e74c3c; background: rgba(231,76,60,0.15); animation: shake 0.5s ease; }
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-10px); } 75% { transform: translateX(10px); } }
+        .matching-item.matched { opacity: 0.4; pointer-events: none; }
+        .matching-score { text-align: center; font-size: 1.3em; margin: 20px 0; color: #ffd700; }
+        .quiz-container { max-width: 800px; margin: 0 auto; }
+        .quiz-question {
+            background: rgba(255,255,255,0.03); border: 2px solid #e94560;
+            border-radius: 20px; padding: 35px; margin-bottom: 25px;
+        }
+        .quiz-question h3 { color: #e94560; margin-bottom: 15px; font-size: 1.1em; }
+        .quiz-question .question-text { font-size: 1.25em; color: #fff; line-height: 1.6; margin-bottom: 25px; }
+        .quiz-options { display: flex; flex-direction: column; gap: 12px; }
+        .quiz-option {
+            padding: 16px 22px; background: rgba(255,255,255,0.05); border: 2px solid rgba(255,255,255,0.1);
+            border-radius: 12px; cursor: pointer; transition: all 0.3s ease;
+            font-size: 1em; color: #d0d0d0;
+        }
+        .quiz-option:hover { background: rgba(255,255,255,0.1); border-color: #e94560; transform: translateX(8px); }
+        .quiz-option.correct { border-color: #2ecc71; background: rgba(46,204,113,0.2); color: #2ecc71; }
+        .quiz-option.wrong { border-color: #e74c3c; background: rgba(231,76,60,0.2); color: #e74c3c; }
+        .quiz-option.disabled { pointer-events: none; opacity: 0.6; }
+        .quiz-feedback {
+            margin-top: 20px; padding: 18px; border-radius: 12px;
+            font-size: 1.05em; line-height: 1.6; display: none;
+        }
+        .quiz-feedback.show { display: block; animation: fadeIn 0.3s ease; }
+        .quiz-feedback.correct { background: rgba(46,204,113,0.1); border: 2px solid #2ecc71; color: #2ecc71; }
+        .quiz-feedback.wrong { background: rgba(231,76,60,0.1); border: 2px solid #e74c3c; color: #e74c3c; }
+        .quiz-stats { display: flex; justify-content: space-around; margin: 20px 0; padding: 15px; background: rgba(255,255,255,0.03); border-radius: 12px; }
+        .stat-item { text-align: center; }
+        .stat-value { font-size: 1.8em; font-weight: 700; color: #e94560; }
+        .stat-label { font-size: 0.85em; color: #888; margin-top: 5px; }
+        .search-box { width: 100%; max-width: 500px; margin: 0 auto 25px; position: relative; }
+        .search-box input {
+            width: 100%; padding: 14px 50px 14px 20px; background: rgba(255,255,255,0.05);
+            border: 2px solid rgba(255,255,255,0.1); border-radius: 12px; color: #fff;
+            font-size: 1em; outline: none; transition: all 0.3s ease;
+        }
+        .search-box input:focus { border-color: #e94560; background: rgba(255,255,255,0.08); }
+        .search-box input::placeholder { color: #666; }
+        .stats-panel { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 25px; }
+        .stat-card {
+            background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 14px; padding: 20px; text-align: center; transition: all 0.3s ease;
+        }
+        .stat-card:hover { transform: translateY(-3px); border-color: #e94560; }
+        .stat-card .icon { font-size: 2em; margin-bottom: 10px; }
+        .stat-card .number { font-size: 1.8em; font-weight: 700; color: #e94560; }
+        .stat-card .label { color: #888; font-size: 0.9em; margin-top: 5px; }
+        .filter-tags { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; justify-content: center; }
+        .filter-tag {
+            padding: 8px 16px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 20px; cursor: pointer; font-size: 0.85em; transition: all 0.3s ease; color: #b0b0b0;
+        }
+        .filter-tag:hover, .filter-tag.active { background: #e94560; border-color: #e94560; color: #fff; }
+        .section-title { text-align: center; font-size: 1.5em; color: #fff; margin-bottom: 25px; padding-bottom: 15px; border-bottom: 2px solid rgba(233,69,96,0.3); }
+        @media (max-width: 768px) {
+            .header h1 { font-size: 1.8em; }
+            .nav-tab { padding: 10px 16px; font-size: 0.85em; }
+            .flashcard { height: 350px; }
+            .theory-grid { grid-template-columns: 1fr; }
+        }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #0f3460; }
+        ::-webkit-scrollbar-thumb { background: #e94560; border-radius: 4px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Тренажёр: Конституция РБ</h1>
+            <div class="subtitle">Подготовка к ЦТ и ЦЭ | Разделы I–V | Органы власти | ВНС</div>
+        </div>
+        <div class="nav-tabs">
+            <div class="nav-tab active" data-section="theory">Теория</div>
+            <div class="nav-tab" data-section="flashcards">Флеш-карточки</div>
+            <div class="nav-tab" data-section="matching">Соотношения</div>
+            <div class="nav-tab" data-section="quiz">Рандомайзер</div>
+            <div class="nav-tab" data-section="stats">Статистика</div>
+        </div>
+
+        <!-- THEORY SECTION -->
+        <div id="theory" class="content-section active">
+            <div class="search-box">
+                <input type="text" id="theorySearch" placeholder="Поиск по статьям, терминам...">
+            </div>
+            <div class="filter-tags">
+                <div class="filter-tag active" data-filter="all">Все</div>
+                <div class="filter-tag" data-filter="section1">Раздел I</div>
+                <div class="filter-tag" data-filter="section2">Раздел II</div>
+                <div class="filter-tag" data-filter="section3">Раздел III</div>
+                <div class="filter-tag" data-filter="section4">Раздел IV</div>
+                <div class="filter-tag" data-filter="section5">Раздел V</div>
+                <div class="filter-tag" data-filter="vns">ВНС</div>
+                <div class="filter-tag" data-filter="president">Президент</div>
+                <div class="filter-tag" data-filter="parliament">Парламент</div>
+            </div>
+            <div class="theory-grid" id="theoryGrid"></div>
+        </div>
+
+        <!-- FLASHCARDS SECTION -->
+        <div id="flashcards" class="content-section">
+            <div class="section-title">Флеш-карточки</div>
+            <div class="progress-text" id="flashcardProgress">Карточка 1 из 30</div>
+            <div class="progress-bar"><div class="progress-fill" id="flashcardProgressBar" style="width:3%"></div></div>
+            <div class="flashcard-container">
+                <div class="flashcard" id="flashcard" onclick="flipCard()">
+                    <div class="flashcard-face flashcard-front">
+                        <h3>Вопрос</h3>
+                        <div class="question" id="flashcardQuestion"></div>
+                        <div class="flashcard-hint">Нажмите, чтобы перевернуть</div>
+                    </div>
+                    <div class="flashcard-face flashcard-back">
+                        <div class="answer" id="flashcardAnswer"></div>
+                        <div class="article-ref" id="flashcardArticle"></div>
+                        <div class="flashcard-hint">Нажмите, чтобы перевернуть</div>
+                    </div>
+                </div>
+            </div>
+            <div class="flashcard-controls">
+                <button class="btn btn-danger" onclick="markDifficult()">Сложно</button>
+                <button class="btn btn-secondary" onclick="prevCard()">Назад</button>
+                <button class="btn btn-primary" onclick="flipCard()">Перевернуть</button>
+                <button class="btn btn-secondary" onclick="nextCard()">Вперёд</button>
+                <button class="btn btn-success" onclick="markLearned()">Знаю</button>
+                <button class="btn btn-secondary" onclick="shuffleCards()">Перемешать</button>
+            </div>
+            <div style="text-align:center;margin-top:20px;color:#888;">
+                <span id="learnedCount">Изучено: 0</span> | 
+                <span id="difficultCount">Сложные: 0</span> | 
+                <span id="remainingCount">Осталось: 30</span>
+            </div>
+        </div>
+
+        <!-- MATCHING SECTION -->
+        <div id="matching" class="content-section">
+            <div class="section-title">Задания на соотношение</div>
+            <div class="matching-instruction">Соедините понятие с его определением. Выберите сначала элемент слева, затем соответствующий справа.</div>
+            <div class="matching-score" id="matchingScore">Счёт: 0 / 0</div>
+            <div class="matching-container">
+                <div class="matching-grid" id="matchingGrid"></div>
+            </div>
+            <div class="flashcard-controls">
+                <button class="btn btn-primary" onclick="initMatching()">Новая игра</button>
+                <button class="btn btn-secondary" onclick="showMatchingHint()">Подсказка</button>
+            </div>
+        </div>
+
+        <!-- QUIZ SECTION -->
+        <div id="quiz" class="content-section">
+            <div class="section-title">Рандомайзер вопросов</div>
+            <div class="quiz-stats">
+                <div class="stat-item"><div class="stat-value" id="quizCorrect">0</div><div class="stat-label">Правильно</div></div>
+                <div class="stat-item"><div class="stat-value" id="quizTotal">0</div><div class="stat-label">Всего</div></div>
+                <div class="stat-item"><div class="stat-value" id="quizPercent">0%</div><div class="stat-label">Процент</div></div>
+                <div class="stat-item"><div class="stat-value" id="quizStreak">0</div><div class="stat-label">Серия</div></div>
+            </div>
+            <div class="quiz-container" id="quizContainer"></div>
+            <div class="flashcard-controls">
+                <button class="btn btn-primary" onclick="nextQuizQuestion()">Следующий вопрос</button>
+                <button class="btn btn-secondary" onclick="resetQuiz()">Сбросить</button>
+            </div>
+        </div>
+
+        <!-- STATS SECTION -->
+        <div id="stats" class="content-section">
+            <div class="section-title">Ваша статистика</div>
+            <div class="stats-panel">
+                <div class="stat-card"><div class="icon">K</div><div class="number" id="statFlashcardsTotal">0</div><div class="label">Всего карточек</div></div>
+                <div class="stat-card"><div class="icon">+</div><div class="number" id="statFlashcardsLearned">0</div><div class="label">Изучено</div></div>
+                <div class="stat-card"><div class="icon">!</div><div class="number" id="statFlashcardsDifficult">0</div><div class="label">Сложные</div></div>
+                <div class="stat-card"><div class="icon">=</div><div class="number" id="statMatchingScore">0</div><div class="label">Соотношения (макс.)</div></div>
+                <div class="stat-card"><div class="icon">?</div><div class="number" id="statQuizCorrect">0</div><div class="label">Правильно в рандомайзере</div></div>
+                <div class="stat-card"><div class="icon">%</div><div class="number" id="statQuizPercent">0%</div><div class="label">Процент правильных</div></div>
+            </div>
+            <div style="text-align:center;margin-top:30px;">
+                <button class="btn btn-danger" onclick="resetAllStats()">Сбросить всю статистику</button>
+            </div>
+        </div>
+    </div>
+
+<script>
+// ==================== DATA ====================
+const theoryData = [
+    { tags: "section1", num: "Ст. 1", title: "Основа государства", text: "РБ — <span class='highlight'>унитарное демократическое социальное правовое государство</span>. Обладает верховенством и полнотой власти на своей территории." },
+    { tags: "section1", num: "Ст. 2", title: "Высшая ценность", text: "<span class='highlight'>Человек, его права, свободы и гарантии их реализации</span> — высшая ценность и цель общества и государства." },
+    { tags: "section1", num: "Ст. 3", title: "Источник власти", text: "<span class='highlight'>Единственный источник государственной власти и носитель суверенитета — народ</span>. Насильственное изменение конституционного строя наказывается по закону." },
+    { tags: "section1", num: "Ст. 4", title: "Демократия", text: "Осуществляется на основе <span class='highlight'>идеологии белорусского государства</span> + многообразие политических институтов и мнений. Идеология партий не может быть обязательной." },
+    { tags: "section1", num: "Ст. 6", title: "Разделение власти", text: "Государственная власть осуществляется на основе <span class='highlight'>разделения на законодательную, исполнительную и судебную</span>. Органы <span class='highlight'>самостоятельны, взаимодействуют, сдерживают и уравновешивают</span> друг друга." },
+    { tags: "section1", num: "Ст. 7", title: "Верховенство права", text: "Конституция имеет <span class='highlight'>высшую юридическую силу и прямое действие</span> на всей территории. Акты, противоречащие Конституции, не имеют юридической силы." },
+    { tags: "section1", num: "Ст. 13", title: "Собственность", text: "<span class='highlight'>Недра, воды, леса — исключительная собственность государства</span>. Земли сельхозназначения — в собственности государства." },
+    { tags: "section1", num: "Ст. 17", title: "Языки", text: "Государственные языки: <span class='highlight'>белорусский и русский</span>." },
+    { tags: "section2", num: "Ст. 21", title: "Высшая цель", text: "Обеспечение прав и свобод граждан — <span class='highlight'>высшая цель государства</span>. Право на достойный уровень жизни." },
+    { tags: "section2", num: "Ст. 22–23", title: "Равенство и ограничения", text: "Все <span class='highlight'>равны перед законом</span>. Ограничение прав — только в случаях, предусмотренных законом (нац. безопасность, общественный порядок, нравственность, здоровье, права других)." },
+    { tags: "section2", num: "Ст. 24–25", title: "Жизнь и достоинство", text: "Право на жизнь; смертная казнь — исключительная мера до отмены. <span class='highlight'>Запрет пыток</span>, жестокого, бесчеловечного обращения. Свобода, неприкосновенность, достоинство личности." },
+    { tags: "section2", num: "Ст. 26–27", title: "Презумпция и свидетельство", text: "<span class='highlight'>Презумпция невиновности</span>. Не принуждение к даче показаний против себя и близких родственников. Доказательства, полученные с нарушением закона, не имеют юридической силы." },
+    { tags: "section2", num: "Ст. 32", title: "Семья", text: "Брак — <span class='highlight'>союз женщины и мужчины</span>. Равные права супругов. Приоритет воспитания детей в семье. Дети отделяются от семьи только по решению суда." },
+    { tags: "section2", num: "Ст. 33", title: "Свобода слова", text: "<span class='highlight'>Монополизация СМИ и цензура не допускаются</span>." },
+    { tags: "section2", num: "Ст. 36", title: "Объединения", text: "<span class='highlight'>Судьи, прокуроры, КГК, военизированные органы, военнослужащие не могут быть членами политических партий</span>." },
+    { tags: "section2", num: "Ст. 37–38", title: "Участие в управлении", text: "Непосредственно (референдумы, обсуждение законов) и через представителей. <span class='highlight'>Избирательное право: всеобщее, равное, прямое или косвенное, тайное голосование</span>." },
+    { tags: "section2", num: "Ст. 41–43", title: "Труд и отдых", text: "Право на труд; <span class='highlight'>рабочая неделя ≤40 часов</span>; право на забастовку; запрет принудительного труда. Равное вознаграждение за труд равной ценности." },
+    { tags: "section2", num: "Ст. 45", title: "Здоровье", text: "<span class='highlight'>Бесплатное лечение за счёт государственных средств</span>." },
+    { tags: "section2", num: "Ст. 49", title: "Образование", text: "<span class='highlight'>Бесплатность общего среднего и профтехобразования</span>. Среднее специальное и высшее — на конкурсной основе бесплатно в государственных учреждениях." },
+    { tags: "section2", num: "Ст. 52–57", title: "Обязанности", text: "Соблюдать Конституцию и законы; уважать символы; беречь историко-культурное наследие; <span class='highlight'>патриотизм — долг каждого</span>; уплата налогов; <span class='highlight'>защита РБ — обязанность и священный долг</span>." },
+    { tags: "section2", num: "Ст. 59–62", title: "Гарантии", text: "Органы несут ответственность за нарушение прав. Защита в <span class='highlight'>компетентном, независимом и беспристрастном суде</span>. Право на юридическую помощь; противодействие оказанию правовой помощи запрещено." },
+    { tags: "section2", num: "Ст. 63", title: "Чрезвычайное положение", text: "Приостановление прав — только в условиях ЧП или военного положения. <span class='highlight'>Не могут ограничиваться права по ст. 24 (жизнь), ч. 3 ст. 25 (пытки), ст. 26 (презумпция), ст. 31 (совесть)</span>." },
+    { tags: "section3", num: "Ст. 64–68", title: "Принципы выборов", text: "<span class='highlight'>Всеобщие</span> (с 18 лет, кроме недееспособных и осуждённых), <span class='highlight'>свободные, равные, прямые, тайные</span>. Единый день голосования — <span class='highlight'>последнее воскресенье февраля</span>." },
+    { tags: "section3", num: "Ст. 70", title: "Финансирование", text: "За счёт государства. <span class='highlight'>Запрет иностранного финансирования</span> выборов." },
+    { tags: "section3", num: "Ст. 71", title: "ЦИК", text: "Организует выборы Президента, делегатов ВНС, депутатов Палаты, членов Совета Республики, местных Советов; референдумы. Председатель и члены избираются <span class='highlight'>ВНС на 5 лет</span>." },
+    { tags: "section3", num: "Ст. 74", title: "Референдум", text: "Назначает Президент: по своей инициативе, предложению ВНС, Палаты+Совета (большинством от полного состава), или <span class='highlight'>≥450 тыс. граждан</span> (в т.ч. ≥30 тыс. от каждой области и Минска)." },
+    { tags: "section3", num: "Ст. 77", title: "Неотменяемость", text: "Решения референдума могут быть изменены <span class='highlight'>только путём референдума</span>." },
+    { tags: "vns section4", num: "Ст. 89¹", title: "Статус ВНС", text: "<span class='highlight'>Высший представительный орган народовластия</span>. Определяет стратегические направления развития, обеспечивает незыблемость конституционного строя, преемственность поколений, гражданское согласие." },
+    { tags: "vns section4", num: "Ст. 89²", title: "Состав ВНС", text: "Президент; Президент, прекративший полномочия; представители властей; местных Советов; гражданского общества. <span class='highlight'>Предельная численность — 1200 человек. Срок — 5 лет</span>. Созыв ЦИК не позднее 60 дней после выборов." },
+    { tags: "vns section4", num: "Ст. 89³", title: "Полномочия ВНС", text: "Утверждает направления политики, военную доктрину, концепцию нац. безопасности; программы соц-экон. развития; <span class='highlight'>предлагает изменения в Конституцию и референдумы</span>; рассматривает легитимность выборов; <span class='highlight'>смещает Президента</span>; вводит ЧП/военное положение при бездействии Президента; избирает судей Конституционного и Верховного судов, ЦИК (по предложению Президента); устанавливает праздники; награждает Президента; даёт обязательные поручения." },
+    { tags: "vns section4", num: "Ст. 89⁴–89⁵", title: "Заседания и решения", text: "Заседания — <span class='highlight'>не реже 1 раза в год</span>. Внеочередные — по инициативе Президента, Президиума ВНС, обеих палат, или ≥150 тыс. граждан. <span class='highlight'>Решения обязательны для исполнения</span>, могут отменять акты госорганов (кроме судебных)." },
+    { tags: "president section4", num: "Ст. 79", title: "Статус Президента", text: "<span class='highlight'>Глава государства, гарант Конституции, прав и свобод</span>. Олицетворяет единство народа; гарантирует реализацию направлений политики; представляет РБ; обеспечивает стабильность, преемственность, взаимодействие органов власти." },
+    { tags: "president section4", num: "Ст. 80–81", title: "Выборы Президента", text: "Кандидат: гражданин РБ <span class='highlight'>по рождению, ≥40 лет, проживание в РБ ≥20 лет, без иностранного гражданства/ВНЖ</span>. Срок — 5 лет, не более 2 сроков. Избирается непосредственно народом. ≥100 тыс. подписей." },
+    { tags: "president section4", num: "Ст. 84", title: "Полномочия Президента", text: "Назначает референдумы и выборы; распускает палаты; назначает Премьер-министра (с согласия Палаты), членов Правительства; назначает судей общей юрисдикции; подписывает законы (право вето); вводит <span class='highlight'>ЧП (с утверждением Совета Республики в 3-дневный срок)</span>; вводит военное положение; <span class='highlight'>Главнокомандующий Вооружёнными Силами</span>; формирует Совет Безопасности." },
+    { tags: "president section4", num: "Ст. 88", title: "Отставка и смещение", text: "Отставка — принимается Палатой представителей. Досрочное освобождение по здоровью — <span class='highlight'>≥2/3 от полного состава каждой палаты</span>. Смещение ВНС — при систематическом/грубом нарушении Конституции, гос. измене, тяжком преступлении. Инициатива: ≥1/3 Палаты или ≥150 тыс. граждан. Решение — большинством от полного состава ВНС после заключения КС." },
+    { tags: "president section4", num: "Ст. 88¹", title: "Вакансия", text: "Полномочия переходят к <span class='highlight'>Председателю Совета Республики</span> до присяги нового Президента. При гибели в результате покушения/терроризма/агрессии: заседания Совета Безопасности под его руководством; вводится ЧП или военное положение." },
+    { tags: "parliament section4", num: "Ст. 90–91", title: "Парламент", text: "<span class='highlight'>Представительный и законодательный орган</span>. Палата представителей — <span class='highlight'>110 депутатов</span>, прямое избрание. Совет Республики — палата территориального представительства: <span class='highlight'>по 8 от каждой области и Минска + 8 от Президента</span> (пожизненно — Президент, прекративший полномочия)." },
+    { tags: "parliament section4", num: "Ст. 92", title: "Требования к депутатам", text: "Палата — <span class='highlight'>≥21 год</span>; Совет — <span class='highlight'>≥30 лет, проживание ≥5 лет</span> в области/Минске. Депутаты Палаты на профессиональной основе. Несовместимость: нельзя одновременно в двух палатах, с членством в Правительстве, с должностью Президента или судьи." },
+    { tags: "parliament section4", num: "Ст. 94", title: "Досрочное прекращение", text: "Палата — при отказе в доверии Правительству, вотуме недоверия, <span class='highlight'>двукратном отказе в согласии на Премьер-министра</span>. Также по заключению КС о нарушении Конституции. Запрет роспуска: в ЧП/военное положение; последние 6 мес. полномочий Президента; при рассмотрении его отставки/смещения; в течение года со дня первых заседаний; в последний год полномочий Парламента." },
+    { tags: "parliament section4", num: "Ст. 97–98", title: "Компетенция палат", text: "Палата: законодательная инициатива; рассматривает бюджет; <span class='highlight'>предварительное согласие на Премьер-министра</span>; заслушивает программу Правительства; вотум недоверия (не ранее года после одобрения программы); ежегодно — информацию Генпрокурора, КГК, Нацбанка. Совет: одобряет законы; <span class='highlight'>предварительное согласие на Генпрокурора, председателя КГК, Нацбанка</span>; распускает местные Советы; рассматривает указы о ЧП/военном положении (≤3 дней)." },
+    { tags: "parliament section4", num: "Ст. 99–100", title: "Законодательный процесс", text: "Инициатива: Президент, ВНС, депутаты, Совет, Правительство, <span class='highlight'>≥50 тыс. граждан</span>. Сначала Палата, затем Совет. Принят — большинством от полного состава каждой палаты. Президент подписывает в течение 2 недель или возвращает с возражениями. Преодоление вето — <span class='highlight'>≥2/3 от полного состава каждой палаты</span>." },
+    { tags: "section4", num: "Ст. 106", title: "Правительство", text: "<span class='highlight'>Совет Министров — центральный орган государственного управления</span>. Исполнительная власть. <span class='highlight'>Подотчётно Президенту, ответственно перед Парламентом</span>. Слагает полномочия перед вновь избранным Президентом." },
+    { tags: "section4", num: "Ст. 106", title: "Премьер-министр", text: "Назначается Президентом с <span class='highlight'>предварительного согласия Палаты представителей</span>. При двукратном отказе — Президент назначает и.о., распускает Палату. Несёт персональную ответственность. Ежегодно информирует ВНС о выполнении программ." },
+    { tags: "section4", num: "Ст. 109–110", title: "Суды", text: "Судебная власть — судами. Принципы: территориальность и специализация. <span class='highlight'>Чрезвычайные суды запрещены</span>. Судьи независимы, подчиняются только закону." },
+    { tags: "section4", num: "Ст. 112¹", title: "Верховный Суд", text: "Возглавляет систему судов общей юрисдикции. <span class='highlight'>Высший судебный орган</span>. Председатель, заместители, судьи — <span class='highlight'>избираются и освобождаются ВНС</span>." },
+    { tags: "section4", num: "Ст. 116", title: "Конституционный Суд", text: "<span class='highlight'>12 судей</span> (высококвалифицированные специалисты, как правило с учёной степенью). Председатель, заместитель, судьи — <span class='highlight'>избираются и освобождаются ВНС</span>. Срок — <span class='highlight'>11 лет</span>." },
+    { tags: "section5", num: "Ст. 117–118", title: "Местное самоуправление", text: "Через местные Советы депутатов, исполнительные органы, ТОС, референдумы, собрания. <span class='highlight'>Срок — 5 лет</span>." },
+    { tags: "section5", num: "Ст. 119", title: "Исполнительные органы", text: "Руководители назначаются Президентом или в установленном им порядке. <span class='highlight'>Утверждаются местными Советами депутатов</span>." },
+    { tags: "section5", num: "Ст. 121", title: "Компетенция местных Советов", text: "Утверждают программы развития, <span class='highlight'>местные бюджеты и отчёты</span>; устанавливают <span class='highlight'>местные налоги и сборы</span>; порядок управления коммунальной собственностью; назначают местные референдумы." },
+    { tags: "section5", num: "Ст. 123", title: "Роспуск", text: "<span class='highlight'>Совет Республики</span> распускает местный Совет при систематическом или грубом нарушении законодательства." },
+    { tags: "section4", num: "Ст. 125–126", title: "Прокуратура", text: "Надзор за исполнением законов. <span class='highlight'>Генпрокурор</span> назначается Президентом <span class='highlight'>с предварительного согласия Совета Республики</span>. Подотчётен Президенту. Нижестоящие прокуроры назначаются Генпрокурором." },
+    { tags: "section4", num: "Ст. 129–130", title: "КГК", text: "Государственный контроль за бюджетом, собственностью, финансами. Образуется Президентом. <span class='highlight'>Председатель назначается Президентом с согласия Совета Республики</span>." },
+    { tags: "section4", num: "Ст. 136", title: "Национальный банк", text: "Регулирует кредитные отношения, денежное обращение. <span class='highlight'>Исключительное право эмиссии денег</span>. Председатель и члены Правления назначаются Президентом <span class='highlight'>с согласия Совета Республики</span>." }
+];
+
+const flashcardsData = [
+    { q: "Какова форма государства РБ?", a: "Унитарное демократическое социальное правовое государство", article: "Ст. 1" },
+    { q: "Кто является единственным источником государственной власти?", a: "Народ", article: "Ст. 3" },
+    { q: "На какие три ветви разделена государственная власть?", a: "Законодательная, исполнительная, судебная", article: "Ст. 6" },
+    { q: "Какие языки являются государственными?", a: "Белорусский и русский", article: "Ст. 17" },
+    { q: "Какова максимальная продолжительность рабочей недели?", a: "40 часов", article: "Ст. 41" },
+    { q: "Какой орган является высшим представительным органом народовластия?", a: "Всебелорусское народное собрание (ВНС)", article: "Ст. 89¹" },
+    { q: "Какова предельная численность делегатов ВНС?", a: "1200 человек", article: "Ст. 89²" },
+    { q: "Какой срок полномочий ВНС?", a: "5 лет", article: "Ст. 89²" },
+    { q: "Как часто проводятся заседания ВНС?", a: "Не реже одного раза в год", article: "Ст. 89⁴" },
+    { q: "Кто избирает судей Конституционного и Верховного судов?", a: "Всебелорусское народное собрание", article: "Ст. 89³" },
+    { q: "Каков возрастной ценз для Президента?", a: "Не моложе 40 лет", article: "Ст. 80" },
+    { q: "Сколько сроков может занимать один Президент?", a: "Не более двух сроков", article: "Ст. 81" },
+    { q: "Какой срок полномочий Президента?", a: "5 лет", article: "Ст. 81" },
+    { q: "Кто назначает Премьер-министра?", a: "Президент с предварительного согласия Палаты представителей", article: "Ст. 106" },
+    { q: "Сколько депутатов в Палате представителей?", a: "110 депутатов", article: "Ст. 91" },
+    { q: "Какова компетенция Совета Республики по отношению к местным Советам?", a: "Может распускать при систематическом/грубом нарушении законодательства", article: "Ст. 123" },
+    { q: "Какой минимальный возраст для депутата Палаты представителей?", a: "21 год", article: "Ст. 92" },
+    { q: "Какой минимальный возраст для члена Совета Республики?", a: "30 лет", article: "Ст. 92" },
+    { q: "Кто возглавляет систему судов общей юрисдикции?", a: "Верховный Суд", article: "Ст. 112¹" },
+    { q: "Сколько судей в Конституционном Суде?", a: "12 судей", article: "Ст. 116" },
+    { q: "Какой срок полномочий судей Конституционного Суда?", a: "11 лет", article: "Ст. 116" },
+    { q: "Кто назначает Генерального прокурора?", a: "Президент с предварительного согласия Совета Республики", article: "Ст. 126" },
+    { q: "Какие объекты находятся в исключительной собственности государства?", a: "Недра, воды, леса", article: "Ст. 13" },
+    { q: "Кто не может быть членом политических партий?", a: "Судьи, прокуроры, КГК, военизированные органы, военнослужащие", article: "Ст. 36" },
+    { q: "Какие права не могут ограничиваться при ЧП?", a: "Право на жизнь (ст. 24), запрет пыток (ч. 3 ст. 25), презумпция невиновности (ст. 26), свобода совести (ст. 31)", article: "Ст. 63" },
+    { q: "Какой кворум для изменения Конституции Парламентом?", a: "Не менее 2/3 от полного состава каждой палаты", article: "Ст. 140" },
+    { q: "Какие разделы Конституции могут быть изменены только референдумом?", a: "Разделы I, II, IV, VIII", article: "Ст. 140" },
+    { q: "Кто переходит полномочия Президента при вакансии?", a: "Председатель Совета Республики", article: "Ст. 88¹" },
+    { q: "Какой орган даёт предварительное согласие на назначение Генпрокурора, председателя КГК и Нацбанка?", a: "Совет Республики", article: "Ст. 84, 98" },
+    { q: "Когда проводятся выборы депутатов?", a: "В единый день голосования — последнее воскресенье февраля", article: "Ст. 67" }
+];
+
+const matchingData = [
+    { left: "Ст. 1", right: "РБ — унитарное демократическое социальное правовое государство" },
+    { left: "Ст. 2", right: "Человек, его права и свободы — высшая ценность" },
+    { left: "Ст. 3", right: "Единственный источник власти — народ" },
+    { left: "Ст. 6", right: "Разделение власти на законодательную, исполнительную, судебную" },
+    { left: "Ст. 13", right: "Недра, воды, леса — исключительная собственность государства" },
+    { left: "Ст. 17", right: "Государственные языки: белорусский и русский" },
+    { left: "Ст. 33", right: "Монополизация СМИ и цензура не допускаются" },
+    { left: "Ст. 36", right: "Судьи, прокуроры, КГК, военнослужащие не могут быть членами партий" },
+    { left: "Ст. 41", right: "Рабочая неделя не более 40 часов" },
+    { left: "Ст. 45", right: "Бесплатное лечение за счёт государственных средств" },
+    { left: "Ст. 49", right: "Бесплатность общего среднего и профтехобразования" },
+    { left: "Ст. 57", right: "Защита РБ — обязанность и священный долг" },
+    { left: "Ст. 63", right: "Не могут ограничиваться права на жизнь, запрет пыток, презумпция, совесть" },
+    { left: "Ст. 67", right: "Единый день голосования — последнее воскресенье февраля" },
+    { left: "Ст. 71", right: "ЦИК избирается ВНС на 5 лет" },
+    { left: "Ст. 74", right: "Референдум по инициативе ≥450 тыс. граждан" },
+    { left: "Ст. 77", right: "Решения референдума изменяются только референдумом" },
+    { left: "Ст. 79", right: "Президент — глава государства, гарант Конституции" },
+    { left: "Ст. 80", right: "Кандидат в Президенты: ≥40 лет, проживание ≥20 лет" },
+    { left: "Ст. 81", right: "Срок полномочий Президента — 5 лет, не более 2 сроков" },
+    { left: "Ст. 84", right: "Президент — Главнокомандующий Вооружёнными Силами" },
+    { left: "Ст. 88", right: "Досрочное освобождение — ≥2/3 от полного состава каждой палаты" },
+    { left: "Ст. 88¹", right: "Вакансия Президента — полномочия переходят к Председателю Совета Республики" },
+    { left: "Ст. 89¹", right: "ВНС — высший представительный орган народовластия" },
+    { left: "Ст. 89²", right: "ВНС: предельная численность 1200, срок 5 лет" },
+    { left: "Ст. 89³", right: "ВНС смещает Президента при систематическом нарушении Конституции" },
+    { left: "Ст. 89⁴", right: "Заседания ВНС — не реже 1 раза в год" },
+    { left: "Ст. 89⁵", right: "Решения ВНС обязательны для исполнения" },
+    { left: "Ст. 91", right: "Палата представителей — 110 депутатов; Совет Республики — 64 члена" },
+    { left: "Ст. 92", right: "Палата: ≥21 год; Совет: ≥30 лет, проживание ≥5 лет" },
+    { left: "Ст. 94", right: "Палата распускается при двукратном отказе в согласии на Премьера" },
+    { left: "Ст. 97", right: "Палата даёт предварительное согласие на Премьер-министра" },
+    { left: "Ст. 98", right: "Совет даёт предварительное согласие на Генпрокурора, КГК, Нацбанк" },
+    { left: "Ст. 99", right: "Законодательная инициатива: ≥50 тыс. граждан" },
+    { left: "Ст. 100", right: "Преодоление вето Президента — ≥2/3 от полного состава каждой палаты" },
+    { left: "Ст. 106", right: "Правительство подотчётно Президенту, ответственно перед Парламентом" },
+    { left: "Ст. 110", right: "Чрезвычайные суды запрещены" },
+    { left: "Ст. 112¹", right: "Верховный Суд — высший судебный орган" },
+    { left: "Ст. 116", right: "Конституционный Суд: 12 судей, срок 11 лет" },
+    { left: "Ст. 118", right: "Срок полномочий местных Советов — 5 лет" },
+    { left: "Ст. 121", right: "Местные Советы утверждают местные бюджеты и налоги" },
+    { left: "Ст. 123", right: "Совет Республики распускает местные Советы при нарушении законов" },
+    { left: "Ст. 126", right: "Генпрокурор назначается Президентом с согласия Совета Республики" },
+    { left: "Ст. 129", right: "Председатель КГК назначается Президентом с согласия Совета Республики" },
+    { left: "Ст. 136", right: "Нацбанк имеет исключительное право эмиссии денег" }
+];
+
+const quizData = [
+    { q: "Какова форма государства РБ?", options: ["Федеративное", "Унитарное демократическое социальное правовое", "Конфедеративное", "Монархия"], correct: 1, article: "Ст. 1" },
+    { q: "Кто является единственным источником государственной власти?", options: ["Президент", "Парламент", "Народ", "Правительство"], correct: 2, article: "Ст. 3" },
+    { q: "На какие ветви разделена государственная власть?", options: ["Законодательная и исполнительная", "Законодательная, исполнительная, судебная", "Верховная и местная", "Федеральная и региональная"], correct: 1, article: "Ст. 6" },
+    { q: "Какие языки являются государственными в РБ?", options: ["Только белорусский", "Белорусский и русский", "Только русский", "Белорусский, русский и польский"], correct: 1, article: "Ст. 17" },
+    { q: "Какова максимальная продолжительность рабочей недели?", options: ["35 часов", "40 часов", "45 часов", "48 часов"], correct: 1, article: "Ст. 41" },
+    { q: "Какой орган является высшим представительным органом народовластия?", options: ["Парламент", "Президент", "ВНС", "Правительство"], correct: 2, article: "Ст. 89¹" },
+    { q: "Какова предельная численность делегатов ВНС?", options: ["500", "800", "1000", "1200"], correct: 3, article: "Ст. 89²" },
+    { q: "Какой срок полномочий ВНС?", options: ["3 года", "4 года", "5 лет", "6 лет"], correct: 2, article: "Ст. 89²" },
+    { q: "Как часто проводятся заседания ВНС?", options: ["Ежемесячно", "Ежеквартально", "Не реже 1 раза в год", "Раз в 2 года"], correct: 2, article: "Ст. 89⁴" },
+    { q: "Кто избирает судей Конституционного и Верховного судов?", options: ["Президент", "Парламент", "ВНС", "ЦИК"], correct: 2, article: "Ст. 89³" },
+    { q: "Каков возрастной ценз для Президента?", options: ["30 лет", "35 лет", "40 лет", "45 лет"], correct: 2, article: "Ст. 80" },
+    { q: "Сколько сроков может занимать один Президент?", options: ["1", "2", "3", "Неограниченно"], correct: 1, article: "Ст. 81" },
+    { q: "Какой срок полномочий Президента?", options: ["4 года", "5 лет", "6 лет", "7 лет"], correct: 1, article: "Ст. 81" },
+    { q: "Кто назначает Премьер-министра?", options: ["Президент самостоятельно", "Президент с согласия Палаты представителей", "Парламент", "ВНС"], correct: 1, article: "Ст. 106" },
+    { q: "Сколько депутатов в Палате представителей?", options: ["100", "110", "120", "150"], correct: 1, article: "Ст. 91" },
+    { q: "Какой минимальный возраст для депутата Палаты представителей?", options: ["18 лет", "21 год", "25 лет", "30 лет"], correct: 1, article: "Ст. 92" },
+    { q: "Какой минимальный возраст для члена Совета Республики?", options: ["21 год", "25 лет", "30 лет", "35 лет"], correct: 2, article: "Ст. 92" },
+    { q: "Кто возглавляет систему судов общей юрисдикции?", options: ["Конституционный Суд", "Верховный Суд", "Президент", "ВНС"], correct: 1, article: "Ст. 112¹" },
+    { q: "Сколько судей в Конституционном Суде?", options: ["9", "10", "11", "12"], correct: 3, article: "Ст. 116" },
+    { q: "Какой срок полномочий судей Конституционного Суда?", options: ["5 лет", "7 лет", "9 лет", "11 лет"], correct: 3, article: "Ст. 116" },
+    { q: "Кто назначает Генерального прокурора?", options: ["Президент самостоятельно", "Президент с согласия Совета Республики", "Палата представителей", "ВНС"], correct: 1, article: "Ст. 126" },
+    { q: "Какие объекты в исключительной собственности государства?", options: ["Земли", "Недра, воды, леса", "Предприятия", "Жилые дома"], correct: 1, article: "Ст. 13" },
+    { q: "Кто не может быть членом политических партий?", options: ["Учителя", "Врачи", "Судьи, прокуроры, КГК, военнослужащие", "Студенты"], correct: 2, article: "Ст. 36" },
+    { q: "Какие права не ограничиваются при ЧП?", options: ["Свобода передвижения", "Право на жизнь, запрет пыток, презумпция, совесть", "Право собственности", "Свобода слова"], correct: 1, article: "Ст. 63" },
+    { q: "Какой кворум для изменения Конституции?", options: ["Большинство", "2/3 от полного состава каждой палаты", "3/4", "Единогласно"], correct: 1, article: "Ст. 140" },
+    { q: "Какие разделы изменяются только референдумом?", options: ["I и II", "I, II, IV, VIII", "Все", "Только VIII"], correct: 1, article: "Ст. 140" },
+    { q: "Кто переходит полномочия Президента при вакансии?", options: ["Премьер-министр", "Председатель Палаты", "Председатель Совета Республики", "Генпрокурор"], correct: 2, article: "Ст. 88¹" },
+    { q: "Какой орган даёт согласие на Генпрокурора, КГК, Нацбанк?", options: ["Палата представителей", "Совет Республики", "ВНС", "Президент"], correct: 1, article: "Ст. 84, 98" },
+    { q: "Когда единый день голосования?", options: ["Первое воскресенье марта", "Последнее воскресенье февраля", "1 мая", "7 ноября"], correct: 1, article: "Ст. 67" }
+];
+
+// ==================== STATE ====================
+let currentCard = 0;
+let learnedCards = new Set();
+let difficultCards = new Set();
+let shuffledOrder = [...Array(flashcardsData.length).keys()];
+let matchingScore = 0;
+let matchingTotal = 0;
+let selectedLeft = null;
+let selectedRight = null;
+let quizCorrect = 0;
+let quizTotal = 0;
+let quizStreak = 0;
+let currentQuizQuestion = null;
+let usedQuizQuestions = new Set();
+
+// ==================== NAVIGATION ====================
+document.querySelectorAll('.nav-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+        document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+        document.getElementById(tab.dataset.section).classList.add('active');
+        if (tab.dataset.section === 'stats') updateStatsDisplay();
+    });
+});
+
+// ==================== THEORY ====================
+function renderTheory(filter = 'all', search = '') {
+    const grid = document.getElementById('theoryGrid');
+    grid.innerHTML = '';
+    theoryData.forEach(item => {
+        if (filter !== 'all' && !item.tags.includes(filter)) return;
+        if (search && !item.title.toLowerCase().includes(search) && !item.text.toLowerCase().includes(search) && !item.num.toLowerCase().includes(search)) return;
+        const card = document.createElement('div');
+        card.className = 'theory-card';
+        card.innerHTML = `<h3><span class="article-num">${item.num}</span> ${item.title}</h3><p>${item.text}</p>`;
+        grid.appendChild(card);
+    });
+}
+
+renderTheory();
+
+document.querySelectorAll('.filter-tag').forEach(tag => {
+    tag.addEventListener('click', () => {
+        document.querySelectorAll('.filter-tag').forEach(t => t.classList.remove('active'));
+        tag.classList.add('active');
+        renderTheory(tag.dataset.filter, document.getElementById('theorySearch').value.toLowerCase());
+    });
+});
+
+document.getElementById('theorySearch').addEventListener('input', (e) => {
+    const activeFilter = document.querySelector('.filter-tag.active').dataset.filter;
+    renderTheory(activeFilter, e.target.value.toLowerCase());
+});
+
+// ==================== FLASHCARDS ====================
+function showCard() {
+    const idx = shuffledOrder[currentCard];
+    const card = flashcardsData[idx];
+    document.getElementById('flashcardQuestion').textContent = card.q;
+    document.getElementById('flashcardAnswer').textContent = card.a;
+    document.getElementById('flashcardArticle').textContent = card.article;
+    document.getElementById('flashcardProgress').textContent = `Карточка ${currentCard + 1} из ${flashcardsData.length}`;
+    document.getElementById('flashcardProgressBar').style.width = `${((currentCard + 1) / flashcardsData.length) * 100}%`;
+    document.getElementById('flashcard').classList.remove('flipped');
+    updateFlashcardStats();
+}
+
+function flipCard() {
+    document.getElementById('flashcard').classList.toggle('flipped');
+}
+
+function nextCard() {
+    currentCard = (currentCard + 1) % flashcardsData.length;
+    showCard();
+}
+
+function prevCard() {
+    currentCard = (currentCard - 1 + flashcardsData.length) % flashcardsData.length;
+    showCard();
+}
+
+function markLearned() {
+    const idx = shuffledOrder[currentCard];
+    learnedCards.add(idx);
+    difficultCards.delete(idx);
+    updateFlashcardStats();
+    nextCard();
+}
+
+function markDifficult() {
+    const idx = shuffledOrder[currentCard];
+    difficultCards.add(idx);
+    learnedCards.delete(idx);
+    updateFlashcardStats();
+}
+
+function shuffleCards() {
+    shuffledOrder = [...Array(flashcardsData.length).keys()];
+    for (let i = shuffledOrder.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffledOrder[i], shuffledOrder[j]] = [shuffledOrder[j], shuffledOrder[i]];
+    }
+    currentCard = 0;
+    showCard();
+}
+
+function updateFlashcardStats() {
+    document.getElementById('learnedCount').textContent = `Изучено: ${learnedCards.size}`;
+    document.getElementById('difficultCount').textContent = `Сложные: ${difficultCards.size}`;
+    document.getElementById('remainingCount').textContent = `Осталось: ${flashcardsData.length - learnedCards.size}`;
+}
+
+showCard();
+
+// ==================== MATCHING ====================
+function initMatching() {
+    matchingScore = 0;
+    matchingTotal = 0;
+    selectedLeft = null;
+    selectedRight = null;
+    document.getElementById('matchingScore').textContent = 'Счёт: 0 / 0';
+
+    const shuffled = [...matchingData].sort(() => Math.random() - 0.5).slice(0, 8);
+    const leftItems = shuffled.map((item, i) => ({ ...item, id: i }));
+    const rightItems = [...leftItems].sort(() => Math.random() - 0.5);
+
+    const grid = document.getElementById('matchingGrid');
+    grid.innerHTML = '';
+
+    const leftCol = document.createElement('div');
+    leftCol.className = 'matching-column';
+    leftCol.id = 'matchingLeft';
+
+    const rightCol = document.createElement('div');
+    rightCol.className = 'matching-column';
+    rightCol.id = 'matchingRight';
+
+    leftItems.forEach((item, i) => {
+        const div = document.createElement('div');
+        div.className = 'matching-item';
+        div.dataset.index = i;
+        div.dataset.side = 'left';
+        div.textContent = item.left;
+        div.onclick = () => selectMatchingItem(div, 'left');
+        leftCol.appendChild(div);
+    });
+
+    rightItems.forEach((item) => {
+        const div = document.createElement('div');
+        div.className = 'matching-item';
+        div.dataset.index = item.id;
+        div.dataset.side = 'right';
+        div.textContent = item.right;
+        div.onclick = () => selectMatchingItem(div, 'right');
+        rightCol.appendChild(div);
+    });
+
+    grid.appendChild(leftCol);
+    grid.appendChild(rightCol);
+}
+
+function selectMatchingItem(el, side) {
+    if (el.classList.contains('matched') || el.classList.contains('correct')) return;
+
+    if (side === 'left') {
+        document.querySelectorAll('#matchingLeft .matching-item').forEach(i => i.classList.remove('selected'));
+        selectedLeft = el;
+        el.classList.add('selected');
+    } else {
+        if (!selectedLeft) return;
+        document.querySelectorAll('#matchingRight .matching-item').forEach(i => i.classList.remove('selected'));
+        selectedRight = el;
+        el.classList.add('selected');
+
+        matchingTotal++;
+        if (selectedLeft.dataset.index === selectedRight.dataset.index) {
+            matchingScore++;
+            selectedLeft.classList.add('correct');
+            selectedRight.classList.add('correct');
+            selectedLeft.classList.remove('selected');
+            selectedRight.classList.remove('selected');
+            setTimeout(() => {
+                selectedLeft.classList.add('matched');
+                selectedRight.classList.add('matched');
+                selectedLeft = null;
+                selectedRight = null;
+                checkMatchingComplete();
+            }, 500);
+        } else {
+            selectedLeft.classList.add('wrong');
+            selectedRight.classList.add('wrong');
+            setTimeout(() => {
+                selectedLeft.classList.remove('wrong', 'selected');
+                selectedRight.classList.remove('wrong', 'selected');
+                selectedLeft = null;
+                selectedRight = null;
+            }, 800);
+        }
+        document.getElementById('matchingScore').textContent = `Счёт: ${matchingScore} / ${matchingTotal}`;
+    }
+}
+
+function checkMatchingComplete() {
+    const allMatched = document.querySelectorAll('#matchingLeft .matching-item.matched').length;
+    const total = document.querySelectorAll('#matchingLeft .matching-item').length;
+    if (allMatched === total) {
+        document.getElementById('matchingScore').textContent = `Победа! Счёт: ${matchingScore} / ${matchingTotal}`;
+    }
+}
+
+function showMatchingHint() {
+    const unmatched = document.querySelectorAll('#matchingLeft .matching-item:not(.matched)');
+    if (unmatched.length > 0) {
+        unmatched[0].style.borderColor = '#ffd700';
+        setTimeout(() => { unmatched[0].style.borderColor = ''; }, 1000);
+    }
+}
+
+initMatching();
+
+// ==================== QUIZ ====================
+function nextQuizQuestion() {
+    const container = document.getElementById('quizContainer');
+    if (usedQuizQuestions.size >= quizData.length) usedQuizQuestions.clear();
+
+    let idx;
+    do { idx = Math.floor(Math.random() * quizData.length); }
+    while (usedQuizQuestions.has(idx));
+    usedQuizQuestions.add(idx);
+
+    currentQuizQuestion = quizData[idx];
+
+    container.innerHTML = `
+        <div class="quiz-question">
+            <h3>Вопрос ${usedQuizQuestions.size} из ${quizData.length} (${currentQuizQuestion.article})</h3>
+            <div class="question-text">${currentQuizQuestion.q}</div>
+            <div class="quiz-options" id="quizOptions"></div>
+            <div class="quiz-feedback" id="quizFeedback"></div>
+        </div>
+    `;
+
+    const optionsDiv = document.getElementById('quizOptions');
+    currentQuizQuestion.options.forEach((opt, i) => {
+        const btn = document.createElement('div');
+        btn.className = 'quiz-option';
+        btn.textContent = opt;
+        btn.onclick = () => selectQuizAnswer(i);
+        optionsDiv.appendChild(btn);
+    });
+}
+
+function selectQuizAnswer(idx) {
+    const options = document.querySelectorAll('.quiz-option');
+    const feedback = document.getElementById('quizFeedback');
+    quizTotal++;
+
+    options.forEach((opt, i) => {
+        opt.classList.add('disabled');
+        if (i === currentQuizQuestion.correct) opt.classList.add('correct');
+        else if (i === idx && i !== currentQuizQuestion.correct) opt.classList.add('wrong');
+    });
+
+    if (idx === currentQuizQuestion.correct) {
+        quizCorrect++;
+        quizStreak++;
+        feedback.className = 'quiz-feedback correct show';
+        feedback.innerHTML = `<strong>Правильно!</strong> ${currentQuizQuestion.article}<br>${currentQuizQuestion.options[currentQuizQuestion.correct]}`;
+    } else {
+        quizStreak = 0;
+        feedback.className = 'quiz-feedback wrong show';
+        feedback.innerHTML = `<strong>Неправильно.</strong> Правильный ответ: ${currentQuizQuestion.options[currentQuizQuestion.correct]} (${currentQuizQuestion.article})`;
+    }
+
+    document.getElementById('quizCorrect').textContent = quizCorrect;
+    document.getElementById('quizTotal').textContent = quizTotal;
+    document.getElementById('quizPercent').textContent = quizTotal > 0 ? Math.round((quizCorrect / quizTotal) * 100) + '%' : '0%';
+    document.getElementById('quizStreak').textContent = quizStreak;
+}
+
+function resetQuiz() {
+    quizCorrect = 0;
+    quizTotal = 0;
+    quizStreak = 0;
+    usedQuizQuestions.clear();
+    document.getElementById('quizCorrect').textContent = '0';
+    document.getElementById('quizTotal').textContent = '0';
+    document.getElementById('quizPercent').textContent = '0%';
+    document.getElementById('quizStreak').textContent = '0';
+    nextQuizQuestion();
+}
+
+nextQuizQuestion();
+
+// ==================== STATS ====================
+function updateStatsDisplay() {
+    document.getElementById('statFlashcardsTotal').textContent = flashcardsData.length;
+    document.getElementById('statFlashcardsLearned').textContent = learnedCards.size;
+    document.getElementById('statFlashcardsDifficult').textContent = difficultCards.size;
+    document.getElementById('statMatchingScore').textContent = matchingScore;
+    document.getElementById('statQuizCorrect').textContent = quizCorrect;
+    document.getElementById('statQuizPercent').textContent = quizTotal > 0 ? Math.round((quizCorrect / quizTotal) * 100) + '%' : '0%';
+}
+
+function resetAllStats() {
+    learnedCards.clear();
+    difficultCards.clear();
+    matchingScore = 0;
+    matchingTotal = 0;
+    quizCorrect = 0;
+    quizTotal = 0;
+    quizStreak = 0;
+    usedQuizQuestions.clear();
+    currentCard = 0;
+    shuffledOrder = [...Array(flashcardsData.length).keys()];
+    updateFlashcardStats();
+    updateStatsDisplay();
+    initMatching();
+    resetQuiz();
+    showCard();
+}
+</script>
+</body>
+</html>

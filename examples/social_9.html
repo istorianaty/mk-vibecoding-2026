@@ -1,0 +1,1292 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Тренажер по обществоведению | 9 класс + ЦТ/ЦЭ</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    min-height: 100vh; color: #e8e8e8; padding: 20px;
+  }
+  .container { max-width: 1100px; margin: 0 auto; }
+  header {
+    text-align: center; padding: 25px 20px;
+    background: rgba(255,255,255,0.05); border-radius: 20px;
+    margin-bottom: 25px; border: 1px solid rgba(255,255,255,0.1);
+  }
+  header h1 {
+    font-size: 28px;
+    background: linear-gradient(90deg, #e94560, #f5a623, #4ecdc4);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text; margin-bottom: 8px;
+  }
+  header p { color: #a0a0b0; font-size: 14px; }
+  .tabs { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-bottom: 25px; }
+  .tab-btn {
+    padding: 12px 18px; background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.15); color: #c0c0d0;
+    border-radius: 12px; cursor: pointer; font-size: 13px;
+    font-weight: 600; transition: all 0.25s; font-family: inherit;
+  }
+  .tab-btn:hover { background: rgba(255,255,255,0.15); transform: translateY(-2px); }
+  .tab-btn.active {
+    background: linear-gradient(135deg, #e94560, #c62a45);
+    color: white; border-color: transparent;
+    box-shadow: 0 4px 15px rgba(233,69,96,0.4);
+  }
+  .panel {
+    background: rgba(255,255,255,0.05); border-radius: 20px;
+    padding: 30px; border: 1px solid rgba(255,255,255,0.1);
+    display: none; animation: fadeIn 0.3s ease;
+  }
+  .panel.active { display: block; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+  h2 { color: #4ecdc4; margin-bottom: 20px; font-size: 22px; }
+  h3 { color: #f5a623; margin: 20px 0 10px; font-size: 17px; }
+  .theory-card {
+    background: rgba(255,255,255,0.05); border-left: 4px solid #4ecdc4;
+    padding: 18px 22px; border-radius: 12px; margin-bottom: 16px;
+  }
+  .theory-card h4 { color: #4ecdc4; margin-bottom: 10px; font-size: 16px; }
+  .theory-card ul { margin-left: 20px; margin-top: 8px; line-height: 1.8; color: #c8c8d8; }
+  .theory-card p { line-height: 1.7; color: #c8c8d8; }
+  .theory-card strong { color: #f5a623; }
+  .dict-item {
+    background: rgba(255,255,255,0.05); padding: 14px 18px;
+    border-radius: 10px; margin-bottom: 10px; border-left: 3px solid #e94560;
+  }
+  .dict-term { color: #e94560; font-weight: 700; font-size: 15px; }
+  .dict-def { color: #c8c8d8; margin-top: 5px; font-size: 14px; line-height: 1.6; }
+  .dict-cat { font-size: 11px; color: #a0a0b0; margin-top: 4px; font-style: italic; }
+  .timeline { position: relative; padding-left: 30px; margin-bottom: 25px; }
+  .timeline::before {
+    content: ''; position: absolute; left: 8px; top: 0; bottom: 0;
+    width: 3px; background: linear-gradient(180deg, #e94560, #f5a623, #4ecdc4);
+    border-radius: 3px;
+  }
+  .tl-item { position: relative; margin-bottom: 22px; }
+  .tl-item::before {
+    content: ''; position: absolute; left: -30px; top: 6px;
+    width: 14px; height: 14px; border-radius: 50%;
+    background: #e94560; border: 3px solid #1a1a2e; box-shadow: 0 0 0 2px #e94560;
+  }
+  .tl-year { color: #f5a623; font-weight: 700; font-size: 16px; }
+  .tl-text { color: #c8c8d8; margin-top: 4px; line-height: 1.6; }
+  .question-box {
+    background: rgba(255,255,255,0.05); padding: 25px;
+    border-radius: 16px; margin-bottom: 20px;
+  }
+  .q-text { font-size: 17px; margin-bottom: 20px; line-height: 1.6; color: #e8e8e8; }
+  .options { display: grid; gap: 10px; }
+  .option-btn {
+    padding: 14px 20px; background: rgba(255,255,255,0.06);
+    border: 2px solid rgba(255,255,255,0.12); color: #e8e8e8;
+    border-radius: 12px; cursor: pointer; text-align: left;
+    font-size: 15px; transition: all 0.2s; font-family: inherit;
+  }
+  .option-btn:hover:not(:disabled) {
+    background: rgba(78,205,196,0.15); border-color: #4ecdc4; transform: translateX(5px);
+  }
+  .option-btn:disabled { cursor: default; opacity: 0.8; }
+  .option-btn.correct {
+    background: rgba(46,204,113,0.25); border-color: #2ecc71;
+    color: #7ee8a2; font-weight: 600;
+  }
+  .option-btn.wrong {
+    background: rgba(233,69,96,0.25); border-color: #e94560; color: #f08a9e;
+  }
+  .feedback {
+    margin-top: 15px; padding: 12px 18px;
+    border-radius: 10px; font-size: 14px; line-height: 1.6; display: none;
+  }
+  .feedback.show { display: block; }
+  .feedback.ok { background: rgba(46,204,113,0.15); border-left: 3px solid #2ecc71; color: #7ee8a2; }
+  .feedback.err { background: rgba(233,69,96,0.15); border-left: 3px solid #e94560; color: #f08a9e; }
+  .stats-bar {
+    display: flex; justify-content: space-around;
+    background: rgba(255,255,255,0.05); padding: 15px;
+    border-radius: 12px; margin-bottom: 20px; flex-wrap: wrap; gap: 10px;
+  }
+  .stat { text-align: center; min-width: 70px; }
+  .stat-val { font-size: 24px; font-weight: 700; color: #4ecdc4; }
+  .stat-label { font-size: 12px; color: #a0a0b0; margin-top: 4px; }
+  .btn {
+    padding: 12px 28px; background: linear-gradient(135deg, #4ecdc4, #44a08d);
+    color: white; border: none; border-radius: 12px; cursor: pointer;
+    font-size: 15px; font-weight: 600; transition: all 0.2s; font-family: inherit;
+  }
+  .btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(78,205,196,0.4); }
+  .btn.secondary { background: linear-gradient(135deg, #e94560, #c62a45); }
+  .btn.secondary:hover { box-shadow: 0 6px 20px rgba(233,69,96,0.4); }
+  .flashcard-container { perspective: 1200px; max-width: 500px; margin: 0 auto; }
+  .flashcard {
+    width: 100%; height: 300px; position: relative;
+    transform-style: preserve-3d; transition: transform 0.6s; cursor: pointer;
+  }
+  .flashcard.flipped { transform: rotateY(180deg); }
+  .flashcard-face {
+    position: absolute; width: 100%; height: 100%;
+    backface-visibility: hidden; -webkit-backface-visibility: hidden;
+    border-radius: 20px; display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    padding: 30px; text-align: center;
+    border: 2px solid rgba(255,255,255,0.15);
+    overflow-y: auto;
+  }
+  .flashcard-front {
+    background: linear-gradient(135deg, #16213e, #0f3460);
+    color: #4ecdc4; font-size: 20px; font-weight: 600;
+  }
+  .flashcard-back {
+    background: linear-gradient(135deg, #e94560, #c62a45);
+    color: white; transform: rotateY(180deg);
+    font-size: 15px; line-height: 1.6;
+  }
+  .flashcard-hint { font-size: 13px; color: #a0a0b0; margin-top: 15px; text-align: center; }
+  .match-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin: 20px 0; }
+  .match-col { display: flex; flex-direction: column; gap: 10px; }
+  .match-item {
+    padding: 14px 18px; background: rgba(255,255,255,0.06);
+    border: 2px solid rgba(255,255,255,0.12); border-radius: 10px;
+    cursor: pointer; font-size: 14px; transition: all 0.2s;
+    color: #e8e8e8; user-select: none;
+  }
+  .match-item:hover:not(.matched) { border-color: #4ecdc4; background: rgba(78,205,196,0.1); }
+  .match-item.selected {
+    background: rgba(245,166,35,0.2); border-color: #f5a623; color: #f5a623;
+  }
+  .match-item.matched {
+    background: rgba(46,204,113,0.2); border-color: #2ecc71;
+    color: #7ee8a2; cursor: default; opacity: 0.7;
+  }
+  .match-item.wrong-flash { animation: shake 0.4s; }
+  @keyframes shake {
+    0%,100% { transform: translateX(0); } 25% { transform: translateX(-8px); }
+    75% { transform: translateX(8px); }
+  }
+  .seq-list { display: flex; flex-direction: column; gap: 10px; margin: 20px 0; }
+  .seq-item {
+    padding: 14px 18px; background: rgba(255,255,255,0.06);
+    border: 2px solid rgba(255,255,255,0.12); border-radius: 10px;
+    font-size: 14px; display: flex; align-items: center; gap: 12px;
+    transition: all 0.2s; user-select: none;
+  }
+  .seq-num {
+    width: 28px; height: 28px; background: #4ecdc4; color: #1a1a2e;
+    border-radius: 50%; display: flex; align-items: center;
+    justify-content: center; font-weight: 700; font-size: 13px;
+    flex-shrink: 0; cursor: grab;
+  }
+  .seq-item.correct-pos { border-color: #2ecc71; background: rgba(46,204,113,0.1); }
+  .seq-item.wrong-pos { border-color: #e94560; background: rgba(233,69,96,0.1); }
+  .seq-controls { display: flex; gap: 8px; margin-left: auto; }
+  .seq-arrow {
+    background: rgba(255,255,255,0.1); border: none; color: #4ecdc4;
+    width: 30px; height: 30px; border-radius: 8px; cursor: pointer;
+    font-size: 16px; font-weight: bold; transition: all 0.2s;
+  }
+  .seq-arrow:hover { background: #4ecdc4; color: #1a1a2e; }
+  .gen-box {
+    background: rgba(255,255,255,0.05); padding: 30px;
+    border-radius: 16px; text-align: center;
+  }
+  .gen-question { font-size: 18px; margin: 20px 0; color: #f5a623; line-height: 1.6; }
+  .gen-input {
+    padding: 12px 20px; background: rgba(255,255,255,0.08);
+    border: 2px solid rgba(255,255,255,0.15); border-radius: 12px;
+    color: white; font-size: 16px; width: 100%; max-width: 500px;
+    text-align: center; outline: none; font-family: inherit;
+  }
+  .gen-input:focus { border-color: #4ecdc4; }
+  .gen-select {
+    padding: 12px 20px; background: rgba(255,255,255,0.08);
+    border: 2px solid rgba(255,255,255,0.15); border-radius: 12px;
+    color: white; font-size: 15px; width: 100%; max-width: 500px;
+    outline: none; font-family: inherit; margin: 15px auto; display: block;
+  }
+  .gen-select option { background: #16213e; color: white; }
+  .persons-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 15px;
+  }
+  .person-card {
+    background: rgba(255,255,255,0.05); border-radius: 14px;
+    padding: 20px; border-top: 3px solid #f5a623; transition: all 0.2s;
+  }
+  .person-card:hover { transform: translateY(-4px); background: rgba(255,255,255,0.08); }
+  .person-name { color: #f5a623; font-weight: 700; font-size: 16px; margin-bottom: 8px; }
+  .person-desc { color: #c8c8d8; font-size: 14px; line-height: 1.6; }
+  .progress-mini {
+    height: 6px; background: rgba(255,255,255,0.1);
+    border-radius: 3px; margin: 10px 0; overflow: hidden;
+  }
+  .progress-mini-fill {
+    height: 100%; background: linear-gradient(90deg, #e94560, #f5a623, #4ecdc4);
+    transition: width 0.3s;
+  }
+  @media (max-width: 600px) {
+    .match-grid { grid-template-columns: 1fr; gap: 15px; }
+    .tabs { gap: 5px; }
+    .tab-btn { padding: 10px 12px; font-size: 11px; }
+    header h1 { font-size: 20px; }
+    .panel { padding: 20px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <h1>📚 Тренажер по обществоведению</h1>
+    <p>9 класс • Подготовка к ЦТ и ЦЭ (10–11 класс) • § 6–11</p>
+  </header>
+
+  <div class="tabs" id="tabs">
+    <button class="tab-btn active" data-tab="theory">📖 Теория</button>
+    <button class="tab-btn" data-tab="timeline">🕐 Лента</button>
+    <button class="tab-btn" data-tab="dict">📕 Словарь</button>
+    <button class="tab-btn" data-tab="persons">👤 Личности</button>
+    <button class="tab-btn" data-tab="quiz">✅ Тесты</button>
+    <button class="tab-btn" data-tab="flash">🃏 Флешкарты</button>
+    <button class="tab-btn" data-tab="match">🔗 Сопоставление</button>
+    <button class="tab-btn" data-tab="sequence">🔢 Последоват.</button>
+    <button class="tab-btn" data-tab="generator">🎲 Генератор</button>
+  </div>
+
+  <!-- ТЕОРИЯ -->
+  <div class="panel active" id="panel-theory">
+    <h2>📖 Опорные конспекты</h2>
+
+    <h3>§ 6. Деятельностная сущность человека</h3>
+    <div class="theory-card">
+      <h4>Структура деятельности</h4>
+      <p><strong>Деятельность</strong> — активное отношение человека к условиям жизни и к себе, их осознанное преобразование.</p>
+      <p style="margin-top:10px;"><strong>Элементы:</strong> Мотив → Цель → Средства → Действия → Результат</p>
+      <ul>
+        <li><strong>Мотив</strong> — побуждение к действию (ради чего?)</li>
+        <li><strong>Цель</strong> — осознанный образ результата (почему?)</li>
+        <li><strong>Средства</strong> — инструменты (как?)</li>
+        <li><strong>Действия</strong> — конкретные шаги (с помощью чего?)</li>
+        <li><strong>Результат</strong> — итог (что в итоге?)</li>
+      </ul>
+    </div>
+    <div class="theory-card">
+      <h4>Потребности и пирамида Маслоу</h4>
+      <p><strong>Потребность</strong> — состояние нужды в необходимом.</p>
+      <p><strong>Мотив</strong> — осознанное побуждение.</p>
+      <p style="margin-top:10px;"><strong>Пирамида Маслоу</strong> (снизу вверх):</p>
+      <ul>
+        <li>Физиология (еда, сон, дыхание)</li>
+        <li>Безопасность (защита, стабильность)</li>
+        <li>Социум (общение, принадлежность)</li>
+        <li>Признание (уважение, статус)</li>
+        <li>Самоактуализация (развитие, творчество)</li>
+      </ul>
+    </div>
+    <div class="theory-card">
+      <h4>Виды деятельности</h4>
+      <ul>
+        <li><strong>Игра</strong> — свободное действие по правилам</li>
+        <li><strong>Учёба</strong> — приобретение знаний</li>
+        <li><strong>Труд</strong> — создание благ</li>
+        <li><strong>Общение</strong> — обмен информацией</li>
+      </ul>
+      <p style="margin-top:10px;"><strong>Продуктивная</strong> — повторение. <strong>Творческая</strong> — создание нового.</p>
+    </div>
+
+    <h3>§ 7. Общение</h3>
+    <div class="theory-card">
+      <h4>Три стороны общения</h4>
+      <ul>
+        <li><strong>Коммуникативная</strong> — обмен информацией</li>
+        <li><strong>Интерактивная</strong> — взаимодействие</li>
+        <li><strong>Перцептивная</strong> — восприятие друг друга</li>
+      </ul>
+    </div>
+    <div class="theory-card">
+      <h4>Формы и виды общения</h4>
+      <ul>
+        <li><strong>Формальное</strong> — по правилам, уставу</li>
+        <li><strong>Неформальное</strong> — личное, эмоциональное</li>
+        <li><strong>Деловое</strong> — решение задачи</li>
+        <li><strong>Инструментальное</strong> — получение информации</li>
+        <li><strong>Интимно-личностное</strong> — человек самоцель</li>
+        <li><strong>Манипулятивное</strong> — скрытие истинной цели</li>
+        <li><strong>Императивное</strong> — приказ, монолог</li>
+        <li><strong>Диалогическое</strong> — равенство сторон</li>
+      </ul>
+    </div>
+    <div class="theory-card">
+      <h4>Способы воздействия</h4>
+      <ul>
+        <li><strong>Заражение</strong> — стихийная передача настроения</li>
+        <li><strong>Внушение</strong> — без логики</li>
+        <li><strong>Подражание</strong> — копирование</li>
+        <li><strong>Убеждение</strong> — с логикой и доказательствами</li>
+        <li><strong>Манипуляция</strong> — скрытое воздействие</li>
+      </ul>
+    </div>
+    <div class="theory-card">
+      <h4>Барьеры общения</h4>
+      <ul>
+        <li><strong>Эстетический</strong> — внешний вид</li>
+        <li><strong>Семантический</strong> — разное понимание слов</li>
+        <li><strong>Логический</strong> — разная логика</li>
+        <li><strong>Физический</strong> — расстояние, шум</li>
+        <li><strong>Психологический</strong> — эмоции, установки</li>
+      </ul>
+    </div>
+
+    <h3>§ 8. Межличностные отношения</h3>
+    <div class="theory-card">
+      <h4>Уровни отношений (по возрастанию)</h4>
+      <ul>
+        <li><strong>Знакомство</strong></li>
+        <li><strong>Приятельство</strong> — симпатия</li>
+        <li><strong>Товарищество</strong> — общая деятельность</li>
+        <li><strong>Дружба</strong> — доверие, бескорыстие</li>
+        <li><strong>Любовь</strong> — высший уровень</li>
+      </ul>
+    </div>
+    <div class="theory-card">
+      <h4>Виды любви (по древним грекам)</h4>
+      <ul>
+        <li><strong>Эрос</strong> — страсть</li>
+        <li><strong>Людус</strong> — игра</li>
+        <li><strong>Сторге</strong> — дружба</li>
+        <li><strong>Прагма</strong> — расчёт</li>
+        <li><strong>Мания</strong> — одержимость</li>
+        <li><strong>Агапе</strong> — бескорыстие</li>
+        <li><strong>Филиа</strong> — родители-дети</li>
+      </ul>
+    </div>
+    <div class="theory-card">
+      <h4>Стереотипы</h4>
+      <p><strong>Стереотип</strong> — устойчивое упрощённое представление о группе.</p>
+      <p style="margin-top:8px;"><strong>Схема:</strong> Восприятие → Оценка → Эмоция → Действие.</p>
+      <p style="margin-top:8px;"><strong>Эффекты:</strong> первичности, новизны, ореола, проекции.</p>
+    </div>
+    <div class="theory-card">
+      <h4>Малая группа</h4>
+      <ul>
+        <li><strong>Формальные</strong> — школьный класс, отдел</li>
+        <li><strong>Неформальные</strong> — компания друзей</li>
+        <li><strong>Коллективизм</strong> — согласие с группой</li>
+        <li><strong>Индивидуализм</strong> — приоритет личных целей</li>
+        <li><strong>Конформизм</strong> — приспособление под давлением</li>
+        <li><strong>Нонконформизм</strong> — противостояние нормам</li>
+      </ul>
+    </div>
+    <div class="theory-card">
+      <h4>Лидерство</h4>
+      <p><strong>Лидер</strong> — неформальный авторитет. <strong>Руководитель</strong> — официальная должность.</p>
+      <p style="margin-top:8px;"><strong>Стили:</strong> директивный (жёсткий), коллегиальный (демократический), либеральный (свобода), ситуативный (гибкий).</p>
+    </div>
+
+    <h3>§ 9. Семья</h3>
+    <div class="theory-card">
+      <h4>Функции семьи</h4>
+      <ul>
+        <li><strong>Репродуктивная</strong> — воспроизводство</li>
+        <li><strong>Хозяйственно-бытовая</strong> — материальные условия</li>
+        <li><strong>Воспитательная</strong> — социализация</li>
+        <li><strong>Эмоциональная</strong> — любовь, поддержка</li>
+        <li><strong>Рекреативная</strong> — досуг, отдых</li>
+      </ul>
+    </div>
+    <div class="theory-card">
+      <h4>Виды семьи</h4>
+      <ul>
+        <li><strong>Нуклеарная</strong> — супруги + дети</li>
+        <li><strong>Расширенная</strong> — с родственниками</li>
+        <li><strong>Полная / неполная</strong></li>
+        <li><strong>Бездетная / однодетная / многодетная</strong></li>
+      </ul>
+      <p style="margin-top:8px;"><strong>По распределению власти:</strong> патриархальная, матриархальная, равноправная.</p>
+    </div>
+
+    <h3>§ 10. Конфликты</h3>
+    <div class="theory-card">
+      <h4>Структура конфликта</h4>
+      <ul>
+        <li><strong>Участники</strong> (оппоненты)</li>
+        <li><strong>Предмет</strong> — противоречие</li>
+        <li><strong>Условия</strong></li>
+        <li><strong>Группы поддержки</strong></li>
+        <li><strong>Подстрекатели</strong></li>
+      </ul>
+    </div>
+    <div class="theory-card">
+      <h4>Динамика конфликта</h4>
+      <p><strong>Скрытый:</strong> проблемная ситуация → осознание → аргументация → восприятие как угрозы</p>
+      <p style="margin-top:8px;"><strong>Открытый:</strong> инцидент → пик → баланс → поиск решения</p>
+    </div>
+    <div class="theory-card">
+      <h4>Внутриличностные конфликты</h4>
+      <ul>
+        <li><strong>Мотивационный</strong> — столкновение мотивов</li>
+        <li><strong>Нравственный</strong> — желание vs долг</li>
+        <li><strong>Нереализованных желаний</strong></li>
+        <li><strong>Ролевой</strong> — несколько ролей</li>
+        <li><strong>Адаптационный</strong></li>
+        <li><strong>Неадекватной самооценки</strong> — комплекс неполноценности</li>
+      </ul>
+    </div>
+    <div class="theory-card">
+      <h4>Буллинг</h4>
+      <p><strong>Буллинг</strong> — систематическое унижение, оскорбление группой.</p>
+      <p><strong>Роли:</strong> агрессор, жертва, наблюдатель.</p>
+    </div>
+
+    <h3>§ 11. Разрешение конфликтов</h3>
+    <div class="theory-card">
+      <h4>Стратегии поведения</h4>
+      <ul>
+        <li><strong>Соперничество</strong> — навязывание (активная, выигрыш одной стороны)</li>
+        <li><strong>Сотрудничество</strong> — выигрыш обеих (активная)</li>
+        <li><strong>Компромисс</strong> — взаимные уступки</li>
+        <li><strong>Приспособление</strong> — уступка (пассивная)</li>
+        <li><strong>Избегание</strong> — уход (пассивная)</li>
+      </ul>
+    </div>
+    <div class="theory-card">
+      <h4>Урегулирование</h4>
+      <ul>
+        <li><strong>Переговоры</strong> — без третьей стороны</li>
+        <li><strong>Посредничество</strong> — третья сторона, решение необязательно</li>
+        <li><strong>Арбитраж</strong> — третья сторона, решение обязательно</li>
+      </ul>
+    </div>
+    <div class="theory-card">
+      <h4>Правила конструктивного общения</h4>
+      <ul>
+        <li>Готовность к компромиссу</li>
+        <li>Искренний интерес к партнёру</li>
+        <li>Терпимость к инакомыслию</li>
+        <li>Не идеализировать партнёра</li>
+        <li>Снижать агрессию в стрессе</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ЛЕНТА ВРЕМЕНИ -->
+  <div class="panel" id="panel-timeline">
+    <h2>🕐 Лента: этапы развития семьи</h2>
+    <div class="timeline">
+      <div class="tl-item"><div class="tl-year">Этап 1</div><div class="tl-text"><strong>Добрачный</strong> — знакомство, ухаживание, решение о браке</div></div>
+      <div class="tl-item"><div class="tl-year">Этап 2</div><div class="tl-text"><strong>Молодая семья</strong> — заключение брака, адаптация</div></div>
+      <div class="tl-item"><div class="tl-year">Этап 3</div><div class="tl-text"><strong>Семья с детьми</strong> — рождение, воспитание</div></div>
+      <div class="tl-item"><div class="tl-year">Этап 4</div><div class="tl-text"><strong>Зрелая семья</strong> — дети отделяются</div></div>
+      <div class="tl-item"><div class="tl-year">Этап 5</div><div class="tl-text"><strong>Пожилая семья</strong> — старение супругов</div></div>
+    </div>
+
+    <h3>Динамика конфликта</h3>
+    <div class="timeline">
+      <div class="tl-item"><div class="tl-year">1</div><div class="tl-text"><strong>Проблемная ситуация</strong> — не осознана</div></div>
+      <div class="tl-item"><div class="tl-year">2</div><div class="tl-text"><strong>Осознание</strong></div></div>
+      <div class="tl-item"><div class="tl-year">3</div><div class="tl-text"><strong>Аргументация</strong></div></div>
+      <div class="tl-item"><div class="tl-year">4</div><div class="tl-text"><strong>Восприятие как угрозы</strong></div></div>
+      <div class="tl-item"><div class="tl-year">5</div><div class="tl-text"><strong>Инцидент</strong> — первое столкновение</div></div>
+      <div class="tl-item"><div class="tl-year">6</div><div class="tl-text"><strong>Пик (эскалация)</strong></div></div>
+      <div class="tl-item"><div class="tl-year">7</div><div class="tl-text"><strong>Баланс</strong></div></div>
+      <div class="tl-item"><div class="tl-year">8</div><div class="tl-text"><strong>Поиск решения</strong></div></div>
+    </div>
+
+    <h3>Пирамида Маслоу (снизу вверх)</h3>
+    <div class="timeline">
+      <div class="tl-item"><div class="tl-year">Уровень 1</div><div class="tl-text"><strong>Физиология</strong> — еда, сон, дыхание, тепло</div></div>
+      <div class="tl-item"><div class="tl-year">Уровень 2</div><div class="tl-text"><strong>Безопасность</strong> — защита, стабильность</div></div>
+      <div class="tl-item"><div class="tl-year">Уровень 3</div><div class="tl-text"><strong>Социум</strong> — общение, принадлежность</div></div>
+      <div class="tl-item"><div class="tl-year">Уровень 4</div><div class="tl-text"><strong>Признание</strong> — уважение, статус</div></div>
+      <div class="tl-item"><div class="tl-year">Уровень 5</div><div class="tl-text"><strong>Самоактуализация</strong> — развитие, творчество</div></div>
+    </div>
+  </div>
+
+  <!-- СЛОВАРЬ -->
+  <div class="panel" id="panel-dict">
+    <h2>📕 Словарь терминов</h2>
+    <input type="text" id="dict-search" class="gen-input" placeholder="🔍 Поиск термина..." style="margin-bottom:15px; max-width:100%;">
+    <div id="dict-list"></div>
+  </div>
+
+  <!-- ЛИЧНОСТИ -->
+  <div class="panel" id="panel-persons">
+    <h2>👤 Галерея личностей и учёных</h2>
+    <div class="persons-grid" id="persons-list"></div>
+  </div>
+
+  <!-- ТЕСТЫ -->
+  <div class="panel" id="panel-quiz">
+    <h2>✅ Тесты с объяснениями (60 вопросов)</h2>
+    <div class="stats-bar">
+      <div class="stat"><div class="stat-val" id="quiz-correct">0</div><div class="stat-label">Правильно</div></div>
+      <div class="stat"><div class="stat-val" id="quiz-total">0</div><div class="stat-label">Всего</div></div>
+      <div class="stat"><div class="stat-val" id="quiz-score">0</div><div class="stat-label">Баллы</div></div>
+      <div class="stat"><div class="stat-val" id="quiz-streak">0</div><div class="stat-label">Серия</div></div>
+    </div>
+    <div class="progress-mini"><div class="progress-mini-fill" id="quiz-progress" style="width:0%"></div></div>
+    <div class="question-box">
+      <div class="q-text" id="quiz-question">Загрузка...</div>
+      <div class="options" id="quiz-options"></div>
+      <div class="feedback" id="quiz-feedback"></div>
+    </div>
+    <button class="btn" id="quiz-next" style="display:none;">Следующий →</button>
+    <button class="btn secondary" id="quiz-restart" style="margin-left:10px;">🔄 Заново</button>
+  </div>
+
+  <!-- ФЛЕШКАРТЫ -->
+  <div class="panel" id="panel-flash">
+    <h2>🃏 Флешкарты для заучивания</h2>
+    <div class="stats-bar">
+      <div class="stat"><div class="stat-val" id="flash-idx">1</div><div class="stat-label">Карточка</div></div>
+      <div class="stat"><div class="stat-val" id="flash-total">0</div><div class="stat-label">Всего</div></div>
+    </div>
+    <div class="flashcard-container">
+      <div class="flashcard" id="flashcard">
+        <div class="flashcard-face flashcard-front" id="flash-front">Термин</div>
+        <div class="flashcard-face flashcard-back" id="flash-back">Определение</div>
+      </div>
+    </div>
+    <p class="flashcard-hint">Нажмите на карточку, чтобы перевернуть</p>
+    <div style="display:flex; gap:10px; justify-content:center; margin-top:20px; flex-wrap:wrap;">
+      <button class="btn" id="flash-prev">← Назад</button>
+      <button class="btn secondary" id="flash-next">Вперёд →</button>
+      <button class="btn" id="flash-shuffle" style="background:linear-gradient(135deg,#f5a623,#e08c00);">🔀 Перемешать</button>
+    </div>
+  </div>
+
+  <!-- СОПОСТАВЛЕНИЕ -->
+  <div class="panel" id="panel-match">
+    <h2>🔗 Сопоставление пар</h2>
+    <p style="color:#a0a0b0; margin-bottom:15px; font-size:14px;">Выберите элемент слева, затем соответствующий ему справа.</p>
+    <div class="stats-bar">
+      <div class="stat"><div class="stat-val" id="match-done">0</div><div class="stat-label">Найдено</div></div>
+      <div class="stat"><div class="stat-val" id="match-total">0</div><div class="stat-label">Всего</div></div>
+      <div class="stat"><div class="stat-val" id="match-errors">0</div><div class="stat-label">Ошибки</div></div>
+    </div>
+    <select class="gen-select" id="match-topic">
+      <option value="all">Все темы</option>
+      <option value="obsh">Общение</option>
+      <option value="konf">Конфликты</option>
+      <option value="sem">Семья</option>
+      <option value="lyub">Любовь (греческие виды)</option>
+      <option value="potr">Пирамида Маслоу</option>
+      <option value="temp">Темперамент</option>
+      <option value="stereo">Стереотипы</option>
+    </select>
+    <div class="match-grid" id="match-grid"></div>
+    <button class="btn" id="match-restart" style="margin-top:15px;">🔄 Заново</button>
+  </div>
+
+  <!-- ПОСЛЕДОВАТЕЛЬНОСТЬ -->
+  <div class="panel" id="panel-sequence">
+    <h2>🔢 Расставьте в правильном порядке</h2>
+    <select class="gen-select" id="seq-topic">
+      <option value="0">Этапы развития семьи</option>
+      <option value="1">Динамика конфликта (все 8 этапов)</option>
+      <option value="2">Скрытый период конфликта</option>
+      <option value="3">Открытый период конфликта</option>
+      <option value="4">Уровни межличностных отношений</option>
+      <option value="5">Пирамида Маслоу (снизу вверх)</option>
+      <option value="6">Структура деятельности</option>
+    </select>
+    <p style="color:#a0a0b0; font-size:13px; margin:10px 0;">Используйте стрелки ▲▼ для перемещения или нажмите «Проверить».</p>
+    <div class="seq-list" id="seq-list"></div>
+    <button class="btn" id="seq-check">✅ Проверить</button>
+    <button class="btn secondary" id="seq-shuffle" style="margin-left:10px;">🔀 Перемешать</button>
+    <div class="feedback" id="seq-feedback" style="margin-top:15px;"></div>
+  </div>
+
+  <!-- ГЕНЕРАТОР -->
+  <div class="panel" id="panel-generator">
+    <h2>🎲 Генератор заданий</h2>
+    <div class="gen-box">
+      <select class="gen-select" id="gen-type">
+        <option value="conflict">Ситуация → стратегия в конфликте</option>
+        <option value="term">Термин → определение</option>
+        <option value="need">Потребность → уровень пирамиды Маслоу</option>
+        <option value="temper">Описание → тип темперамента</option>
+        <option value="world">Убеждение → тип мировоззрения</option>
+      </select>
+      <div class="gen-question" id="gen-question">Нажмите «Новое задание»</div>
+      <div id="gen-answer-area"></div>
+      <div class="feedback" id="gen-feedback" style="margin-top:15px;"></div>
+      <button class="btn" id="gen-new" style="margin-top:20px;">🎲 Новое задание</button>
+      <button class="btn secondary" id="gen-check" style="margin-top:20px; display:none;">Проверить</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ============ ДАННЫЕ ============
+
+const DICT = [
+  { t: "Деятельность", d: "Активное отношение человека к условиям жизни и к самому себе, их осознанное преобразование.", c: "§6" },
+  { t: "Потребность", d: "Состояние нужды, недостатка в чём-либо, необходимом человеку, группе или обществу.", c: "§6" },
+  { t: "Мотив", d: "Побуждение к осознанным активным действиям, основанное на эмоционально переживаемом желании.", c: "§6" },
+  { t: "Цель", d: "Осознанный образ предвосхищаемого результата, на достижение которого направлена деятельность.", c: "§6" },
+  { t: "Средство", d: "То, с помощью чего достигается цель деятельности.", c: "§6" },
+  { t: "Поступок", d: "Личностно значимый, самостоятельный и законченный акт деятельности.", c: "§6" },
+  { t: "Интерес", d: "Избирательное отношение человека к объекту, с повышенным вниманием к нему.", c: "§6" },
+  { t: "Игра", d: "Свободное действие, которому предаются без принуждения, в свободное время, по определённым правилам.", c: "§6" },
+  { t: "Творчество", d: "Деятельность, в процессе которой человек создаёт новое для себя и (или) для других.", c: "§6" },
+  { t: "Общение", d: "Процесс обмена информацией и (или) действиями, сопровождаемый взаимным восприятием и познанием людьми друг друга.", c: "§7" },
+  { t: "Коммуникация", d: "Обмен информацией между людьми (одна из трёх сторон общения).", c: "§7" },
+  { t: "Интеракция", d: "Взаимодействие людей в процессе общения.", c: "§7" },
+  { t: "Перцепция", d: "Восприятие и понимание людьми друг друга в общении.", c: "§7" },
+  { t: "Формальное общение", d: "Общение, подчинённое правилам, предписаниям, уставу; официальное, обезличенное.", c: "§7" },
+  { t: "Неформальное общение", d: "Общение, определяемое личностными отношениями, открытый обмен мнениями и эмоциями.", c: "§7" },
+  { t: "Деловое общение", d: "Общение, подчинённое решению определённой производственной, научной или коммерческой задачи.", c: "§7" },
+  { t: "Инструментальное общение", d: "Общение с целью получения информации или побуждения человека к действиям.", c: "§7" },
+  { t: "Интимно-личностное общение", d: "Общение, в котором человек является самоцелью, важен сам процесс общения.", c: "§7" },
+  { t: "Манипуляция", d: "Способ воздействия, при котором один из партнёров намеренно скрывает истинную цель общения для получения выгоды.", c: "§7" },
+  { t: "Императивное общение", d: "Директивная форма воздействия, приказ, монолог.", c: "§7" },
+  { t: "Диалогическое общение", d: "Общение, предполагающее равенство участников и свободный обмен мнениями.", c: "§7" },
+  { t: "Заражение", d: "Стихийное распространение настроения, деятельности в процессе восприятия эмоционального состояния.", c: "§7" },
+  { t: "Внушение", d: "Воздействие на человека, в результате которого у него помимо воли появляются определённые чувства, намерения.", c: "§7" },
+  { t: "Подражание", d: "Сознательное или некритическое воспроизведение образцов демонстрируемого поведения.", c: "§7" },
+  { t: "Убеждение", d: "Процесс обоснованного, с опорой на логику и доказательства, воздействия с целью изменения взглядов и поведения.", c: "§7" },
+  { t: "Сленг (жаргон)", d: "Совокупность условных слов и выражений, используемых определённой группой.", c: "§7" },
+  { t: "Этикет", d: "Правила поведения людей в обществе в зависимости от конкретной ситуации.", c: "§7" },
+  { t: "Виртуальное общение", d: "Общение посредством компьютера и гаджетов через Интернет (опосредованное общение).", c: "§7" },
+  { t: "Эмпатия", d: "Способность понимать переживания другого человека, сочувствовать и сопереживать.", c: "§7" },
+  { t: "Рефлексия", d: "Осознание человеком себя, своих действий, мыслей и чувств.", c: "§7" },
+  { t: "Идентификация", d: "Уподобление себя другому человеку, отождествление с ним.", c: "§7" },
+  { t: "Знакомство", d: "Первый уровень межличностных отношений — знаете людей лично.", c: "§8" },
+  { t: "Приятельство", d: "Уровень отношений с взаимной симпатией и желанием общаться.", c: "§8" },
+  { t: "Товарищество", d: "Отношения, основанные на совместной деятельности и достижении общих целей.", c: "§8" },
+  { t: "Дружба", d: "Отношения на основе высокой степени доверия, взаимной симпатии и бескорыстия.", c: "§8" },
+  { t: "Любовь", d: "Высший уровень межличностных отношений, чувство глубокой привязанности и симпатии.", c: "§8" },
+  { t: "Эрос", d: "Страстная любовь-увлечение, стремящаяся к физической близости.", c: "§8" },
+  { t: "Людус", d: "Любовь-игра, не отличающаяся глубиной чувства, ориентированная на удовольствие.", c: "§8" },
+  { t: "Сторге", d: "Спокойная, тёплая и надёжная любовь-дружба, любовь-нежность.", c: "§8" },
+  { t: "Прагма", d: "Рассудочная, легко поддающаяся сознательному контролю любовь по расчёту.", c: "§8" },
+  { t: "Мания", d: "Любовь-одержимость, для которой характерна зависимость от объекта влечения.", c: "§8" },
+  { t: "Агапе", d: "Бескорыстная любовь-самоотдача (например, любовь к ближнему).", c: "§8" },
+  { t: "Филиа", d: "Любовь между родителями и детьми.", c: "§8" },
+  { t: "Стереотип", d: "Устойчивые и упрощённые оценочные представления о группе людей и соответствующее отношение к ней.", c: "§8" },
+  { t: "Малая группа", d: "Немногочисленная по составу группа, члены которой объединены общей деятельностью и находятся в непосредственном личном общении.", c: "§8" },
+  { t: "Коллективизм", d: "Согласие с позицией группы в результате осознанного совпадения устремлений личности с целями группы.", c: "§8" },
+  { t: "Индивидуализм", d: "Признание приоритета личностных целей и интересов над коллективными.", c: "§8" },
+  { t: "Конформизм", d: "Приспособление человека к принятым групповым нормам поведения под влиянием реального или воображаемого давления.", c: "§8" },
+  { t: "Нонконформизм", d: "Стремление отстаивать установки и мнения, противоречащие господствующим в группе.", c: "§8" },
+  { t: "Буллинг", d: "Систематическое унижение, оскорбление, исключение из общения, психологическое и физическое воздействие на человека группой лиц.", c: "§8" },
+  { t: "Лидер", d: "Авторитетный член малой группы, личностное влияние которого позволяет ему играть ведущую роль.", c: "§8" },
+  { t: "Руководитель", d: "Лицо, на которое официально возложены функции управления группой.", c: "§8" },
+  { t: "Семья", d: "Объединение людей, связанных узами супружества, родительства или родства и находящихся в постоянном близком общении.", c: "§9" },
+  { t: "Брак", d: "Зарегистрированный добровольный союз мужчины и женщины.", c: "§9" },
+  { t: "Нуклеарная семья", d: "Простая семья, состоящая из супружеской пары или супругов с несовершеннолетними детьми.", c: "§9" },
+  { t: "Расширенная семья", d: "Семья, в состав которой входят другие родственники (например, бабушки и дедушки), проживающие вместе.", c: "§9" },
+  { t: "Репродуктивная функция", d: "Функция семьи — поддержание биологической непрерывности общества путём воспроизводства поколений.", c: "§9" },
+  { t: "Воспитательная функция", d: "Функция семьи — социализация членов, передача норм и манер поведения, воспитание подрастающего поколения.", c: "§9" },
+  { t: "Эмоциональная функция", d: "Функция семьи — удовлетворение потребностей в любви, тепле, взаимопонимании, эмоциональной поддержке.", c: "§9" },
+  { t: "Рекреативная функция", d: "Функция семьи — обеспечение комфорта, организация досуга и отдыха, укрепление здоровья.", c: "§9" },
+  { t: "Конфликт", d: "Процесс возникновения, развития и разрешения противоречий, заключающийся в противодействии людей.", c: "§10" },
+  { t: "Оппоненты", d: "Противоборствующие стороны конфликта.", c: "§10" },
+  { t: "Инцидент", d: "Первое столкновение сторон, пробa сил в конфликте.", c: "§10" },
+  { t: "Эскалация", d: "Пик конфликта — резкое усиление борьбы оппонентов.", c: "§10" },
+  { t: "Подстрекатель", d: "Человек, подталкивающий другого к конфликту, но сам в нём не участвующий.", c: "§10" },
+  { t: "Сотрудничество", d: "Тип взаимодействия, при котором реализация целей одного способствует реализации целей другого.", c: "§10" },
+  { t: "Конкуренция", d: "Тип взаимодействия, при котором реализация целей одного затрудняет или исключает реализацию целей другого.", c: "§10" },
+  { t: "Внутриличностный конфликт", d: "Противоречие человека с самим собой, затрагивающее мотивы, ценности и самооценку.", c: "§10" },
+  { t: "Компромисс", d: "Стратегия поведения в конфликте через взаимные уступки сторон.", c: "§11" },
+  { t: "Избегание", d: "Пассивная стратегия поведения в конфликте — уход от него.", c: "§11" },
+  { t: "Приспособление", d: "Стратегия поведения в конфликте — отказ от своих интересов в пользу оппонента.", c: "§11" },
+  { t: "Соперничество", d: "Стратегия поведения в конфликте — навязывание другой стороне предпочтительного решения.", c: "§11" },
+  { t: "Переговоры", d: "Обсуждение предмета конфликта с целью исключения противоречия без обращения к третьей стороне.", c: "§11" },
+  { t: "Посредничество", d: "Форма участия третьей стороны в урегулировании конфликта на основе добровольного согласия участников.", c: "§11" },
+  { t: "Арбитраж", d: "Обращение конфликтующих сторон к третьей стороне, решение которой носит обязательный характер.", c: "§11" },
+  { t: "Темперамент", d: "Индивидуальные особенности человека, определяющие динамику его психической деятельности.", c: "Доп." },
+  { t: "Холерик", d: "Тип темперамента: порывистый, возбудимый, неуравновешенный.", c: "Доп." },
+  { t: "Сангвиник", d: "Тип темперамента: активный, общительный, уравновешенный.", c: "Доп." },
+  { t: "Флегматик", d: "Тип темперамента: спокойный, надёжный, медлительный.", c: "Доп." },
+  { t: "Меланхолик", d: "Тип темперамента: чувствительный, ранимый, вдумчивый.", c: "Доп." },
+  { t: "Мировоззрение", d: "Система взглядов человека на мир и своё место в нём.", c: "Доп." },
+  { t: "Стресс", d: "Эмоциональное состояние повышенного напряжения, возникающее в ответ на сложные ситуации.", c: "Доп." }
+];
+
+const PERSONS = [
+  { n: "Абрахам Маслоу", d: "Американский психолог, создал «пирамиду потребностей» (иерархию потребностей человека).", c: "Учёный" },
+  { n: "Уолтер Липпман", d: "Американский учёный и писатель, в 1922 г. ввёл понятие «стереотип» в научный оборот.", c: "Учёный" },
+  { n: "Иван Павлов", d: "Русский физиолог, изучал типы нервной системы, лежащие в основе темперамента.", c: "Учёный" },
+  { n: "Карл Юнг", d: "Швейцарский психолог, разделил людей на экстравертов и интровертов.", c: "Учёный" },
+  { n: "Зигмунд Фрейд", d: "Австрийский психолог, основатель психоанализа, изучал механизмы психологической защиты.", c: "Учёный" },
+  { n: "Эрик Берн", d: "Американский психолог, создал трансактный анализ общения.", c: "Учёный" },
+  { n: "Курт Левин", d: "Немецко-американский психолог, изучал стили лидерства и групповую динамику.", c: "Учёный" },
+  { n: "Альфред Адлер", d: "Австрийский психолог, изучал комплекс неполноценности и стремление к превосходству.", c: "Учёный" },
+  { n: "Эрик Эриксон", d: "Психолог, автор теории психосоциального развития личности.", c: "Учёный" },
+  { n: "Ян Матейко", d: "Польский художник, автор картины «Сигизмунд Август с Барбарой».", c: "Деятель культуры" },
+  { n: "Сигизмунд Август", d: "Великий князь литовский и король польский, связан с легендой Несвижского замка и Барбарой Радзивилл.", c: "Историческая личность" },
+  { n: "Барбара Радзивилл", d: "Историческая личность, связанная с легендой о любви и Несвижским замком.", c: "Историческая личность" },
+  { n: "Людовик XIV", d: "Французский король, при дворе которого в XVII в. впервые стали использовать слово «этикет».", c: "Историческая личность" },
+  { n: "Северин Кройер", d: "Художник, автор картины «Семья Гиршпрунга» (1881).", c: "Деятель культуры" }
+];
+
+// 60 вопросов
+const QUIZ = [
+  // §6 Деятельность (10)
+  { q: "Что является побуждением к осознанным активным действиям, основанным на эмоционально переживаемом желании?", a: ["Потребность", "Мотив", "Цель", "Результат"], c: 1, e: "Мотив — побуждение к действиям, основанное на желании достичь чего-то." },
+  { q: "Что НЕ входит в структуру деятельности?", a: ["Мотив", "Цель", "Эмоция", "Результат"], c: 2, e: "Структура: Мотив → Цель → Средства → Действия → Результат. Эмоция — не элемент." },
+  { q: "Осознанный образ предвосхищаемого результата — это:", a: ["Мотив", "Цель", "Средство", "Потребность"], c: 1, e: "Цель — осознанный образ желаемого результата." },
+  { q: "Какое понятие определяется как «состояние нужды в чём-либо необходимом»?", a: ["Мотив", "Интерес", "Потребность", "Цель"], c: 2, e: "Потребность — состояние нужды, недостатка в чём-либо." },
+  { q: "Какой уровень пирамиды Маслоу является фундаментом?", a: ["Самоактуализация", "Признание", "Безопасность", "Физиология"], c: 3, e: "Фундамент пирамиды — физиологические потребности (еда, сон, дыхание)." },
+  { q: "Что относится к высшему уровню пирамиды Маслоу?", a: ["Социум", "Безопасность", "Самоактуализация", "Физиология"], c: 2, e: "Самоактуализация — высший уровень: развитие, творчество, реализация способностей." },
+  { q: "Деятельность, предполагающая повторение ранее отработанного результата, называется:", a: ["Творческой", "Продуктивной", "Игровой", "Духовной"], c: 1, e: "Продуктивная деятельность — воспроизведение известного результата." },
+  { q: "Что является личностно значимым, самостоятельным и законченным актом деятельности?", a: ["Действие", "Операция", "Поступок", "Привычка"], c: 2, e: "Поступок — личностно значимый, самостоятельный и законченный акт деятельности." },
+  { q: "К видам деятельности НЕ относится:", a: ["Игра", "Учёба", "Труд", "Сон"], c: 3, e: "Сон — физиологический процесс, а не вид деятельности." },
+  { q: "Что является основанием любой человеческой деятельности?", a: ["Игра", "Общение", "Труд", "Творчество"], c: 1, e: "Вне общения человеческая деятельность невозможна — общение её основа." },
+
+  // §7 Общение (12)
+  { q: "Какой вид общения направлен на получение информации или побуждение к действию?", a: ["Интимно-личностное", "Диалогическое", "Инструментальное", "Императивное"], c: 2, e: "Инструментальное общение — цель: получить информацию или побудить к действию." },
+  { q: "Сколько сторон выделяют в структуре общения?", a: ["Две", "Три", "Четыре", "Пять"], c: 1, e: "Три стороны: коммуникативная, интерактивная, перцептивная." },
+  { q: "Способ воздействия, при котором один человек намеренно скрывает истинную цель общения:", a: ["Убеждение", "Внушение", "Манипуляция", "Подражание"], c: 2, e: "Манипуляция — скрытое воздействие для получения выгоды." },
+  { q: "Какой способ воздействия основан на логике и доказательствах?", a: ["Заражение", "Внушение", "Подражание", "Убеждение"], c: 3, e: "Убеждение — обоснованное, с опорой на логику и доказательства, воздействие." },
+  { q: "Стихийное распространение настроения в группе — это:", a: ["Внушение", "Заражение", "Подражание", "Убеждение"], c: 1, e: "Заражение — стихийная передача настроения, состояния." },
+  { q: "Общение, подчинённое правилам и уставу, называется:", a: ["Неформальным", "Деловым", "Формальным", "Личностным"], c: 2, e: "Формальное общение — по правилам, предписаниям, официальное." },
+  { q: "Что НЕ является барьером общения?", a: ["Семантический", "Логический", "Эстетический", "Компромиссный"], c: 3, e: "Компромисс — стратегия в конфликте, не барьер общения." },
+  { q: "Способность понять чувства другого человека — это:", a: ["Рефлексия", "Эмпатия", "Идентификация", "Стереотип"], c: 1, e: "Эмпатия — способность понимать переживания другого, сочувствовать." },
+  { q: "Осознание человеком себя, своих действий и мыслей — это:", a: ["Эмпатия", "Идентификация", "Рефлексия", "Внушение"], c: 2, e: "Рефлексия — осознание себя, своих действий." },
+  { q: "Что означает термин «респект, брат» в молодёжном сленге?", a: ["Родство", "Уважение", "Просьба", "Приветствие"], c: 1, e: "«Респект» — от англ. respect — уважение." },
+  { q: "Какой вид общения лишает человека эмоциональной полноты?", a: ["Прямое", "Виртуальное", "Деловое", "Диалогическое"], c: 1, e: "Виртуальное общение лишает эмоциональной полноты — неречевых средств." },
+  { q: "Что является основой этикета?", a: ["Принцип уместности", "Принцип силы", "Принцип выгоды", "Принцип скорости"], c: 0, e: "Этикет основан на принципе уместности — соответствия ситуации." },
+
+  // §8 Межличностные отношения (10)
+  { q: "Какой уровень межличностных отношений является первичным?", a: ["Дружба", "Знакомство", "Товарищество", "Любовь"], c: 1, e: "Первичный уровень — знакомство." },
+  { q: "Какой уровень отношений основан на совместной деятельности?", a: ["Знакомство", "Приятельство", "Товарищество", "Любовь"], c: 2, e: "Товарищество — отношения на основе совместной деятельности." },
+  { q: "Что означает понятие «эрос» в греческой классификации любви?", a: ["Любовь-игра", "Страстная любовь", "Любовь-дружба", "Любовь по расчёту"], c: 1, e: "Эрос — страстная любовь-увлечение." },
+  { q: "Что означает понятие «прагма»?", a: ["Бескорыстная любовь", "Любовь по расчёту", "Любовь-дружба", "Любовь-одержимость"], c: 1, e: "Прагма — рассудочная, легко поддающаяся контролю любовь по расчёту." },
+  { q: "Какой вид любви относится к отношениям родителей и детей?", a: ["Агапе", "Филиа", "Мания", "Людус"], c: 1, e: "Филиа — любовь между родителями и детьми." },
+  { q: "Стереотип — это:", a: ["Личное мнение", "Устойчивое упрощённое представление о группе людей", "Научный факт", "Результат наблюдения"], c: 1, e: "Стереотип — устойчивое и упрощённое оценочное представление о группе." },
+  { q: "Кто ввёл понятие «стереотип» в науку?", a: ["А. Маслоу", "У. Липпман", "К. Юнг", "И. Павлов"], c: 1, e: "Уолтер Липпман в 1922 г. ввёл понятие «стереотип»." },
+  { q: "Что такое конформизм?", a: ["Независимость от группы", "Приспособление к групповым нормам под давлением", "Активное противостояние группе", "Лидерство в группе"], c: 1, e: "Конформизм — приспособление под реальным или воображаемым давлением группы." },
+  { q: "Что такое буллинг?", a: ["Спор", "Систематическое унижение человека группой", "Конкуренция", "Деловая игра"], c: 1, e: "Буллинг — систематическое унижение, оскорбление, психологическое или физическое воздействие." },
+  { q: "В чём отличие лидера от руководителя?", a: ["Лидер назначается, руководитель выдвигается", "Лидер выдвигается стихийно, руководитель назначается", "Они одинаковы", "Лидер старше"], c: 1, e: "Лидер выдвигается стихийно, руководитель — назначается официально." },
+
+  // §9 Семья (10)
+  { q: "Что такое брак с точки зрения закона?", a: ["Любовный союз", "Совместное проживание", "Зарегистрированный добровольный союз мужчины и женщины", "Родственные отношения"], c: 2, e: "Брак — зарегистрированный добровольный союз мужчины и женщины." },
+  { q: "Семья из супругов и несовершеннолетних детей называется:", a: ["Расширенной", "Нуклеарной", "Неполной", "Многодетной"], c: 1, e: "Нуклеарная (простая) семья — супруги + несовершеннолетние дети." },
+  { q: "Какая функция семьи обеспечивает воспроизводство поколений?", a: ["Воспитательная", "Репродуктивная", "Эмоциональная", "Рекреативная"], c: 1, e: "Репродуктивная функция — поддержание биологической непрерывности общества." },
+  { q: "Какая функция семьи обеспечивает социализацию детей?", a: ["Репродуктивная", "Хозяйственно-бытовая", "Воспитательная", "Рекреативная"], c: 2, e: "Воспитательная — передача норм, социализация, социальный контроль." },
+  { q: "Какая функция семьи обеспечивает эмоциональную поддержку?", a: ["Репродуктивная", "Эмоциональная", "Хозяйственно-бытовая", "Рекреативная"], c: 1, e: "Эмоциональная — удовлетворение потребностей в любви, тепле, взаимопонимании." },
+  { q: "Семья, включающая бабушек и дедушек, называется:", a: ["Нуклеарной", "Расширенной", "Неполной", "Однодетной"], c: 1, e: "Расширенная семья — включает других родственников, проживающих вместе." },
+  { q: "Семья с одним родителем называется:", a: ["Полной", "Расширенной", "Неполной", "Нуклеарной"], c: 2, e: "Неполная семья — с одним родителем (материнская или отцовская)." },
+  { q: "Многодетная семья — это семья с:", a: ["Одним ребёнком", "Двумя детьми", "Тремя и более детьми", "Без детей"], c: 2, e: "Многодетная семья — три и более ребёнка." },
+  { q: "Какая семья называется патриархальной?", a: ["С равными правами супругов", "С доминированием мужчины", "С доминированием женщины", "Неполная"], c: 1, e: "Патриархальная семья — доминирование мужчины в принятии решений." },
+  { q: "Какой мотив вступления в брак преобладает у белорусов по опросам?", a: ["Решение жилищных проблем", "Страх одиночества", "Взаимные чувства", "Желание стать независимым"], c: 2, e: "84,2 % назвали взаимные чувства — самый популярный мотив." },
+
+  // §10 Конфликты (10)
+  { q: "Что такое конфликт?", a: ["Спор", "Процесс возникновения, развития и разрешения противоречий", "Ссора", "Дискуссия"], c: 1, e: "Конфликт — процесс возникновения, развития и разрешения противоречий." },
+  { q: "Как называется первое столкновение сторон в конфликте?", a: ["Пик", "Инцидент", "Баланс", "Эскалация"], c: 1, e: "Инцидент — первое столкновение сторон, проба сил." },
+  { q: "Что идёт сразу после инцидента?", a: ["Баланс", "Пик (эскалация)", "Поиск решения", "Осознание"], c: 1, e: "После инцидента следует пик (эскалация)." },
+  { q: "Кто такой подстрекатель?", a: ["Участник конфликта", "Тот, кто подталкивает к конфликту, но сам не участвует", "Жертва", "Наблюдатель"], c: 1, e: "Подстрекатель подталкивает к конфликту, но сам не участвует активно." },
+  { q: "Какой тип взаимодействия способствует реализации целей обоих?", a: ["Конкуренция", "Соперничество", "Кооперация", "Конфликт"], c: 2, e: "Кооперация (сотрудничество) — реализация целей одного способствует реализации целей другого." },
+  { q: "Какой конфликт называется внутриличностным?", a: ["Между людьми", "Между группами", "Противоречие человека с самим собой", "Деловой"], c: 2, e: "Внутриличностный — противоречие с самим собой, затрагивает мотивы, ценности, самооценку." },
+  { q: "Какой внутриличностный конфликт связан с невозможностью выполнять несколько ролей?", a: ["Мотивационный", "Нравственный", "Ролевой", "Адаптационный"], c: 2, e: "Ролевой — невозможность одновременно выполнять несколько ролей." },
+  { q: "Какой внутриличностный конфликт называют комплексом неполноценности?", a: ["Мотивационный", "Нравственный", "Неадекватной самооценки", "Ролевой"], c: 2, e: "Конфликт неадекватной самооценки — переоценка или недооценка своих возможностей." },
+  { q: "Сколько этапов в скрытом периоде конфликта?", a: ["Два", "Три", "Четыре", "Пять"], c: 2, e: "Скрытый период: проблемная ситуация, осознание, аргументация, восприятие как угрозы — 4 этапа." },
+  { q: "Что является ключевым звеном конфликта?", a: ["Предмет", "Условия", "Противоборствующие стороны", "Подстрекатели"], c: 2, e: "Противоборствующие стороны — ключевое звено; уходит одна — конфликт прекращается." },
+
+  // §11 Разрешение конфликтов (8)
+  { q: "Стратегия поведения в конфликте, при которой обе стороны ищут взаимовыгодное решение:", a: ["Соперничество", "Избегание", "Приспособление", "Компромисс"], c: 3, e: "Компромисс — взаимные уступки, частичное удовлетворение интересов." },
+  { q: "Стратегия ухода от конфликта называется:", a: ["Соперничество", "Избегание", "Приспособление", "Сотрудничество"], c: 1, e: "Избегание — пассивная стратегия, уход от конфликта." },
+  { q: "Стратегия отказа от своих интересов в пользу оппонента:", a: ["Соперничество", "Избегание", "Приспособление", "Компромисс"], c: 2, e: "Приспособление — отказ от своих интересов в пользу оппонента." },
+  { q: "Стратегия навязывания своего решения называется:", a: ["Соперничество", "Избегание", "Приспособление", "Компромисс"], c: 0, e: "Соперничество — навязывание другой стороне предпочтительного решения." },
+  { q: "Какая стратегия ведёт к выигрышу обеих сторон?", a: ["Соперничество", "Избегание", "Сотрудничество", "Приспособление"], c: 2, e: "Сотрудничество — поиск решения, выгодного обеим сторонам." },
+  { q: "Чем арбитраж отличается от посредничества?", a: ["Ничем", "Решение арбитра обязательно, посредника — нет", "Решение посредника обязательно", "Арбитр не участвует"], c: 1, e: "Решение арбитра носит обязательный характер, посредника — рекомендательный." },
+  { q: "Что является основой конструктивного общения?", a: ["Навязывание своего мнения", "Готовность к компромиссу и интерес к партнёру", "Игнорирование собеседника", "Спор ради спора"], c: 1, e: "Конструктивное общение — готовность к компромиссу, интерес к партнёру, терпимость." },
+  { q: "Какова основная цель переговоров?", a: ["Победить", "Обсудить предмет конфликта без третьей стороны", "Привлечь посредника", "Избежать конфликта"], c: 1, e: "Переговоры — обсуждение предмета конфликта без обращения к третьей стороне." }
+];
+
+const FLASH_EXTRA = [
+  { front: "А. Маслоу", back: "Американский психолог, создал пирамиду потребностей" },
+  { front: "У. Липпман", back: "Ввёл понятие «стереотип» (1922)" },
+  { front: "И. Павлов", back: "Изучал типы нервной системы (темперамент)" },
+  { front: "К. Юнг", back: "Разделил людей на экстравертов и интровертов" },
+  { front: "З. Фрейд", back: "Основатель психоанализа, изучал защитные механизмы" },
+  { front: "Э. Берн", back: "Создал трансактный анализ общения" },
+  { front: "К. Левин", back: "Изучал стили лидерства и групповую динамику" },
+  { front: "А. Адлер", back: "Изучал комплекс неполноценности" }
+];
+
+// ============ УТИЛИТЫ ============
+function shuffle(a) { 
+  const arr = a.slice();
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+// ============ ВКЛАДКИ ============
+document.getElementById('tabs').addEventListener('click', (e) => {
+  const btn = e.target.closest('.tab-btn');
+  if (!btn) return;
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  const panel = document.getElementById('panel-' + btn.dataset.tab);
+  if (panel) panel.classList.add('active');
+});
+
+// ============ СЛОВАРЬ ============
+function renderDict(filter = '') {
+  const list = document.getElementById('dict-list');
+  if (!list) return;
+  list.innerHTML = '';
+  const f = filter.toLowerCase();
+  const filtered = DICT.filter(d => 
+    d.t.toLowerCase().includes(f) || d.d.toLowerCase().includes(f) || d.c.toLowerCase().includes(f)
+  );
+  if (filtered.length === 0) {
+    list.innerHTML = '<p style="color:#a0a0b0; text-align:center; padding:20px;">Ничего не найдено</p>';
+    return;
+  }
+  filtered.forEach(d => {
+    const el = document.createElement('div');
+    el.className = 'dict-item';
+    el.innerHTML = `<div class="dict-term">${d.t}</div><div class="dict-def">${d.d}</div><div class="dict-cat">${d.c}</div>`;
+    list.appendChild(el);
+  });
+}
+renderDict();
+document.getElementById('dict-search').addEventListener('input', (e) => renderDict(e.target.value));
+
+// ============ ЛИЧНОСТИ ============
+const pList = document.getElementById('persons-list');
+PERSONS.forEach(p => {
+  const el = document.createElement('div');
+  el.className = 'person-card';
+  el.innerHTML = `<div class="person-name">${p.n}</div><div class="person-desc">${p.d}</div><div class="dict-cat" style="margin-top:8px;">${p.c}</div>`;
+  pList.appendChild(el);
+});
+
+// ============ ТЕСТЫ ============
+let quizState = { idx: 0, correct: 0, total: 0, score: 0, streak: 0, bestStreak: 0, order: [] };
+
+function startQuiz() {
+  quizState = { idx: 0, correct: 0, total: 0, score: 0, streak: 0, bestStreak: 0, order: shuffle(QUIZ.map((_, i) => i)) };
+  updateQuizStats();
+  renderQuiz();
+}
+
+function updateQuizStats() {
+  document.getElementById('quiz-correct').textContent = quizState.correct;
+  document.getElementById('quiz-total').textContent = quizState.total;
+  document.getElementById('quiz-score').textContent = quizState.score;
+  document.getElementById('quiz-streak').textContent = quizState.streak;
+}
+
+function renderQuiz() {
+  const qBox = document.getElementById('quiz-question');
+  const optBox = document.getElementById('quiz-options');
+  const fb = document.getElementById('quiz-feedback');
+  const nextBtn = document.getElementById('quiz-next');
+  const progress = document.getElementById('quiz-progress');
+
+  if (quizState.idx >= quizState.order.length) {
+    qBox.innerHTML = `🎉 <strong>Тест завершён!</strong><br>Правильно: ${quizState.correct} из ${quizState.total}<br>Баллы: ${quizState.score}<br>Лучшая серия: ${quizState.bestStreak}`;
+    optBox.innerHTML = '';
+    fb.className = 'feedback';
+    nextBtn.style.display = 'none';
+    progress.style.width = '100%';
+    return;
+  }
+
+  progress.style.width = (quizState.idx / quizState.order.length * 100) + '%';
+  const q = QUIZ[quizState.order[quizState.idx]];
+  qBox.textContent = `Вопрос ${quizState.idx + 1} из ${quizState.order.length}: ${q.q}`;
+  optBox.innerHTML = '';
+  fb.className = 'feedback';
+  fb.textContent = '';
+  nextBtn.style.display = 'none';
+
+  q.a.forEach((opt, i) => {
+    const b = document.createElement('button');
+    b.className = 'option-btn';
+    b.textContent = opt;
+    b.onclick = () => checkQuiz(i);
+    optBox.appendChild(b);
+  });
+}
+
+function checkQuiz(i) {
+  const q = QUIZ[quizState.order[quizState.idx]];
+  const fb = document.getElementById('quiz-feedback');
+  document.querySelectorAll('#quiz-options .option-btn').forEach((b, idx) => {
+    b.disabled = true;
+    if (idx === q.c) b.classList.add('correct');
+    if (idx === i && i !== q.c) b.classList.add('wrong');
+  });
+
+  quizState.total++;
+  if (i === q.c) {
+    quizState.correct++;
+    quizState.streak++;
+    quizState.score += 2 + Math.min(quizState.streak, 5);
+    if (quizState.streak > quizState.bestStreak) quizState.bestStreak = quizState.streak;
+    fb.className = 'feedback ok show';
+    fb.innerHTML = `✅ <strong>Верно!</strong> ${q.e}` + (quizState.streak > 1 ? `<br>🔥 Серия: ${quizState.streak}` : '');
+  } else {
+    quizState.streak = 0;
+    fb.className = 'feedback err show';
+    fb.innerHTML = `❌ <strong>Неверно.</strong> Правильный ответ: <strong>${q.a[q.c]}</strong><br>${q.e}`;
+  }
+
+  updateQuizStats();
+  document.getElementById('quiz-next').style.display = 'inline-block';
+}
+
+document.getElementById('quiz-next').onclick = () => {
+  quizState.idx++;
+  renderQuiz();
+};
+document.getElementById('quiz-restart').onclick = startQuiz;
+startQuiz();
+
+// ============ ФЛЕШКАРТЫ ============
+let flashCards = DICT.map(d => ({ front: d.t, back: d.d })).concat(FLASH_EXTRA);
+let flashIdx = 0;
+document.getElementById('flash-total').textContent = flashCards.length;
+
+function renderFlash() {
+  const f = flashCards[flashIdx];
+  const card = document.getElementById('flashcard');
+  card.classList.remove('flipped');
+  document.getElementById('flash-front').textContent = f.front;
+  document.getElementById('flash-back').textContent = f.back;
+  document.getElementById('flash-idx').textContent = flashIdx + 1;
+}
+
+document.getElementById('flashcard').onclick = () => {
+  document.getElementById('flashcard').classList.toggle('flipped');
+};
+document.getElementById('flash-prev').onclick = () => {
+  flashIdx = (flashIdx - 1 + flashCards.length) % flashCards.length;
+  renderFlash();
+};
+document.getElementById('flash-next').onclick = () => {
+  flashIdx = (flashIdx + 1) % flashCards.length;
+  renderFlash();
+};
+document.getElementById('flash-shuffle').onclick = () => {
+  flashCards = shuffle(flashCards);
+  flashIdx = 0;
+  renderFlash();
+};
+renderFlash();
+
+// ============ СОПОСТАВЛЕНИЕ ============
+const MATCH_DATA = {
+  obsh: [
+    { l: "Формальное", r: "По правилам, уставу" },
+    { l: "Неформальное", r: "Личное, эмоциональное" },
+    { l: "Деловое", r: "Решение задачи" },
+    { l: "Инструментальное", r: "Получение информации" },
+    { l: "Манипулятивное", r: "Скрытие истинной цели" },
+    { l: "Императивное", r: "Приказ, монолог" },
+    { l: "Диалогическое", r: "Равенство сторон" }
+  ],
+  konf: [
+    { l: "Соперничество", r: "Навязывание своего решения" },
+    { l: "Сотрудничество", r: "Решение, выгодное обеим сторонам" },
+    { l: "Компромисс", r: "Взаимные уступки" },
+    { l: "Приспособление", r: "Отказ от своих интересов" },
+    { l: "Избегание", r: "Уход от конфликта" },
+    { l: "Переговоры", r: "Обсуждение без третьей стороны" },
+    { l: "Посредничество", r: "Третья сторона, решение необязательно" },
+    { l: "Арбитраж", r: "Третья сторона, решение обязательно" }
+  ],
+  sem: [
+    { l: "Репродуктивная", r: "Воспроизводство поколений" },
+    { l: "Хозяйственно-бытовая", r: "Материальные условия жизни" },
+    { l: "Воспитательная", r: "Социализация, нормы поведения" },
+    { l: "Эмоциональная", r: "Любовь, поддержка" },
+    { l: "Рекреативная", r: "Досуг и отдых" },
+    { l: "Нуклеарная", r: "Супруги + дети" },
+    { l: "Расширенная", r: "С другими родственниками" }
+  ],
+  lyub: [
+    { l: "Эрос", r: "Страстная любовь" },
+    { l: "Людус", r: "Любовь-игра" },
+    { l: "Сторге", r: "Любовь-дружба" },
+    { l: "Прагма", r: "Любовь по расчёту" },
+    { l: "Мания", r: "Любовь-одержимость" },
+    { l: "Агапе", r: "Бескорыстная любовь" },
+    { l: "Филиа", r: "Родители и дети" }
+  ],
+  potr: [
+    { l: "Физиология", r: "Еда, сон, дыхание" },
+    { l: "Безопасность", r: "Защита, стабильность" },
+    { l: "Социум", r: "Общение, принадлежность" },
+    { l: "Признание", r: "Уважение, статус" },
+    { l: "Самоактуализация", r: "Развитие, творчество" }
+  ],
+  temp: [
+    { l: "Холерик", r: "Порывистый, возбудимый, неуравновешенный" },
+    { l: "Сангвиник", r: "Активный, общительный, поверхностный" },
+    { l: "Флегматик", r: "Спокойный, надёжный, медлительный" },
+    { l: "Меланхолик", r: "Чувствительный, ранимый, вдумчивый" }
+  ],
+  stereo: [
+    { l: "Стереотип", r: "Упрощённый устойчивый образ" },
+    { l: "Эмпатия", r: "Способность понять чувства другого" },
+    { l: "Рефлексия", r: "Осознание себя, своих действий" },
+    { l: "Идентификация", r: "Уподобление другому человеку" }
+  ]
+};
+
+let matchState = { selected: null, done: 0, total: 0, errors: 0, pairs: [] };
+
+function startMatch() {
+  const topic = document.getElementById('match-topic').value;
+  let pool;
+  if (topic === 'all') {
+    pool = [];
+    Object.values(MATCH_DATA).forEach(arr => arr.forEach(p => pool.push(p)));
+  } else {
+    pool = MATCH_DATA[topic] || [];
+  }
+  pool = shuffle(pool).slice(0, 8);
+  matchState = { selected: null, done: 0, total: pool.length, errors: 0, pairs: pool };
+
+  document.getElementById('match-done').textContent = '0';
+  document.getElementById('match-total').textContent = pool.length;
+  document.getElementById('match-errors').textContent = '0';
+
+  const left = shuffle(pool.map((p, i) => ({ text: p.l, id: i })));
+  const right = shuffle(pool.map((p, i) => ({ text: p.r, id: i })));
+
+  const grid = document.getElementById('match-grid');
+  grid.innerHTML = '';
+
+  const colL = document.createElement('div'); colL.className = 'match-col';
+  const colR = document.createElement('div'); colR.className = 'match-col';
+
+  left.forEach(item => {
+    const el = document.createElement('div');
+    el.className = 'match-item';
+    el.textContent = item.text;
+    el.dataset.id = item.id;
+    el.dataset.side = 'L';
+    el.onclick = () => selectMatch(el);
+    colL.appendChild(el);
+  });
+  right.forEach(item => {
+    const el = document.createElement('div');
+    el.className = 'match-item';
+    el.textContent = item.text;
+    el.dataset.id = item.id;
+    el.dataset.side = 'R';
+    el.onclick = () => selectMatch(el);
+    colR.appendChild(el);
+  });
+
+  grid.appendChild(colL);
+  grid.appendChild(colR);
+}
+
+function selectMatch(el) {
+  if (el.classList.contains('matched')) return;
+  if (!matchState.selected) {
+    matchState.selected = el;
+    el.classList.add('selected');
+    return;
+  }
+  if (matchState.selected === el) {
+    el.classList.remove('selected');
+    matchState.selected = null;
+    return;
+  }
+  if (matchState.selected.dataset.id === el.dataset.id &&
+      matchState.selected.dataset.side !== el.dataset.side) {
+    matchState.selected.classList.remove('selected');
+    matchState.selected.classList.add('matched');
+    el.classList.add('matched');
+    matchState.selected = null;
+    matchState.done++;
+    document.getElementById('match-done').textContent = matchState.done;
+    if (matchState.done === matchState.total) {
+      setTimeout(() => alert('🎉 Все пары найдены! Ошибок: ' + matchState.errors), 300);
+    }
+  } else {
+    const wrong = el;
+    wrong.classList.add('wrong-flash');
+    matchState.selected.classList.remove('selected');
+    matchState.selected = null;
+    matchState.errors++;
+    document.getElementById('match-errors').textContent = matchState.errors;
+    setTimeout(() => wrong.classList.remove('wrong-flash'), 400);
+  }
+}
+
+document.getElementById('match-topic').onchange = startMatch;
+document.getElementById('match-restart').onclick = startMatch;
+startMatch();
+
+// ============ ПОСЛЕДОВАТЕЛЬНОСТЬ ============
+const SEQ_DATA = [
+  { title: "Этапы развития семьи", items: ["Добрачный период", "Молодая семья", "Семья с детьми", "Зрелая семья", "Пожилая семья"] },
+  { title: "Динамика конфликта (8 этапов)", items: ["Проблемная ситуация", "Осознание", "Аргументация", "Восприятие как угрозы", "Инцидент", "Пик (эскалация)", "Баланс", "Поиск решения"] },
+  { title: "Скрытый период конфликта", items: ["Проблемная ситуация", "Осознание", "Аргументация своих интересов", "Восприятие как угрозы"] },
+  { title: "Открытый период конфликта", items: ["Инцидент", "Пик (эскалация)", "Баланс в противостоянии", "Поиск решения"] },
+  { title: "Уровни межличностных отношений", items: ["Знакомство", "Приятельство", "Товарищество", "Дружба", "Любовь"] },
+  { title: "Пирамида Маслоу (снизу вверх)", items: ["Физиология", "Безопасность", "Социум", "Признание", "Самоактуализация"] },
+  { title: "Структура деятельности", items: ["Мотив", "Цель", "Средства", "Действия", "Результат"] }
+];
+
+let seqState = { current: 0, items: [] };
+
+function startSeq() {
+  const idx = parseInt(document.getElementById('seq-topic').value);
+  seqState.current = idx;
+  seqState.items = shuffle(SEQ_DATA[idx].items.slice());
+  renderSeq();
+  document.getElementById('seq-feedback').className = 'feedback';
+}
+
+function renderSeq() {
+  const list = document.getElementById('seq-list');
+  list.innerHTML = '';
+  seqState.items.forEach((item, i) => {
+    const el = document.createElement('div');
+    el.className = 'seq-item';
+    el.innerHTML = `
+      <span class="seq-num">${i + 1}</span>
+      <span style="flex:1;">${item}</span>
+      <span class="seq-controls">
+        <button class="seq-arrow" data-dir="up" data-idx="${i}">▲</button>
+        <button class="seq-arrow" data-dir="down" data-idx="${i}">▼</button>
+      </span>
+    `;
+    list.appendChild(el);
+  });
+  list.querySelectorAll('.seq-arrow').forEach(b => {
+    b.onclick = () => {
+      const i = parseInt(b.dataset.idx);
+      const dir = b.dataset.dir;
+      const j = dir === 'up' ? i - 1 : i + 1;
+      if (j < 0 || j >= seqState.items.length) return;
+      [seqState.items[i], seqState.items[j]] = [seqState.items[j], seqState.items[i]];
+      renderSeq();
+    };
+  });
+}
+
+document.getElementById('seq-check').onclick = () => {
+  const correct = SEQ_DATA[seqState.current].items;
+  const fb = document.getElementById('seq-feedback');
+  let ok = true;
+  document.querySelectorAll('#seq-list .seq-item').forEach((el, i) => {
+    el.classList.remove('correct-pos', 'wrong-pos');
+    if (seqState.items[i] === correct[i]) {
+      el.classList.add('correct-pos');
+    } else {
+      el.classList.add('wrong-pos');
+      ok = false;
+    }
+  });
+  if (ok) {
+    fb.className = 'feedback ok show';
+    fb.innerHTML = '✅ <strong>Верно!</strong> Все элементы в правильном порядке.';
+  } else {
+    fb.className = 'feedback err show';
+    fb.innerHTML = '❌ <strong>Есть ошибки.</strong> Зелёные — на своих местах, красные — нет.';
+  }
+};
+
+document.getElementById('seq-shuffle').onclick = () => {
+  seqState.items = shuffle(seqState.items);
+  renderSeq();
+  document.getElementById('seq-feedback').className = 'feedback';
+};
+
+document.getElementById('seq-topic').onchange = startSeq;
+startSeq();
+
+// ============ ГЕНЕРАТОР ============
+const GEN_DATA = {
+  conflict: [
+    { sit: "Два друга спорят, в какой кинотеатр пойти. Один настаивает на своём варианте, другой уступает, чтобы не поругаться.", ans: "Приспособление" },
+    { sit: "Один из коллег настаивает на своём решении, игнорируя мнение другого, и добивается своего любой ценой.", ans: "Соперничество" },
+    { sit: "Супруги ссорятся из-за распределения домашних обязанностей и вместе ищут решение, которое устроит обоих.", ans: "Сотрудничество" },
+    { sit: "Два ученика делят одну ручку: один берёт её на первый урок, другой — на второй. Оба недовольны, но согласны.", ans: "Компромисс" },
+    { sit: "Подросток не хочет ссориться с родителями и просто уходит в свою комнату, не обсуждая проблему.", ans: "Избегание" },
+    { sit: "На работе один сотрудник обвиняет другого в ошибке, не выслушав его объяснений, и требует признать вину.", ans: "Соперничество" },
+    { sit: "Две подруги поссорились из-за парня. Одна готова отказаться от него ради дружбы.", ans: "Приспособление" },
+    { sit: "Соседи спорят о громкой музыке. Они договариваются: до 22:00 — можно, после — нет.", ans: "Компромисс" }
+  ],
+  need: [
+    { sit: "Потребность в еде", ans: "Физиология" },
+    { sit: "Потребность в сне", ans: "Физиология" },
+    { sit: "Потребность в защите от опасности", ans: "Безопасность" },
+    { sit: "Потребность в стабильности и порядке", ans: "Безопасность" },
+    { sit: "Потребность в общении с друзьями", ans: "Социум" },
+    { sit: "Потребность в принадлежности к группе", ans: "Социум" },
+    { sit: "Потребность в уважении окружающих", ans: "Признание" },
+    { sit: "Потребность в статусе и престиже", ans: "Признание" },
+    { sit: "Потребность в творчестве и саморазвитии", ans: "Самоактуализация" },
+    { sit: "Потребность реализовать свои способности", ans: "Самоактуализация" }
+  ],
+  temper: [
+    { sit: "Порывистый, возбудимый, неуравновешенный, быстро загорается и быстро остывает.", ans: "Холерик" },
+    { sit: "Активный, общительный, жизнерадостный, но поверхностный в увлечениях.", ans: "Сангвиник" },
+    { sit: "Спокойный, надёжный, медлительный, с устойчивыми интересами.", ans: "Флегматик" },
+    { sit: "Чувствительный, ранимый, вдумчивый, склонный к переживаниям.", ans: "Меланхолик" }
+  ],
+  world: [
+    { sit: "«Мир создан Богом, и всё в нём подчиняется высшей силе».", ans: "Религиозное" },
+    { sit: "«Всё в мире можно объяснить законами природы, наука — главный источник знания».", ans: "Научное" },
+    { sit: "«Красота и искусство — главные ценности в жизни человека».", ans: "Эстетическое" },
+    { sit: "«Главное в жизни — делать добро и помогать другим».", ans: "Гуманистическое" },
+    { sit: "«Каждый человек должен прежде всего заботиться о своих интересах».", ans: "Обыденное (прагматическое)" }
+  ]
+};
+
+let genState = { type: 'conflict', current: null, answered: false };
+
+function newGenTask() {
+  const type = document.getElementById('gen-type').value;
+  genState.type = type;
+  genState.answered = false;
+
+  const qBox = document.getElementById('gen-question');
+  const area = document.getElementById('gen-answer-area');
+  const fb = document.getElementById('gen-feedback');
+  const checkBtn = document.getElementById('gen-check');
+  fb.className = 'feedback';
+  area.innerHTML = '';
+
+  if (type === 'conflict' || type === 'need' || type === 'temper' || type === 'world') {
+    const pool = GEN_DATA[type];
+    genState.current = pool[Math.floor(Math.random() * pool.length)];
+    qBox.textContent = genState.current.sit;
+    checkBtn.style.display = 'inline-block';
+    checkBtn.textContent = 'Показать ответ';
+  } else if (type === 'term') {
+    const pool = DICT;
+    genState.current = pool[Math.floor(Math.random() * pool.length)];
+    qBox.innerHTML = `<strong>${genState.current.t}</strong><br><span style="font-size:14px;color:#a0a0b0;">Дайте определение (устно), затем нажмите «Показать».</span>`;
+    checkBtn.style.display = 'inline-block';
+    checkBtn.textContent = 'Показать ответ';
+  }
+}
+
+document.getElementById('gen-new').onclick = newGenTask;
+document.getElementById('gen-check').onclick = () => {
+  const fb = document.getElementById('gen-feedback');
+  if (genState.type === 'term') {
+    fb.className = 'feedback ok show';
+    fb.innerHTML = `<strong>${genState.current.t}:</strong> ${genState.current.d}`;
+  } else {
+    fb.className = 'feedback ok show';
+    fb.innerHTML = `✅ <strong>Правильный ответ:</strong> ${genState.current.ans}`;
+  }
+};
+document.getElementById('gen-type').onchange = newGenTask;
+newGenTask();
+
+</script>
+</body>
+</html>

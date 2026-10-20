@@ -1,0 +1,2957 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Онлайн-урок: Обобщение — Беларусь во второй половине XIX — начале XX в.</title>
+    <style>
+
+        :root {
+            --primary: #1a5276;
+            --primary-light: #2980b9;
+            --primary-dark: #0e2f44;
+            --accent: #e74c3c;
+            --accent-light: #ff6b6b;
+            --success: #27ae60;
+            --success-light: #2ecc71;
+            --warning: #f39c12;
+            --warning-light: #f1c40f;
+            --bg: #f0f4f8;
+            --card-bg: #ffffff;
+            --text: #2c3e50;
+            --text-light: #5d6d7e;
+            --border: #d5dbdb;
+            --shadow: 0 4px 20px rgba(0,0,0,0.08);
+            --shadow-hover: 0 8px 30px rgba(0,0,0,0.15);
+            --radius: 16px;
+            --radius-sm: 10px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 50%, var(--primary-light) 100%);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%; left: -50%;
+            width: 200%; height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 70%);
+            animation: headerPulse 8s ease-in-out infinite;
+        }
+
+        @keyframes headerPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .header h1 {
+            font-family: 'Merriweather', serif;
+            font-size: clamp(1.5rem, 4vw, 2.5rem);
+            margin-bottom: 10px;
+            position: relative; z-index: 1;
+        }
+
+        .header p {
+            font-size: clamp(0.9rem, 2vw, 1.1rem);
+            opacity: 0.9;
+            position: relative; z-index: 1;
+        }
+
+        .header .emoji-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            display: block;
+            position: relative; z-index: 1;
+        }
+
+        .progress-container {
+            background: white;
+            padding: 15px 20px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .progress-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-light);
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e8ecef;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-light), var(--success));
+            border-radius: 10px;
+            transition: width 0.5s ease;
+            width: 0%;
+        }
+
+        .nav-tabs {
+            display: flex;
+            overflow-x: auto;
+            background: white;
+            padding: 10px 15px;
+            gap: 6px;
+            border-bottom: 1px solid var(--border);
+            scrollbar-width: thin;
+        }
+
+        .nav-tabs::-webkit-scrollbar { height: 4px; }
+        .nav-tabs::-webkit-scrollbar-thumb { background: var(--primary-light); border-radius: 4px; }
+
+        .nav-tab {
+            flex-shrink: 0;
+            padding: 8px 16px;
+            border: 2px solid transparent;
+            border-radius: 25px;
+            background: #f0f4f8;
+            color: var(--text-light);
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            white-space: nowrap;
+        }
+
+        .nav-tab:hover { background: #e8ecef; color: var(--primary); }
+        .nav-tab.active { background: var(--primary); color: white; border-color: var(--primary); }
+        .nav-tab.completed { background: var(--success-light); color: white; }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .section {
+            display: none;
+            animation: fadeInUp 0.5s ease;
+        }
+
+        .section.active { display: block; }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            border: 1px solid rgba(0,0,0,0.04);
+        }
+
+        .card:hover { box-shadow: var(--shadow-hover); }
+
+        .card h2 {
+            font-family: 'Merriweather', serif;
+            font-size: 1.5rem;
+            color: var(--primary);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card h3 {
+            font-size: 1.15rem;
+            color: var(--primary-dark);
+            margin: 20px 0 12px;
+        }
+
+        .card h4 {
+            font-size: 1rem;
+            color: var(--text);
+            margin: 15px 0 8px;
+        }
+
+        /* Timeline Game */
+        .timeline-game {
+            background: linear-gradient(135deg, #f8f9fa, #e8ecef);
+            border-radius: var(--radius-sm);
+            padding: 25px;
+            margin: 20px 0;
+        }
+
+        .timeline-slots {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+            margin: 20px 0;
+            min-height: 120px;
+            padding: 15px;
+            background: white;
+            border-radius: var(--radius-sm);
+            border: 2px dashed var(--border);
+        }
+
+        .timeline-slot {
+            width: 200px;
+            min-height: 100px;
+            background: #f0f4f8;
+            border: 2px dashed var(--primary-light);
+            border-radius: var(--radius-sm);
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .timeline-slot.drag-over {
+            background: #d6eaf8;
+            border-color: var(--primary);
+            transform: scale(1.05);
+        }
+
+        .timeline-slot.correct {
+            border-color: var(--success);
+            background: #e8f5e9;
+        }
+
+        .timeline-slot.incorrect {
+            border-color: var(--accent);
+            background: #fde8e8;
+            animation: shake 0.5s;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .slot-year {
+            font-weight: 800;
+            font-size: 1.1rem;
+            color: var(--primary);
+            margin-bottom: 8px;
+        }
+
+        .slot-content {
+            font-size: 0.85rem;
+            text-align: center;
+            color: var(--text);
+            width: 100%;
+        }
+
+        .timeline-cards-pool {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin: 20px 0;
+            padding: 15px;
+            background: white;
+            border-radius: var(--radius-sm);
+            border: 2px solid var(--border);
+            min-height: 80px;
+        }
+
+        .timeline-card {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white;
+            padding: 12px 16px;
+            border-radius: var(--radius-sm);
+            cursor: grab;
+            font-size: 0.85rem;
+            font-weight: 600;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            transition: var(--transition);
+            user-select: none;
+            max-width: 180px;
+            text-align: center;
+        }
+
+        .timeline-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.25);
+        }
+
+        .timeline-card.dragging {
+            opacity: 0.5;
+            cursor: grabbing;
+        }
+
+        .timeline-card.placed {
+            background: linear-gradient(135deg, var(--success), var(--success-light));
+            cursor: default;
+        }
+
+        .timeline-card.placed.incorrect-card {
+            background: linear-gradient(135deg, var(--accent), var(--accent-light));
+        }
+
+        /* Comparison drag-drop */
+        .comparison-game {
+            margin: 20px 0;
+        }
+
+        .comparison-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 10px;
+            margin: 10px 0;
+            align-items: stretch;
+        }
+
+        .comparison-header {
+            background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+            color: white;
+            padding: 14px 12px;
+            text-align: center;
+            font-weight: 600;
+            border-radius: var(--radius-sm);
+            font-size: 0.85rem;
+        }
+
+        .comparison-cell {
+            background: white;
+            border: 2px dashed var(--border);
+            border-radius: var(--radius-sm);
+            padding: 12px;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .comparison-cell.drag-over {
+            background: #d6eaf8;
+            border-color: var(--primary);
+        }
+
+        .comparison-cell.correct {
+            border-color: var(--success);
+            background: #e8f5e9;
+        }
+
+        .comparison-cell.incorrect {
+            border-color: var(--accent);
+            background: #fde8e8;
+            animation: shake 0.5s;
+        }
+
+        .comparison-cell .cell-label {
+            font-weight: 600;
+            color: var(--primary-dark);
+            font-size: 0.9rem;
+        }
+
+        .drag-card {
+            background: linear-gradient(135deg, var(--warning), #e67e22);
+            color: white;
+            padding: 10px 14px;
+            border-radius: 8px;
+            cursor: grab;
+            font-size: 0.82rem;
+            font-weight: 600;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+            transition: var(--transition);
+            display: inline-block;
+            margin: 4px;
+            user-select: none;
+        }
+
+        .drag-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        .drag-card.dragging {
+            opacity: 0.5;
+            cursor: grabbing;
+        }
+
+        .drag-card.placed {
+            background: linear-gradient(135deg, var(--success), var(--success-light));
+            cursor: default;
+        }
+
+        .drag-card.placed.incorrect-card {
+            background: linear-gradient(135deg, var(--accent), var(--accent-light));
+        }
+
+        .cards-pool {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: var(--radius-sm);
+            margin: 15px 0;
+            min-height: 60px;
+            border: 2px solid var(--border);
+        }
+
+        /* Dropdown for summary table */
+        .summary-dropdown {
+            width: 100%;
+            padding: 8px 12px;
+            border: 2px solid var(--border);
+            border-radius: 6px;
+            font-size: 0.82rem;
+            font-family: 'Inter', sans-serif;
+            background: white;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .summary-dropdown:focus {
+            outline: none;
+            border-color: var(--primary-light);
+            box-shadow: 0 0 0 3px rgba(41,128,185,0.1);
+        }
+
+        .summary-dropdown.correct {
+            border-color: var(--success);
+            background: #e8f5e9;
+        }
+
+        .summary-dropdown.incorrect {
+            border-color: var(--accent);
+            background: #fde8e8;
+        }
+
+        /* Interview hidden answers */
+        .interview-hidden {
+            display: none;
+        }
+
+        .interview-hidden.show {
+            display: block;
+            animation: fadeInUp 0.4s ease;
+        }
+
+        .reveal-interview-btn {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin: 10px 0;
+            transition: var(--transition);
+            font-family: 'Inter', sans-serif;
+        }
+
+        .reveal-interview-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(26,82,118,0.4);
+        }
+
+        /* Terms */
+        .terms-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 12px;
+            margin: 15px 0;
+        }
+
+        .term-card {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e8ecef 100%);
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            cursor: pointer;
+            transition: var(--transition);
+            border: 2px solid transparent;
+        }
+
+        .term-card:hover {
+            border-color: var(--primary-light);
+            transform: translateY(-2px);
+        }
+
+        .term-card.revealed {
+            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+            border-color: var(--success);
+        }
+
+        .term-name {
+            font-weight: 700;
+            color: var(--primary);
+            font-size: 0.95rem;
+            margin-bottom: 5px;
+        }
+
+        .term-def {
+            font-size: 0.85rem;
+            color: var(--text-light);
+            display: none;
+        }
+
+        .term-def.show {
+            display: block;
+            animation: fadeInUp 0.3s ease;
+        }
+
+        .term-hint {
+            font-size: 0.8rem;
+            color: var(--primary-light);
+            font-style: italic;
+        }
+
+        /* Source analysis */
+        .source-block {
+            background: linear-gradient(135deg, #fdf6e3 0%, #fef9ef 100%);
+            border-left: 5px solid var(--warning);
+            border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+            padding: 20px 25px;
+            margin: 15px 0;
+            font-style: italic;
+            font-family: 'Merriweather', serif;
+            font-size: 0.95rem;
+            line-height: 1.8;
+        }
+
+        .source-author {
+            text-align: right;
+            font-weight: 600;
+            color: var(--text-light);
+            margin-top: 10px;
+            font-style: normal;
+        }
+
+        .keywords-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin: 15px 0;
+            border-radius: var(--radius-sm);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+
+        .keywords-table th {
+            background: var(--primary);
+            color: white;
+            padding: 12px 16px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .keywords-table td {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.88rem;
+            vertical-align: top;
+        }
+
+        .keywords-table tr:nth-child(even) td { background: #f8f9fa; }
+        .keywords-table tr:hover td { background: #e8f4fd; }
+
+        .keyword-highlight {
+            background: linear-gradient(120deg, #ffeaa7 0%, #fdcb6e 100%);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+
+        /* Comparison table static */
+        .comparison-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin: 15px 0;
+            border-radius: var(--radius-sm);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            font-size: 0.85rem;
+        }
+
+        .comparison-table th {
+            background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+            color: white;
+            padding: 14px 12px;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .comparison-table td {
+            padding: 12px;
+            border-bottom: 1px solid var(--border);
+            vertical-align: top;
+        }
+
+        .comparison-table td:first-child {
+            font-weight: 600;
+            background: #f0f4f8;
+            color: var(--primary-dark);
+        }
+
+        .comparison-table tr:hover td { background: #e8f4fd; }
+        .comparison-table tr:hover td:first-child { background: #d6eaf8; }
+
+        /* Quiz */
+        .quiz-container { margin: 15px 0; }
+
+        .quiz-question {
+            background: white;
+            border-radius: var(--radius-sm);
+            padding: 25px;
+            margin-bottom: 15px;
+            border: 2px solid var(--border);
+            transition: var(--transition);
+        }
+
+        .quiz-question.correct { border-color: var(--success); background: #e8f5e9; }
+        .quiz-question.incorrect { border-color: var(--accent); background: #fde8e8; }
+
+        .quiz-text {
+            font-weight: 600;
+            font-size: 1rem;
+            margin-bottom: 15px;
+            color: var(--primary-dark);
+        }
+
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .quiz-option {
+            padding: 12px 18px;
+            border: 2px solid var(--border);
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .quiz-option:hover {
+            border-color: var(--primary-light);
+            background: #e8f4fd;
+        }
+
+        .quiz-option.selected {
+            border-color: var(--primary);
+            background: #d6eaf8;
+        }
+
+        .quiz-option.correct-answer {
+            border-color: var(--success);
+            background: #e8f5e9;
+        }
+
+        .quiz-option.wrong-answer {
+            border-color: var(--accent);
+            background: #fde8e8;
+        }
+
+        .quiz-option-letter {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.85rem;
+            flex-shrink: 0;
+        }
+
+        .quiz-feedback {
+            display: none;
+            margin-top: 12px;
+            padding: 12px 16px;
+            border-radius: var(--radius-sm);
+            font-size: 0.88rem;
+        }
+
+        .quiz-feedback.show { display: block; animation: fadeInUp 0.3s ease; }
+        .quiz-feedback.correct { background: #e8f5e9; color: #1b5e20; border: 1px solid #a5d6a7; }
+        .quiz-feedback.incorrect { background: #fde8e8; color: #b71c1c; border: 1px solid #ef9a9a; }
+
+        /* Cause-effect */
+        .cause-effect {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin: 15px 0;
+            padding: 20px;
+            background: #f0f4f8;
+            border-radius: var(--radius-sm);
+            flex-wrap: wrap;
+        }
+
+        .cause-box, .effect-box {
+            flex: 1;
+            min-width: 200px;
+            padding: 15px;
+            border-radius: var(--radius-sm);
+            text-align: center;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .cause-box {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+        }
+
+        .effect-box {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            color: white;
+        }
+
+        .arrow-box {
+            font-size: 2rem;
+            color: var(--primary);
+            flex-shrink: 0;
+        }
+
+        .mechanism {
+            width: 100%;
+            background: white;
+            padding: 15px;
+            border-radius: var(--radius-sm);
+            margin-top: 10px;
+            font-size: 0.88rem;
+            display: none;
+            border: 1px solid var(--border);
+        }
+
+        .mechanism.show { display: block; animation: fadeInUp 0.3s ease; }
+
+        /* Proof cards */
+        .proof-card {
+            background: white;
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            margin: 10px 0;
+            border-left: 4px solid var(--primary);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .proof-card:hover { box-shadow: var(--shadow-hover); }
+
+        .proof-card h4 {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .proof-card .toggle-icon {
+            transition: transform 0.3s ease;
+            font-size: 1.2rem;
+        }
+
+        .proof-card.open .toggle-icon { transform: rotate(180deg); }
+
+        .proof-details {
+            display: none;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid var(--border);
+        }
+
+        .proof-details.show { display: block; animation: fadeInUp 0.3s ease; }
+
+        .proof-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .proof-list li {
+            padding: 8px 0 8px 25px;
+            position: relative;
+            font-size: 0.9rem;
+        }
+
+        .proof-list li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--success);
+            font-weight: bold;
+        }
+
+        /* Interview */
+        .interview-container {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e8ecef 100%);
+            border-radius: var(--radius);
+            padding: 25px;
+            margin: 15px 0;
+        }
+
+        .interview-person {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .interview-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .interview-name {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--primary-dark);
+        }
+
+        .interview-role {
+            font-size: 0.85rem;
+            color: var(--text-light);
+        }
+
+        .dialogue-line {
+            display: flex;
+            gap: 12px;
+            margin: 12px 0;
+            align-items: flex-start;
+        }
+
+        .dialogue-speaker {
+            font-weight: 700;
+            color: var(--primary);
+            font-size: 0.85rem;
+            min-width: 100px;
+            flex-shrink: 0;
+        }
+
+        .dialogue-text {
+            font-size: 0.9rem;
+            line-height: 1.6;
+            background: white;
+            padding: 12px 16px;
+            border-radius: 0 var(--radius-sm) var(--radius-sm) var(--radius-sm);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        /* Summary table */
+        .summary-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            border-radius: var(--radius-sm);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            font-size: 0.82rem;
+            margin: 15px 0;
+        }
+
+        .summary-table th {
+            background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+            color: white;
+            padding: 14px 10px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+
+        .summary-table td {
+            padding: 10px;
+            border-bottom: 1px solid var(--border);
+            vertical-align: top;
+        }
+
+        .summary-table tr:nth-child(even) td { background: #f8f9fa; }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            font-family: 'Inter', sans-serif;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(26,82,118,0.4);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, var(--success), var(--success-light));
+            color: white;
+        }
+
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(39,174,96,0.4);
+        }
+
+        .btn-accent {
+            background: linear-gradient(135deg, var(--accent), var(--accent-light));
+            color: white;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-outline:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .btn-check {
+            background: linear-gradient(135deg, var(--warning), #e67e22);
+            color: white;
+            padding: 10px 20px;
+        }
+
+        /* Score display */
+        .score-display {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white;
+            border-radius: var(--radius);
+            padding: 30px;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .score-number {
+            font-size: 3rem;
+            font-weight: 800;
+        }
+
+        .score-label {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        /* Accordion */
+        .accordion-item {
+            background: white;
+            border-radius: var(--radius-sm);
+            margin: 8px 0;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            border: 1px solid var(--border);
+        }
+
+        .accordion-header {
+            padding: 16px 20px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+
+        .accordion-header:hover { background: #f0f4f8; }
+
+        .accordion-body {
+            display: none;
+            padding: 0 20px 20px;
+            font-size: 0.9rem;
+        }
+
+        .accordion-body.show { display: block; animation: fadeInUp 0.3s ease; }
+
+        /* Alert boxes */
+        .alert {
+            padding: 15px 20px;
+            border-radius: var(--radius-sm);
+            margin: 15px 0;
+            font-size: 0.9rem;
+        }
+
+        .alert-info {
+            background: #e3f2fd;
+            border: 1px solid #90caf9;
+            color: #1565c0;
+        }
+
+        .alert-success {
+            background: #e8f5e9;
+            border: 1px solid #a5d6a7;
+            color: #2e7d32;
+        }
+
+        .alert-warning {
+            background: #fff3e0;
+            border: 1px solid #ffcc80;
+            color: #e65100;
+        }
+
+        .alert-tip {
+            background: #f3e5f5;
+            border: 1px solid #ce93d8;
+            color: #6a1b9a;
+        }
+
+        /* Interactive reveal button */
+        .reveal-btn {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 8px 18px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: var(--transition);
+            margin: 5px 0;
+        }
+
+        .reveal-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(102,126,234,0.4);
+        }
+
+        /* Textarea for answers */
+        .answer-textarea {
+            width: 100%;
+            min-height: 120px;
+            padding: 15px;
+            border: 2px solid var(--border);
+            border-radius: var(--radius-sm);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+            resize: vertical;
+            transition: var(--transition);
+        }
+
+        .answer-textarea:focus {
+            outline: none;
+            border-color: var(--primary-light);
+            box-shadow: 0 0 0 3px rgba(41,128,185,0.1);
+        }
+
+        /* Badge */
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+
+        .badge-primary { background: #d6eaf8; color: var(--primary); }
+        .badge-success { background: #d5f5e3; color: var(--success); }
+        .badge-warning { background: #fdebd0; color: #e67e22; }
+        .badge-accent { background: #fadbd8; color: var(--accent); }
+
+        /* Footer */
+        .footer {
+            background: var(--primary-dark);
+            color: white;
+            text-align: center;
+            padding: 30px;
+            margin-top: 40px;
+        }
+
+        .footer p {
+            opacity: 0.8;
+            font-size: 0.85rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .comparison-row { grid-template-columns: 1fr; }
+            .comparison-header { display: none; }
+            .comparison-cell { margin: 5px 0; }
+            .timeline-slots { flex-direction: column; align-items: center; }
+            .timeline-slot { width: 100%; max-width: 300px; }
+        }
+
+        @media (max-width: 600px) {
+            .container { padding: 10px; }
+            .card { padding: 20px; }
+            .terms-grid { grid-template-columns: 1fr; }
+            .cause-effect { flex-direction: column; }
+            .arrow-box { transform: rotate(90deg); }
+            .comparison-table { font-size: 0.75rem; }
+            .comparison-table td, .comparison-table th { padding: 8px 6px; }
+            .dialogue-line { flex-direction: column; gap: 5px; }
+            .dialogue-speaker { min-width: unset; }
+        }
+
+        /* Scroll to top */
+        .scroll-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            border: none;
+            font-size: 1.3rem;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            transition: var(--transition);
+            display: none;
+            z-index: 999;
+        }
+
+        .scroll-top.visible {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .scroll-top:hover {
+            transform: translateY(-3px);
+            background: var(--primary-light);
+        }
+
+        .highlight { background: linear-gradient(120deg, #a8edea 0%, #fed6e3 100%); padding: 2px 5px; border-radius: 3px; }
+        .highlight-yellow { background: #ffeaa7; padding: 2px 5px; border-radius: 3px; }
+        .highlight-green { background: #a8edea; padding: 2px 5px; border-radius: 3px; }
+
+        .conclusion-box {
+            background: linear-gradient(135deg, #667eea22, #764ba222);
+            border: 2px solid #667eea;
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            margin: 15px 0;
+        }
+
+        .conclusion-box h4 { color: #667eea; margin-bottom: 10px; }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            text-align: center;
+            box-shadow: var(--shadow);
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--primary);
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: var(--text-light);
+            margin-top: 5px;
+        }
+
+        .hidden-answer {
+            display: none;
+            margin-top: 10px;
+            padding: 15px;
+            background: #e8f5e9;
+            border-radius: var(--radius-sm);
+            border: 1px solid #a5d6a7;
+        }
+
+        .hidden-answer.show { display: block; animation: fadeInUp 0.3s ease; }
+
+        .check-result {
+            font-weight: 700;
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: var(--radius-sm);
+            text-align: center;
+        }
+
+        .check-result.success {
+            background: #e8f5e9;
+            color: #1b5e20;
+            border: 1px solid #a5d6a7;
+        }
+
+        .check-result.error {
+            background: #fde8e8;
+            color: #b71c1c;
+            border: 1px solid #ef9a9a;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Header -->
+<div class="header">
+    <span class="emoji-icon">📚</span>
+    <h1>Обобщение: Беларусь во второй половине XIX — начале XX в.</h1>
+    <p>Интерактивный онлайн-урок по истории Беларуси</p>
+</div>
+
+<!-- Progress Bar -->
+<div class="progress-container">
+    <div class="progress-info">
+        <span id="progress-text">Раздел 1 из 10</span>
+        <span id="progress-percent">0%</span>
+    </div>
+    <div class="progress-bar">
+        <div class="progress-fill" id="progress-fill"></div>
+    </div>
+</div>
+
+<!-- Navigation Tabs -->
+<div class="nav-tabs" id="nav-tabs">
+    <div class="nav-tab active" onclick="showSection(0)">📖 Термины</div>
+    <div class="nav-tab" onclick="showSection(1)">🕐 Лента времени</div>
+    <div class="nav-tab" onclick="showSection(2)">📜 Источники</div>
+    <div class="nav-tab" onclick="showSection(3)">📊 Сравнение</div>
+    <div class="nav-tab" onclick="showSection(4)">📝 Факты</div>
+    <div class="nav-tab" onclick="showSection(5)">🔗 Связи</div>
+    <div class="nav-tab" onclick="showSection(6)">✅ Доказательства</div>
+    <div class="nav-tab" onclick="showSection(7)">🧩 Задачи</div>
+    <div class="nav-tab" onclick="showSection(8)">🎤 Интервью</div>
+    <div class="nav-tab" onclick="showSection(9)">🏆 Итоги</div>
+</div>
+
+<div class="container">
+  <!-- Section 0: Terms -->
+    <div class="section active" id="section-0">
+        <div class="card">
+            <h2>📖 Ключевые понятия и термины</h2>
+            <p>Нажмите на карточку, чтобы увидеть определение. Постарайтесь сначала вспомнить его самостоятельно!</p>
+
+            <div class="stats-grid" style="margin: 20px 0;">
+                <div class="stat-card">
+                    <div class="stat-number" id="terms-revealed">0</div>
+                    <div class="stat-label">Открыто терминов</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">11</div>
+                    <div class="stat-label">Всего терминов</div>
+                </div>
+            </div>
+
+            <div class="terms-grid">
+                <div class="term-card" onclick="revealTerm(this)">
+                    <div class="term-name">Временнообязанные крестьяне</div>
+                    <div class="term-hint">Нажмите, чтобы увидеть ответ</div>
+                    <div class="term-def">Крестьяне, которые после отмены крепостного права в 1861 г. продолжали выполнять повинности в пользу помещика до заключения выкупной сделки.</div>
+                </div>
+                <div class="term-card" onclick="revealTerm(this)">
+                    <div class="term-name">«Мужыцкая праўда»</div>
+                    <div class="term-hint">Нажмите, чтобы увидеть ответ</div>
+                    <div class="term-def">Подпольная газета К. Калиновского (1862–1863), обращённая к белорусским крестьянам, призывавшая к борьбе за свободу и справедливость.</div>
+                </div>
+                <div class="term-card" onclick="revealTerm(this)">
+                    <div class="term-name">Западноруссизм</div>
+                    <div class="term-hint">Нажмите, чтобы увидеть ответ</div>
+                    <div class="term-def">Идеология, отрицавшая самостоятельность белорусского народа, рассматривавшая белорусов как часть «общерусского» народа.</div>
+                </div>
+                <div class="term-card" onclick="revealTerm(this)">
+                    <div class="term-name">«Прусский» путь</div>
+                    <div class="term-hint">Нажмите, чтобы увидеть ответ</div>
+                    <div class="term-def">Путь развития капитализма в сельском хозяйстве через медленное приспособление помещичьего хозяйства к рынку при сохранении крупного землевладения.</div>
+                </div>
+                <div class="term-card" onclick="revealTerm(this)">
+                    <div class="term-name">«Американский» путь</div>
+                    <div class="term-hint">Нажмите, чтобы увидеть ответ</div>
+                    <div class="term-def">Путь развития капитализма через свободное фермерское хозяйство. В Беларуси — через хутора и отруба (столыпинская реформа).</div>
+                </div>
+                <div class="term-card" onclick="revealTerm(this)">
+                    <div class="term-name">БСГ</div>
+                    <div class="term-hint">Нажмите, чтобы увидеть ответ</div>
+                    <div class="term-def">Белорусская социалистическая громада — первая белорусская национальная политическая партия (1903 г.).</div>
+                </div>
+                <div class="term-card" onclick="revealTerm(this)">
+                    <div class="term-name">Курловский расстрел</div>
+                    <div class="term-hint">Нажмите, чтобы увидеть ответ</div>
+                    <div class="term-def">Расстрел мирной демонстрации в Минске 18 октября 1905 г. по приказу губернатора Курлова. Погибло около 100 человек.</div>
+                </div>
+                <div class="term-card" onclick="revealTerm(this)">
+                    <div class="term-name">Нация</div>
+                    <div class="term-hint">Нажмите, чтобы увидеть ответ</div>
+                    <div class="term-def">Историческая общность людей с общей территорией, экономическими связями, литературным языком, культурой и национальным самосознанием.</div>
+                </div>
+                <div class="term-card" onclick="revealTerm(this)">
+                    <div class="term-name">Хутор / Отруб</div>
+                    <div class="term-hint">Нажмите, чтобы увидеть ответ</div>
+                    <div class="term-def">Хутор — обособленный участок с усадьбой вне деревни. Отруб — участок земли из общинной в одном месте, но без переноса усадьбы. Формы столыпинской реформы.</div>
+                </div>
+                <div class="term-card" onclick="revealTerm(this)">
+                    <div class="term-name">«Тутэйшыя»</div>
+                    <div class="term-hint">Нажмите, чтобы увидеть ответ</div>
+                    <div class="term-def">«Здешние» — самоназвание белорусских крестьян, отражавшее слабое национальное самосознание: люди определяли себя по месту, а не по национальности.</div>
+                </div>
+                <div class="term-card" onclick="revealTerm(this)">
+                    <div class="term-name">Национализация</div>
+                    <div class="term-hint">Нажмите, чтобы увидеть ответ</div>
+                    <div class="term-def">Передача частной собственности (земли, предприятий) в государственную. Требование ряда революционных партий начала XX в.</div>
+                </div>
+            </div>
+
+            <div class="btn-group">
+                <button class="btn btn-primary" onclick="showSection(1)">Далее: Лента времени →</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Section 1: Timeline (Interactive) -->
+    <div class="section" id="section-1">
+        <div class="card">
+            <h2>🕐 Лента времени: ключевые события</h2>
+            <p><strong>Задание:</strong> Перетащите карточки с описаниями событий в соответствующие ячейки с датами. Нажмите «Проверить», чтобы увидеть результат.</p>
+
+            <div class="alert alert-tip">💡 Перетащите карточку из нижнего ряда в нужную ячейку с датой.</div>
+
+            <div class="timeline-game">
+                <div class="timeline-slots" id="timeline-slots">
+                    <div class="timeline-slot" data-year="1861" ondrop="dropTimeline(event)" ondragover="allowDropTimeline(event)" ondragleave="leaveDropTimeline(event)">
+                        <div class="slot-year">1861 г.</div>
+                        <div class="slot-content">Перетащите сюда описание события</div>
+                    </div>
+                    <div class="timeline-slot" data-year="1863" ondrop="dropTimeline(event)" ondragover="allowDropTimeline(event)" ondragleave="leaveDropTimeline(event)">
+                        <div class="slot-year">1863–1864 гг.</div>
+                        <div class="slot-content">Перетащите сюда описание события</div>
+                    </div>
+                    <div class="timeline-slot" data-year="1884" ondrop="dropTimeline(event)" ondragover="allowDropTimeline(event)" ondragleave="leaveDropTimeline(event)">
+                        <div class="slot-year">1884 г.</div>
+                        <div class="slot-content">Перетащите сюда описание события</div>
+                    </div>
+                    <div class="timeline-slot" data-year="1903" ondrop="dropTimeline(event)" ondragover="allowDropTimeline(event)" ondragleave="leaveDropTimeline(event)">
+                        <div class="slot-year">1903 г.</div>
+                        <div class="slot-content">Перетащите сюда описание события</div>
+                    </div>
+                    <div class="timeline-slot" data-year="1905" ondrop="dropTimeline(event)" ondragover="allowDropTimeline(event)" ondragleave="leaveDropTimeline(event)">
+                        <div class="slot-year">1905 г.</div>
+                        <div class="slot-content">Перетащите сюда описание события</div>
+                    </div>
+                    <div class="timeline-slot" data-year="1906" ondrop="dropTimeline(event)" ondragover="allowDropTimeline(event)" ondragleave="leaveDropTimeline(event)">
+                        <div class="slot-year">1906 г.</div>
+                        <div class="slot-content">Перетащите сюда описание события</div>
+                    </div>
+                    <div class="timeline-slot" data-year="1914" ondrop="dropTimeline(event)" ondragover="allowDropTimeline(event)" ondragleave="leaveDropTimeline(event)">
+                        <div class="slot-year">1914 г.</div>
+                        <div class="slot-content">Перетащите сюда описание события</div>
+                    </div>
+                </div>
+
+                <div class="timeline-cards-pool" id="timeline-pool">
+                    <div class="timeline-card" draggable="true" data-answer="1861" ondragstart="dragTimeline(event)">Отмена крепостного права. Манифест Александра II.</div>
+                    <div class="timeline-card" draggable="true" data-answer="1863" ondragstart="dragTimeline(event)">Восстание под руководством К. Калиновского в Польше, Литве и Беларуси.</div>
+                    <div class="timeline-card" draggable="true" data-answer="1884" ondragstart="dragTimeline(event)">Деятельность студентов-гомоновцев — первая организация, признавшая белорусов самостоятельным народом.</div>
+                    <div class="timeline-card" draggable="true" data-answer="1903" ondragstart="dragTimeline(event)">Оформление БСГ — первой белорусской национальной политической партии.</div>
+                    <div class="timeline-card" draggable="true" data-answer="1905" ondragstart="dragTimeline(event)">Курловский расстрел мирной демонстрации в Минске. Погибло около 100 человек.</div>
+                    <div class="timeline-card" draggable="true" data-answer="1906" ondragstart="dragTimeline(event)">Начало столыпинской аграрной реформы: хутора, отруба, выход из общины.</div>
+                    <div class="timeline-card" draggable="true" data-answer="1914" ondragstart="dragTimeline(event)">Начало Первой мировой войны. Беларусь стала прифронтовой зоной.</div>
+                </div>
+
+                <div class="btn-group" style="justify-content: center;">
+                    <button class="btn btn-check" onclick="checkTimeline()">✅ Проверить ленту времени</button>
+                    <button class="btn btn-outline" onclick="resetTimeline()">🔄 Сбросить</button>
+                </div>
+                <div id="timeline-result"></div>
+            </div>
+
+            <div class="alert alert-info" style="margin-top: 20px;">
+                <strong>После заполнения ленты времени:</strong> Выскажите своё собственное отношение, в том числе эмоциональное, к обозначенным событиям и поясните его.
+            </div>
+
+            <div class="accordion-item">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span><strong>1861 г.</strong> — Образец ответа <span class="badge badge-primary">Реформа</span></span>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="accordion-body">
+                    <div class="conclusion-box">
+                        <h4>💬 Образец ответа:</h4>
+                        <p>«Отмена крепостного права — прогрессивное, но половинчатое событие. Крестьяне получили свободу, но остались временнообязанными, должны были платить выкупные платежи, получили урезанные наделы. Моё отношение — двойственное: радость от конца рабства и горечь от несправедливости условий.»</p>
+                    </div>
+                    <textarea class="answer-textarea" placeholder="Напишите своё отношение к этому событию..."></textarea>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span><strong>1863–1864 гг.</strong> — Образец ответа <span class="badge badge-accent">Восстание</span></span>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="accordion-body">
+                    <div class="conclusion-box">
+                        <h4>💬 Образец ответа:</h4>
+                        <p>«Восстание вызывает уважение к мужеству его участников. К. Калиновский стал символом борьбы. Несмотря на поражение, власти улучшили условия реформы: отменили временнообязанное положение, снизили выкупные платежи на 20%. Казнь Калиновского вызывает чувство сострадания и гордости.»</p>
+                    </div>
+                    <textarea class="answer-textarea" placeholder="Напишите своё отношение..."></textarea>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span><strong>1905 г.</strong> — Образец ответа <span class="badge badge-accent">Трагедия</span></span>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="accordion-body">
+                    <div class="conclusion-box">
+                        <h4>💬 Образец ответа:</h4>
+                        <p>«Курловский расстрел вызывает возмущение и скорбь. Мирные люди были расстреляны сразу после объявления свобод по Манифесту 17 октября. Это показало готовность властей применять насилие.»</p>
+                    </div>
+                    <textarea class="answer-textarea" placeholder="Напишите своё отношение..."></textarea>
+                </div>
+            </div>
+
+            <div class="btn-group">
+                <button class="btn btn-outline" onclick="showSection(0)">← Назад</button>
+                <button class="btn btn-primary" onclick="showSection(2)">Далее: Источники →</button>
+            </div>
+        </div>
+    </div>
+ <!-- Section 2: Sources -->
+    <div class="section" id="section-2">
+        <div class="card">
+            <h2>📜 Работа с историческими источниками</h2>
+            <p>Найдите и объясните ключевые слова в каждом источнике.</p>
+
+            <h3>Источник 1: В. Сырокомля «Освобождение крестьян»</h3>
+            <div class="source-block">
+                Читал я, что люди <span class="keyword-highlight">права получают</span><br>
+                По воле <span class="keyword-highlight">священной царя-исполина</span>...<br>
+                Не нынче, так завтра узнает Европа,<br>
+                Россия и Польша узнают с восторгом,<br>
+                Что мы, <span class="keyword-highlight">добровольно сняв цепи с холопа</span>,<br>
+                <span class="keyword-highlight">Преступным себя не позорили торгом</span>...
+                <div class="source-author">Перевод Д. Минаева</div>
+            </div>
+
+            <button class="reveal-btn" onclick="toggleHidden('source1-analysis')">📋 Показать анализ ключевых слов</button>
+            <div class="hidden-answer" id="source1-analysis">
+                <table class="keywords-table">
+                    <tr><th>Ключевое слово</th><th>Значение</th></tr>
+                    <tr><td><span class="keyword-highlight">«права получают»</span></td><td>Отмена крепостного права 1861 г. — крестьяне получили личную свободу</td></tr>
+                    <tr><td><span class="keyword-highlight">«царя-исполина»</span></td><td>Реформа «сверху» — по воле императора Александра II</td></tr>
+                    <tr><td><span class="keyword-highlight">«сняв цепи с холопа»</span></td><td>«Цепи» — крепостная зависимость, метафора освобождения от рабства</td></tr>
+                    <tr><td><span class="keyword-highlight">«добровольно»</span></td><td>Освобождение мирным путём, без революции</td></tr>
+                    <tr><td><span class="keyword-highlight">«преступным торгом»</span></td><td>Осуждение торговли людьми (продажи крепостных)</td></tr>
+                </table>
+            </div>
+
+            <h3>Источник 2: «Мужыцкая праўда» (К. Калиновский)</h3>
+            <div class="source-block">
+                «Дзецюкі! Доўга маўчаў я, не казаў вам нічога, бо хацеў разгледзецца добра ды разабрацъ, што гэта дзеецца на свеце, штоб ужо спавясціць вас па справядлівасці ды сказацъ, як наказвае Бог ды сумленне, што нам цяпер трэба рабіць...»
+            </div>
+
+            <button class="reveal-btn" onclick="toggleHidden('source2-analysis')">📋 Показать анализ</button>
+            <div class="hidden-answer" id="source2-analysis">
+                <table class="keywords-table">
+                    <tr><th>Ключевое слово</th><th>Значение</th></tr>
+                    <tr><td>«Дзецюкі!»</td><td>Обращение к молодым крестьянам — народный, демократический характер газеты</td></tr>
+                    <tr><td>«па справядлівасці»</td><td>Справедливость — центральная идея Калиновского</td></tr>
+                    <tr><td>«Бог ды сумленне»</td><td>Апелляция к религиозным чувствам и совести крестьян</td></tr>
+                    <tr><td>«трэба рабіць»</td><td>Призыв к действию — бороться за свои права</td></tr>
+                </table>
+                <div class="conclusion-box">
+                    <h4>📌 Вывод:</h4>
+                    <p>Калиновский обращается к крестьянам на белорусском языке, критикует реформу 1861 г. и призывает бороться за свои права.</p>
+                </div>
+            </div>
+
+            <h3>Источник 3: Манифест РСДРП 1898 г.</h3>
+            <div class="source-block">
+                «...На своих крепких плечах русский рабочий класс должен вынести и вынесет дело завоевания политической свободы. Это необходимый, но лишь первый шаг к осуществлению великой исторической миссии пролетариата — к созданию такого общественного строя, в котором не будет места эксплуатации человека человеком...»
+            </div>
+
+            <button class="reveal-btn" onclick="toggleHidden('source3-analysis')">📋 Показать анализ</button>
+            <div class="hidden-answer" id="source3-analysis">
+                <table class="keywords-table">
+                    <tr><th>Ключевое слово</th><th>Значение</th></tr>
+                    <tr><td>«рабочий класс» / «пролетариат»</td><td>Новый класс наёмных рабочих, сформировавшийся в ходе промышленного переворота</td></tr>
+                    <tr><td>«политическая свобода»</td><td>Борьба за демократические права при самодержавии</td></tr>
+                    <tr><td>«историческая миссия»</td><td>Марксистская идея о роли рабочего класса в свержении капитализма</td></tr>
+                    <tr><td>«эксплуатация»</td><td>Присвоение результатов чужого труда — основное понятие марксизма</td></tr>
+                </table>
+            </div>
+
+            <h3>Источник 4: Указ Николая II (1906 г.) — Столыпинская реформа</h3>
+            <div class="source-block">
+                «Каждый домохозяин, владеющий надельной землёю на общинном праве, может во всякое время требовать укрепления за собою в личную собственность причитающейся ему части из означенной земли...»
+            </div>
+
+            <button class="reveal-btn" onclick="toggleHidden('source4-analysis')">📋 Показать анализ</button>
+            <div class="hidden-answer" id="source4-analysis">
+                <table class="keywords-table">
+                    <tr><th>Ключевое слово</th><th>Значение</th></tr>
+                    <tr><td>«домохозяин»</td><td>Глава крестьянского хозяйства, получавший право на частную собственность</td></tr>
+                    <tr><td>«общинное право»</td><td>Коллективная форма землевладения крестьянской общины</td></tr>
+                    <tr><td>«личная собственность»</td><td>Частная собственность — ключевая идея столыпинской реформы</td></tr>
+                </table>
+            </div>
+
+            <h3>Источник 5: Я. Купала «Независимость»</h3>
+            <div class="source-block">
+                «Беларускі народ самабытны — гэта прызнаюць ужо нават і нашы працўнікі з польскага ці расейскага лагера. Беларуская дзяржаўнасць таксама мае сваю гісторыю...»
+            </div>
+
+            <button class="reveal-btn" onclick="toggleHidden('source5-analysis')">📋 Показать анализ</button>
+            <div class="hidden-answer" id="source5-analysis">
+                <div class="conclusion-box">
+                    <h4>📌 Вывод:</h4>
+                    <p>Купала утверждает самобытность белорусского народа и его право на государственность. Это была революционная позиция в начале XX в., отстаивающая белорусскую национальную идею.</p>
+                </div>
+            </div>
+
+            <div class="btn-group">
+                <button class="btn btn-outline" onclick="showSection(1)">← Назад</button>
+                <button class="btn btn-primary" onclick="showSection(3)">Далее: Сравнение →</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Section 3: Comparisons (Interactive) -->
+    <div class="section" id="section-3">
+        <div class="card">
+            <h2>📊 Сравнительный анализ</h2>
+            <p><strong>Задание:</strong> Перетащите карточки с характеристиками в соответствующие ячейки таблиц. Затем нажмите «Проверить».</p>
+
+            <h3>1. Крестьянская реформа 1861 г. vs 1863–1864 гг.</h3>
+            <div class="comparison-game" id="comparison1">
+                <div class="comparison-row">
+                    <div class="comparison-header">Линия сравнения</div>
+                    <div class="comparison-header">1861 г. (общие условия)</div>
+                    <div class="comparison-header">1863–1864 гг. (после восстания)</div>
+                </div>
+                <div class="comparison-row">
+                    <div class="comparison-cell"><span class="cell-label">Временнообязанное положение</span></div>
+                    <div class="comparison-cell" data-answer="c1-1-1" ondrop="dropComparison(event)" ondragover="allowDropComparison(event)" ondragleave="leaveDropComparison(event)"></div>
+                    <div class="comparison-cell" data-answer="c1-1-2" ondrop="dropComparison(event)" ondragover="allowDropComparison(event)" ondragleave="leaveDropComparison(event)"></div>
+                </div>
+                <div class="comparison-row">
+                    <div class="comparison-cell"><span class="cell-label">Выкупные платежи</span></div>
+                    <div class="comparison-cell" data-answer="c1-2-1" ondrop="dropComparison(event)" ondragover="allowDropComparison(event)" ondragleave="leaveDropComparison(event)"></div>
+                    <div class="comparison-cell" data-answer="c1-2-2" ondrop="dropComparison(event)" ondragover="allowDropComparison(event)" ondragleave="leaveDropComparison(event)"></div>
+                </div>
+                <div class="comparison-row">
+                    <div class="comparison-cell"><span class="cell-label">Отрезки земли</span></div>
+                    <div class="comparison-cell" data-answer="c1-3-1" ondrop="dropComparison(event)" ondragover="allowDropComparison(event)" ondragleave="leaveDropComparison(event)"></div>
+                    <div class="comparison-cell" data-answer="c1-3-2" ondrop="dropComparison(event)" ondragover="allowDropComparison(event)" ondragleave="leaveDropComparison(event)"></div>
+                </div>
+
+                <div class="cards-pool" id="pool1">
+                    <div class="drag-card" draggable="true" data-answer="c1-1-1" ondragstart="dragComparison(event)">Сохранялось до выкупной сделки</div>
+                    <div class="drag-card" draggable="true" data-answer="c1-1-2" ondragstart="dragComparison(event)">Отменено — обязательный выкуп</div>
+                    <div class="drag-card" draggable="true" data-answer="c1-2-1" ondragstart="dragComparison(event)">На основе капитализации оброка</div>
+                    <div class="drag-card" draggable="true" data-answer="c1-2-2" ondragstart="dragComparison(event)">Снижены на 20%</div>
+                    <div class="drag-card" draggable="true" data-answer="c1-3-1" ondragstart="dragComparison(event)">До 30% земли отрезали помещикам</div>
+                    <div class="drag-card" draggable="true" data-answer="c1-3-2" ondragstart="dragComparison(event)">Частично возвращены</div>
+                </div>
+
+                <div class="btn-group" style="justify-content: center;">
+                    <button class="btn btn-check" onclick="checkComparison('comparison1', 'pool1')">✅ Проверить таблицу 1</button>
+                </div>
+            </div>
+
+            <h3>2. «Прусский» vs «Американский» путь</h3>
+            <div class="comparison-game" id="comparison2">
+                <div class="comparison-row">
+                    <div class="comparison-header">Линия сравнения</div>
+                    <div class="comparison-header">«Прусский» путь</div>
+                    <div class="comparison-header">«Американский» путь</div>
+                </div>
+                <div class="comparison-row">
+                    <div class="comparison-cell"><span class="cell-label">Суть</span></div>
+                    <div class="comparison-cell" data-answer="c2-1-1" ondrop="dropComparison(event)" ondragover="allowDropComparison(event)" ondragleave="leaveDropComparison(event)"></div>
+                    <div class="comparison-cell" data-answer="c2-1-2" ondragstart="dragComparison(event)"></div>
+                </div>
+                <div class="comparison-row">
+                    <div class="comparison-cell"><span class="cell-label">Роль помещиков</span></div>
+                    <div class="comparison-cell" data-answer="c2-2-1" ondrop="dropComparison(event)" ondragover="allowDropComparison(event)" ondragleave="leaveDropComparison(event)"></div>
+                    <div class="comparison-cell" data-answer="c2-2-2" ondrop="dropComparison(event)" ondragover="allowDropComparison(event)" ondragleave="leaveDropComparison(event)"></div>
+                </div>
+                <div class="comparison-row">
+                    <div class="comparison-cell"><span class="cell-label">Роль крестьян</span></div>
+                    <div class="comparison-cell" data-answer="c2-3-1" ondrop="dropComparison(event)" ondragover="allowDropComparison(event)" ondragleave="leaveDropComparison(event)"></div>
+                    <div class="comparison-cell" data-answer="c2-3-2" ondrop="dropComparison(event)" ondragover="allowDropComparison(event)" ondragleave="leaveDropComparison(event)"></div>
+                </div>
+
+                <div class="cards-pool" id="pool2">
+                    <div class="drag-card" draggable="true" data-answer="c2-1-1" ondragstart="dragComparison(event)">Приспособление помещичьего хозяйства</div>
+                    <div class="drag-card" draggable="true" data-answer="c2-1-2" ondragstart="dragComparison(event)">Свободное фермерское хозяйство</div>
+                    <div class="drag-card" draggable="true" data-answer="c2-2-1" ondragstart="dragComparison(event)">Сохраняют крупное землевладение</div>
+                    <div class="drag-card" draggable="true" data-answer="c2-2-2" ondragstart="dragComparison(event)">Теряют значение</div>
+                    <div class="drag-card" draggable="true" data-answer="c2-3-1" ondragstart="dragComparison(event)">Зависимы, нанимаются</div>
+                    <div class="drag-card" draggable="true" data-answer="c2-3-2" ondragstart="dragComparison(event)">Самостоятельные фермеры</div>
+                </div>
+
+                <div class="btn-group" style="justify-content: center;">
+                    <button class="btn btn-check" onclick="checkComparison('comparison2', 'pool2')">✅ Проверить таблицу 2</button>
+                </div>
+            </div>
+
+            <h3>3. БСГ vs Западноруссизм</h3>
+            <div class="comparison-game" id="comparison3">
+                <div class="comparison-row">
+                    <div class="comparison-header">Линия сравнения</div>
+                    <div class="comparison-header">БСГ</div>
+                    <div class="comparison-header">Западноруссизм</div>
+                </div>
+                <div class="comparison-row">
+                    <div class="comparison-cell"><span class="cell-label">Белорусский народ</span></div>
+                    <div class="comparison-cell" data-answer="c3-1-1" ondrop="dropComparison(event)" ondragover="allowDropComparison(event)" ondragleave="leaveDropComparison(event)"></div>
+                    <div class="comparison-cell" data-answer="c3-1-2" ondrop="dropComparison(event)" ondragover="allowDropComparison(event)" ondragleave="leaveDropComparison(event)"></div>
+                </div>
+                <div class="comparison-row">
+                    <div class="comparison-cell"><span class="cell-label">Язык</span></div>
+                    <div class="comparison-cell" data-answer="c3-2-1" ondrop="dropComparison(event)" ondragover="allowDropComparison(event)" ondragleave="leaveDropComparison(event)"></div>
+                    <div class="comparison-cell" data-answer="c3-2-2" ondrop="dropComparison(event)" ondragover="allowDropComparison(event)" ondragleave="leaveDropComparison(event)"></div>
+                </div>
+                <div class="comparison-row">
+                    <div class="comparison-cell"><span class="cell-label">Государственность</span></div>
+                    <div class="comparison-cell" data-answer="c3-3-1" ondrop="dropComparison(event)" ondragover="allowDropComparison(event)" ondragleave="leaveDropComparison(event)"></div>
+                    <div class="comparison-cell" data-answer="c3-3-2" ondrop="dropComparison(event)" ondragover="allowDropComparison(event)" ondragleave="leaveDropComparison(event)"></div>
+                </div>
+
+                <div class="cards-pool" id="pool3">
+                    <div class="drag-card" draggable="true" data-answer="c3-1-1" ondragstart="dragComparison(event)">Самостоятельный народ</div>
+                    <div class="drag-card" draggable="true" data-answer="c3-1-2" ondragstart="dragComparison(event)">Часть «общерусского» народа</div>
+                    <div class="drag-card" draggable="true" data-answer="c3-2-1" ondragstart="dragComparison(event)">Самостоятельный белорусский</div>
+                    <div class="drag-card" draggable="true" data-answer="c3-2-2" ondragstart="dragComparison(event)">Диалект русского</div>
+                    <div class="drag-card" draggable="true" data-answer="c3-3-1" ondragstart="dragComparison(event)">Автономия Беларуси</div>
+                    <div class="drag-card" draggable="true" data-answer="c3-3-2" ondragstart="dragComparison(event)">Часть «единой» России</div>
+                </div>
+
+                <div class="btn-group" style="justify-content: center;">
+                    <button class="btn btn-check" onclick="checkComparison('comparison3', 'pool3')">✅ Проверить таблицу 3</button>
+                </div>
+            </div>
+
+            <div class="btn-group">
+                <button class="btn btn-outline" onclick="showSection(2)">← Назад</button>
+                <button class="btn btn-primary" onclick="showSection(4)">Далее: Факты →</button>
+            </div>
+        </div>
+    </div>
+<!-- Section 4: Facts -->
+    <div class="section" id="section-4">
+        <div class="card">
+            <h2>📝 Исторические факты</h2>
+            <p>Нажмите на тему, чтобы увидеть ключевые факты.</p>
+
+            <div class="proof-card" onclick="toggleProof(this)">
+                <h4>Особенности промышленного переворота в Беларуси <span class="toggle-icon">▼</span></h4>
+                <div class="proof-details">
+                    <ul class="proof-list">
+                        <li>Начался позже, чем в центральной России — в 1860–1870-е гг.</li>
+                        <li>Преобладала мелкая и средняя промышленность по переработке с/х сырья</li>
+                        <li>Крупная фабричная промышленность не получила значительного развития</li>
+                        <li>Формирование рабочего класса шло медленно</li>
+                        <li>Важную роль играла лесная, деревообрабатывающая промышленность</li>
+                        <li>Строительство железных дорог (1871, 1873) стимулировало развитие</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="proof-card" onclick="toggleProof(this)">
+                <h4>Пути развития капитализма в сельском хозяйстве <span class="toggle-icon">▼</span></h4>
+                <div class="proof-details">
+                    <ul class="proof-list">
+                        <li>После 1861 г. помещичьи хозяйства переходили к наёмному труду — «прусский» путь</li>
+                        <li>Социальное расслоение деревни: «кулаки», середняки, батраки</li>
+                        <li>Столыпинская реформа: выход на хутора и отруба — «американский» путь</li>
+                        <li>К 1914 г. более 12% крестьян вышли из общины</li>
+                        <li>Специализация: молочное животноводство, льноводство, картофелеводство</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="proof-card" onclick="toggleProof(this)">
+                <h4>Итоги революционных преобразований в начале XX в. <span class="toggle-icon">▼</span></h4>
+                <div class="proof-details">
+                    <ul class="proof-list">
+                        <li>Манифест 17 октября 1905 г.: свобода слова, собраний, союзов</li>
+                        <li>Создание Государственной думы</li>
+                        <li>Легализация политических партий и профсоюзов</li>
+                        <li>Белорусская легальная пресса: «Наша доля», «Наша ніва»</li>
+                        <li>Столыпинская реформа — попытка решить аграрный вопрос</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="proof-card" onclick="toggleProof(this)">
+                <h4>Положение белорусского народа в Первой мировой войне <span class="toggle-icon">▼</span></h4>
+                <div class="proof-details">
+                    <ul class="proof-list">
+                        <li>Прифронтовая зона с 1914 г., оккупация западной части с 1915 г.</li>
+                        <li>Более 1 млн беженцев</li>
+                        <li>Мобилизация подорвала сельское хозяйство</li>
+                        <li>Реквизиции, принудительный труд, разрушения</li>
+                        <li>Ускорение формирования национального самосознания</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="proof-card" onclick="toggleProof(this)">
+                <h4>Формирование белорусской нации <span class="toggle-icon">▼</span></h4>
+                <div class="proof-details">
+                    <ul class="proof-list">
+                        <li>Творчество Я. Купалы, Я. Коласа, М. Богдановича — национальная литература</li>
+                        <li>«Наша ніва» (1906–1915) — центр национального движения</li>
+                        <li>БСГ (1903) — первая белорусская партия</li>
+                        <li>Е. Карский «Белорусы» — научное обоснование самостоятельности</li>
+                        <li>Первый белорусский театр И. Буйницкого (1907)</li>
+                        <li>Переход от «тутэйшыя» к осознанию себя белорусами</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="btn-group">
+                <button class="btn btn-outline" onclick="showSection(3)">← Назад</button>
+                <button class="btn btn-primary" onclick="showSection(5)">Далее: Связи →</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Section 5: Cause-Effect -->
+    <div class="section" id="section-5">
+        <div class="card">
+            <h2>🔗 Причинно-следственные связи</h2>
+            <p>Нажмите «Показать механизм», чтобы увидеть, как одно событие вело к другому.</p>
+
+            <div class="cause-effect">
+                <div class="cause-box">Восстание 1863–1864 гг.</div>
+                <div class="arrow-box">→</div>
+                <div class="effect-box">Упразднение временнообязанного положения</div>
+                <button class="reveal-btn" onclick="toggleHidden('ce1')" style="width:100%">🔍 Показать механизм</button>
+                <div class="mechanism hidden-answer" id="ce1">
+                    <strong>Механизм:</strong> Правительство опасалось, что крестьяне присоединятся к повстанцам. Чтобы привлечь их на свою сторону: отменили временнообязанное положение, снизили выкуп на 20%, частично вернули отрезки. Крестьяне не поддержали восстание.
+                </div>
+            </div>
+
+            <div class="cause-effect">
+                <div class="cause-box">Отмена крепостного права (1861)</div>
+                <div class="arrow-box">→</div>
+                <div class="effect-box">Развитие капитализма в с/х и промышленности</div>
+                <button class="reveal-btn" onclick="toggleHidden('ce2')" style="width:100%">🔍 Показать механизм</button>
+                <div class="mechanism hidden-answer" id="ce2">
+                    <strong>Механизм:</strong> Появилась свободная рабочая сила → развитие промышленности. Крестьяне вовлекались в рынок → рост внутреннего рынка. Помещики переходили к наёмному труду. Строительство ж/д → связь с рынками.
+                </div>
+            </div>
+
+            <div class="cause-effect">
+                <div class="cause-box">Столыпинская реформа (1906)</div>
+                <div class="arrow-box">→</div>
+                <div class="effect-box">«Американский» путь капитализма</div>
+                <button class="reveal-btn" onclick="toggleHidden('ce3')" style="width:100%">🔍 Показать механизм</button>
+                <div class="mechanism hidden-answer" id="ce3">
+                    <strong>Механизм:</strong> Право выхода из общины → личная собственность → хутора и отруба → кредиты через Крестьянский банк → формирование крестьян-собственников.
+                </div>
+            </div>
+
+            <div class="cause-effect">
+                <div class="cause-box">Манифест 17 октября 1905 г.</div>
+                <div class="arrow-box">→</div>
+                <div class="effect-box">Начало демократизации</div>
+                <button class="reveal-btn" onclick="toggleHidden('ce4')" style="width:100%">🔍 Показать механизм</button>
+                <div class="mechanism hidden-answer" id="ce4">
+                    <strong>Механизм:</strong> Революция 1905 г. вынудила царя → Манифест: свободы слова, собраний, союзов → Государственная дума → легальные партии и пресса → «Наша ніва» в Беларуси.
+                </div>
+            </div>
+
+            <div class="cause-effect">
+                <div class="cause-box">Формирование белорусской нации</div>
+                <div class="arrow-box">→</div>
+                <div class="effect-box">Оформление национальной идеи</div>
+                <button class="reveal-btn" onclick="toggleHidden('ce5')" style="width:100%">🔍 Показать механизм</button>
+                <div class="mechanism hidden-answer" id="ce5">
+                    <strong>Механизм:</strong> Учёные (Карский) доказали самостоятельность языка → писатели создали литературу → «Наша ніва» объединила движение → БСГ сформулировала политические требования → белорусская национальная идея: право на самоопределение.
+                </div>
+            </div>
+
+            <div class="btn-group">
+                <button class="btn btn-outline" onclick="showSection(4)">← Назад</button>
+                <button class="btn btn-primary" onclick="showSection(6)">Далее: Доказательства →</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Section 6: Proofs -->
+    <div class="section" id="section-6">
+        <div class="card">
+            <h2>✅ Доказательства</h2>
+            <p>Докажите следующие тезисы, используя исторические факты.</p>
+
+            <div class="proof-card" onclick="toggleProof(this)">
+                <h4>Реформа 1861 г. имела феодальные и капиталистические черты <span class="toggle-icon">▼</span></h4>
+                <div class="proof-details">
+                    <h4>Феодальные черты:</h4>
+                    <ul class="proof-list">
+                        <li>Сохранение крупного помещичьего землевладения</li>
+                        <li>Временнообязанное положение крестьян</li>
+                        <li>Отрезки земли в пользу помещиков</li>
+                        <li>Крестьянская община с круговой порукой</li>
+                    </ul>
+                    <h4>Капиталистические черты:</h4>
+                    <ul class="proof-list">
+                        <li>Личная свобода крестьян</li>
+                        <li>Право заниматься торговлей и промыслами</li>
+                        <li>Земля — объект купли-продажи</li>
+                        <li>Формирование рынка рабочей силы</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="proof-card" onclick="toggleProof(this)">
+                <h4>Судебная и земская реформы носили ограниченный характер <span class="toggle-icon">▼</span></h4>
+                <div class="proof-details">
+                    <ul class="proof-list">
+                        <li>Земская реформа не вводилась до 1911 г. (недоверие после восстания 1863 г.)</li>
+                        <li>В 1911 г. введена в урезанном виде: ограничение для поляков</li>
+                        <li>Судебная реформа введена с опозданием (1872, 1882)</li>
+                        <li>Не были введены суды присяжных в ряде губерний</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="proof-card" onclick="toggleProof(this)">
+                <h4>Столыпинская реформа способствовала развитию капитализма <span class="toggle-icon">▼</span></h4>
+                <div class="proof-details">
+                    <ul class="proof-list">
+                        <li>Выход из общины → индивидуальные хозяйства</li>
+                        <li>Рост использования сельхозтехники</li>
+                        <li>Специализация хозяйств</li>
+                        <li>Рост товарности сельского хозяйства</li>
+                        <li>Развитие кредитной кооперации</li>
+                        <li>Социальная дифференциация деревни</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="proof-card" onclick="toggleProof(this)">
+                <h4>Начало XX в. — период национально-культурного возрождения <span class="toggle-icon">▼</span></h4>
+                <div class="proof-details">
+                    <ul class="proof-list">
+                        <li>Газета «Наша ніва» (1906–1915)</li>
+                        <li>Творчество Купалы, Коласа, Богдановича</li>
+                        <li>Театр И. Буйницкого (1907)</li>
+                        <li>Труды Е. Карского «Белорусы»</li>
+                        <li>Деятельность БСГ</li>
+                        <li>Издание белорусских книг, учебников</li>
+                        <li>Работы Довнар-Запольского, Ластовского</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="btn-group">
+                <button class="btn btn-outline" onclick="showSection(5)">← Назад</button>
+                <button class="btn btn-primary" onclick="showSection(7)">Далее: Задачи →</button>
+            </div>
+        </div>
+    </div>
+<!-- Section 7: Quiz Tasks -->
+    <div class="section" id="section-7">
+        <div class="card">
+            <h2>🧩 Исторические задачи — Тест</h2>
+            <p>Проверьте свои знания! Выберите правильный ответ.</p>
+
+            <div class="quiz-container" id="quiz">
+                <div class="quiz-question" id="q1">
+                    <div class="quiz-text">1. О каком событии идёт речь в «Гутарке Данилы со Степаном»: «Што вольнасць нам, бедным, дасць без адкладу, Толькі што з панамі не дойдзема ладу»?</div>
+                    <div class="quiz-options">
+                        <div class="quiz-option" onclick="checkAnswer(this, 'q1', true)">
+                            <span class="quiz-option-letter">А</span>
+                            <span>Отмена крепостного права (1861 г.)</span>
+                        </div>
+                        <div class="quiz-option" onclick="checkAnswer(this, 'q1', false)">
+                            <span class="quiz-option-letter">Б</span>
+                            <span>Восстание 1863–1864 гг.</span>
+                        </div>
+                        <div class="quiz-option" onclick="checkAnswer(this, 'q1', false)">
+                            <span class="quiz-option-letter">В</span>
+                            <span>Столыпинская реформа</span>
+                        </div>
+                        <div class="quiz-option" onclick="checkAnswer(this, 'q1', false)">
+                            <span class="quiz-option-letter">Г</span>
+                            <span>Революция 1905 г.</span>
+                        </div>
+                    </div>
+                    <div class="quiz-feedback" id="q1-feedback"></div>
+                </div>
+
+                <div class="quiz-question" id="q2">
+                    <div class="quiz-text">2. С какими событиями связана наградная медаль с датами «1863–1864»?</div>
+                    <div class="quiz-options">
+                        <div class="quiz-option" onclick="checkAnswer(this, 'q2', false)">
+                            <span class="quiz-option-letter">А</span>
+                            <span>Крестьянская реформа</span>
+                        </div>
+                        <div class="quiz-option" onclick="checkAnswer(this, 'q2', true)">
+                            <span class="quiz-option-letter">Б</span>
+                            <span>Подавление восстания 1863–1864 гг.</span>
+                        </div>
+                        <div class="quiz-option" onclick="checkAnswer(this, 'q2', false)">
+                            <span class="quiz-option-letter">В</span>
+                            <span>Строительство железных дорог</span>
+                        </div>
+                        <div class="quiz-option" onclick="checkAnswer(this, 'q2', false)">
+                            <span class="quiz-option-letter">Г</span>
+                            <span>Введение земств</span>
+                        </div>
+                    </div>
+                    <div class="quiz-feedback" id="q2-feedback"></div>
+                </div>
+
+                <div class="quiz-question" id="q3">
+                    <div class="quiz-text">3. Почему автор стихотворения «Кто я?» не может определить свою национальность?</div>
+                    <div class="quiz-options">
+                        <div class="quiz-option" onclick="checkAnswer(this, 'q3', false)">
+                            <span class="quiz-option-letter">А</span>
+                            <span>Он родился за границей</span>
+                        </div>
+                        <div class="quiz-option" onclick="checkAnswer(this, 'q3', false)">
+                            <span class="quiz-option-letter">Б</span>
+                            <span>У него смешанные корни</span>
+                        </div>
+                        <div class="quiz-option" onclick="checkAnswer(this, 'q3', true)">
+                            <span class="quiz-option-letter">В</span>
+                            <span>Белорусская нация ещё не сформировалась, слабое национальное самосознание</span>
+                        </div>
+                        <div class="quiz-option" onclick="checkAnswer(this, 'q3', false)">
+                            <span class="quiz-option-letter">Г</span>
+                            <span>Было запрещено называть себя белорусом</span>
+                        </div>
+                    </div>
+                    <div class="quiz-feedback" id="q3-feedback"></div>
+                </div>
+
+                <div class="quiz-question" id="q4">
+                    <div class="quiz-text">4. Что означает слово «тутэйшыя» и почему Купала использует его в стихотворении?</div>
+                    <div class="quiz-options">
+                        <div class="quiz-option" onclick="checkAnswer(this, 'q4', false)">
+                            <span class="quiz-option-letter">А</span>
+                            <span>«Свои» — подчёркивание единства с русским народом</span>
+                        </div>
+                        <div class="quiz-option" onclick="checkAnswer(this, 'q4', true)">
+                            <span class="quiz-option-letter">Б</span>
+                            <span>«Здешние» — отражение слабого национального самосознания белорусов</span>
+                        </div>
+                        <div class="quiz-option" onclick="checkAnswer(this, 'q4', false)">
+                            <span class="quiz-option-letter">В</span>
+                            <span>«Местные» — название политической партии</span>
+                        </div>
+                        <div class="quiz-option" onclick="checkAnswer(this, 'q4', false)">
+                            <span class="quiz-option-letter">Г</span>
+                            <span>«Простые» — обозначение крестьянского сословия</span>
+                        </div>
+                    </div>
+                    <div class="quiz-feedback" id="q4-feedback"></div>
+                </div>
+
+                <div class="quiz-question" id="q5">
+                    <div class="quiz-text">5. Какое высказывание крестьянина отражает последствия восстания 1863 г. для условий реформы?</div>
+                    <div class="quiz-options">
+                        <div class="quiz-option" onclick="checkAnswer(this, 'q5', true)">
+                            <span class="quiz-option-letter">А</span>
+                            <span>«Дзякуем, што вы ўзбунтаваліcь: інакш-бы нам такога дабра не дачакацца»</span>
+                        </div>
+                        <div class="quiz-option" onclick="checkAnswer(this, 'q5', false)">
+                            <span class="quiz-option-letter">Б</span>
+                            <span>«Нам цяпер горш стала, бо паны злуюцца»</span>
+                        </div>
+                        <div class="quiz-option" onclick="checkAnswer(this, 'q5', false)">
+                            <span class="quiz-option-letter">В</span>
+                            <span>«Мы нічога не ведаем пра паўстанне»</span>
+                        </div>
+                        <div class="quiz-option" onclick="checkAnswer(this, 'q5', false)">
+                            <span class="quiz-option-letter">Г</span>
+                            <span>«Паўстанне не змяніла нашага жыцця»</span>
+                        </div>
+                    </div>
+                    <div class="quiz-feedback" id="q5-feedback"></div>
+                </div>
+
+                <div class="quiz-question" id="q6">
+                    <div class="quiz-text">6. Какую проблему поднимал К. Калиновский в «Мужыцкай праўдзе»?</div>
+                    <div class="quiz-options">
+                        <div class="quiz-option" onclick="checkAnswer(this, 'q6', false)">
+                            <span class="quiz-option-letter">А</span>
+                            <span>Необходимость развития промышленности</span>
+                        </div>
+                        <div class="quiz-option" onclick="checkAnswer(this, 'q6', true)">
+                            <span class="quiz-option-letter">Б</span>
+                            <span>Несправедливость реформы 1861 г.: земля должна принадлежать крестьянам бесплатно</span>
+                        </div>
+                        <div class="quiz-option" onclick="checkAnswer(this, 'q6', false)">
+                            <span class="quiz-option-letter">В</span>
+                            <span>Введение всеобщего образования</span>
+                        </div>
+                        <div class="quiz-option" onclick="checkAnswer(this, 'q6', false)">
+                            <span class="quiz-option-letter">Г</span>
+                            <span>Строительство железных дорог</span>
+                        </div>
+                    </div>
+                    <div class="quiz-feedback" id="q6-feedback"></div>
+                </div>
+
+                <div class="quiz-question" id="q7">
+                    <div class="quiz-text">7. Первая белорусская национальная политическая партия — это:</div>
+                    <div class="quiz-options">
+                        <div class="quiz-option" onclick="checkAnswer(this, 'q7', false)">
+                            <span class="quiz-option-letter">А</span>
+                            <span>РСДРП</span>
+                        </div>
+                        <div class="quiz-option" onclick="checkAnswer(this, 'q7', false)">
+                            <span class="quiz-option-letter">Б</span>
+                            <span>Группа «Гомон»</span>
+                        </div>
+                        <div class="quiz-option" onclick="checkAnswer(this, 'q7', true)">
+                            <span class="quiz-option-letter">В</span>
+                            <span>БСГ (Белорусская социалистическая громада)</span>
+                        </div>
+                        <div class="quiz-option" onclick="checkAnswer(this, 'q7', false)">
+                            <span class="quiz-option-letter">Г</span>
+                            <span>Русский окраинный союз</span>
+                        </div>
+                    </div>
+                    <div class="quiz-feedback" id="q7-feedback"></div>
+                </div>
+
+                <div class="quiz-question" id="q8">
+                    <div class="quiz-text">8. Столыпинская реформа создавала условия для какого пути развития капитализма?</div>
+                    <div class="quiz-options">
+                        <div class="quiz-option" onclick="checkAnswer(this, 'q8', false)">
+                            <span class="quiz-option-letter">А</span>
+                            <span>«Прусского»</span>
+                        </div>
+                        <div class="quiz-option" onclick="checkAnswer(this, 'q8', true)">
+                            <span class="quiz-option-letter">Б</span>
+                            <span>«Американского»</span>
+                        </div>
+                        <div class="quiz-option" onclick="checkAnswer(this, 'q8', false)">
+                            <span class="quiz-option-letter">В</span>
+                            <span>«Английского»</span>
+                        </div>
+                        <div class="quiz-option" onclick="checkAnswer(this, 'q8', false)">
+                            <span class="quiz-option-letter">Г</span>
+                            <span>«Французского»</span>
+                        </div>
+                    </div>
+                    <div class="quiz-feedback" id="q8-feedback"></div>
+                </div>
+            </div>
+
+            <div class="score-display" id="quiz-score" style="display:none;">
+                <div class="score-number" id="score-value">0/8</div>
+                <div class="score-label">Правильных ответов</div>
+            </div>
+
+            <div class="btn-group">
+                <button class="btn btn-outline" onclick="showSection(6)">← Назад</button>
+                <button class="btn btn-success" onclick="showQuizScore()">📊 Показать результат</button>
+                <button class="btn btn-primary" onclick="showSection(8)">Далее: Интервью →</button>
+            </div>
+        </div>
+    </div>
+<!-- Section 8: Interviews -->
+    <div class="section" id="section-8">
+        <div class="card">
+            <h2>🎤 Воображаемые интервью</h2>
+            <p>Нажмите кнопку «Показать ответ», чтобы увидеть диалог. Сначала попробуйте ответить самостоятельно!</p>
+
+            <!-- Interview 1: K. Kalinouski -->
+            <div class="interview-container">
+                <div class="interview-person">
+                    <div class="interview-avatar">🗡️</div>
+                    <div>
+                        <div class="interview-name">К. Калиновский</div>
+                        <div class="interview-role">Руководитель восстания 1863–1864 гг., автор «Мужыцкай праўды»</div>
+                    </div>
+                </div>
+
+                <div class="dialogue-line">
+                    <div class="dialogue-speaker">Журналист:</div>
+                    <div class="dialogue-text">Кастусь, что вы понимаете под «народным государством»?</div>
+                </div>
+                <button class="reveal-interview-btn" onclick="toggleInterview('kalinouski-1')">👁️ Показать ответ</button>
+                <div class="interview-hidden" id="kalinouski-1">
+                    <div class="dialogue-line">
+                        <div class="dialogue-speaker">Калиновский:</div>
+                        <div class="dialogue-text">«Як добры слуга глядзіць худобы гаспадарскай, так добры ўрад глядзець павінен шчасця людзей. Не народ зроблены для ўрада, а ўрад для народа.» Правительство — слуга народа!</div>
+                    </div>
+                </div>
+
+                <div class="dialogue-line">
+                    <div class="dialogue-speaker">Журналист:</div>
+                    <div class="dialogue-text">Как вы относитесь к реформе 1861 г.?</div>
+                </div>
+                <button class="reveal-interview-btn" onclick="toggleInterview('kalinouski-2')">👁️ Показать ответ</button>
+                <div class="interview-hidden" id="kalinouski-2">
+                    <div class="dialogue-line">
+                        <div class="dialogue-speaker">Калиновский:</div>
+                        <div class="dialogue-text">Мужыкі не павінны плаціць ані чыншу паном, ані аброку ў казну за зямлю, бо гэта зямля да нас належыць! Реформа несправедлива — земля должна быть крестьянской бесплатно!</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Interview 2: F. Bogushevich -->
+            <div class="interview-container" style="margin-top: 20px;">
+                <div class="interview-person">
+                    <div class="interview-avatar">📝</div>
+                    <div>
+                        <div class="interview-name">Ф. Богушевич</div>
+                        <div class="interview-role">Поэт, автор «Дудки белорусской»</div>
+                    </div>
+                </div>
+
+                <div class="dialogue-line">
+                    <div class="dialogue-speaker">Журналист:</div>
+                    <div class="dialogue-text">Францішак, почему белорусский язык так важен для вас?</div>
+                </div>
+                <button class="reveal-interview-btn" onclick="toggleInterview('bogushevich-1')">👁️ Показать ответ</button>
+                <div class="interview-hidden" id="bogushevich-1">
+                    <div class="dialogue-line">
+                        <div class="dialogue-speaker">Богушевич:</div>
+                        <div class="dialogue-text">«Мова наша ёсць такая ж людская і панская, як французская, альбо нямецкая... Наша мова для нас святая, бо яна нам ад Бога дадзена.» Наш язык равен любому европейскому!</div>
+                    </div>
+                </div>
+
+                <div class="dialogue-line">
+                    <div class="dialogue-speaker">Журналист:</div>
+                    <div class="dialogue-text">Зачем знать свой язык, если есть русский и польский?</div>
+                </div>
+                <button class="reveal-interview-btn" onclick="toggleInterview('bogushevich-2')">👁️ Показать ответ</button>
+                <div class="interview-hidden" id="bogushevich-2">
+                    <div class="dialogue-line">
+                        <div class="dialogue-speaker">Богушевич:</div>
+                        <div class="dialogue-text">Яно добра знаць суседскую мову, але найперш трэба знаць сваю! Народ, который отрекается от своего языка, — умирает.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Interview 3: N.O. Koyalovich -->
+            <div class="interview-container" style="margin-top: 20px;">
+                <div class="interview-person">
+                    <div class="interview-avatar">📖</div>
+                    <div>
+                        <div class="interview-name">Н.О. Коялович</div>
+                        <div class="interview-role">Историк, публицист, деятель западноруссизма</div>
+                    </div>
+                </div>
+
+                <div class="dialogue-line">
+                    <div class="dialogue-speaker">Журналист:</div>
+                    <div class="dialogue-text">Как вы оцениваете белорусский язык и народ?</div>
+                </div>
+                <button class="reveal-interview-btn" onclick="toggleInterview('koyalovich-1')">👁️ Показать ответ</button>
+                <div class="interview-hidden" id="koyalovich-1">
+                    <div class="dialogue-line">
+                        <div class="dialogue-speaker">Коялович:</div>
+                        <div class="dialogue-text">Белорусы — это часть единого русского народа. Их язык — лишь диалект русского, а не самостоятельный. Разделение на «белорусов» и «великорусов» — искусственное, навязанное извне.</div>
+                    </div>
+                </div>
+
+                <div class="dialogue-line">
+                    <div class="dialogue-speaker">Журналист:</div>
+                    <div class="dialogue-text">Какое будущее вы видите для белорусских земель?</div>
+                </div>
+                <button class="reveal-interview-btn" onclick="toggleInterview('koyalovich-2')">👁️ Показать ответ</button>
+                <div class="interview-hidden" id="koyalovich-2">
+                    <div class="dialogue-line">
+                        <div class="dialogue-speaker">Коялович:</div>
+                        <div class="dialogue-text">Единство с Россией — единственный путь. Белорусские земли должны оставаться неотъемлемой частью «единой и неделимой» России. Самостоятельность — это путь к разрушению.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Interview 4: Roman Skirmunt -->
+            <div class="interview-container" style="margin-top: 20px;">
+                <div class="interview-person">
+                    <div class="interview-avatar">🏛️</div>
+                    <div>
+                        <div class="interview-name">Роман Скирмунт</div>
+                        <div class="interview-role">Политический деятель, экономист</div>
+                    </div>
+                </div>
+
+                <div class="dialogue-line">
+                    <div class="dialogue-speaker">Журналист:</div>
+                    <div class="dialogue-text">Какую экономическую политику вы считаете правильной для Беларуси?</div>
+                </div>
+                <button class="reveal-interview-btn" onclick="toggleInterview('skirmunt-1')">👁️ Показать ответ</button>
+                <div class="interview-hidden" id="skirmunt-1">
+                    <div class="dialogue-line">
+                        <div class="dialogue-speaker">Скирмунт:</div>
+                        <div class="dialogue-text">Нужно развивать кооперацию и местное самоуправление. Крестьяне должны объединяться, чтобы защищать свои интересы. Экономическая свобода — основа процветания края.</div>
+                    </div>
+                </div>
+
+                <div class="dialogue-line">
+                    <div class="dialogue-speaker">Журналист:</div>
+                    <div class="dialogue-text">Какова ваша позиция по национальному вопросу?</div>
+                </div>
+                <button class="reveal-interview-btn" onclick="toggleInterview('skirmunt-2')">👁️ Показать ответ</button>
+                <div class="interview-hidden" id="skirmunt-2">
+                    <div class="dialogue-line">
+                        <div class="dialogue-speaker">Скирмунт:</div>
+                        <div class="dialogue-text">Я — за культурную автономию в составе России. Белорусы должны иметь право на свой язык, школы, печать, но полная независимость в тот момент невозможна и опасна.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Interview 5: Ignat Bujnicki -->
+            <div class="interview-container" style="margin-top: 20px;">
+                <div class="interview-person">
+                    <div class="interview-avatar">🎭</div>
+                    <div>
+                        <div class="interview-name">Игнатий Буйницкий</div>
+                        <div class="interview-role">Основатель первого белорусского профессионального театра (1907)</div>
+                    </div>
+                </div>
+
+                <div class="dialogue-line">
+                    <div class="dialogue-speaker">Журналист:</div>
+                    <div class="dialogue-text">Зачем вам понадобилось создавать белорусский театр?</div>
+                </div>
+                <button class="reveal-interview-btn" onclick="toggleInterview('bujnicki-1')">👁️ Показать ответ</button>
+                <div class="interview-hidden" id="bujnicki-1">
+                    <div class="dialogue-line">
+                        <div class="dialogue-speaker">Буйницкий:</div>
+                        <div class="dialogue-text">Театр — это зеркало души народа. Через сцену мы показываем белорусскую жизнь, обычаи, характер. Народ должен видеть себя, чтобы полюбить себя и поверить в своё будущее.</div>
+                    </div>
+                </div>
+
+                <div class="dialogue-line">
+                    <div class="dialogue-speaker">Журналист:</div>
+                    <div class="dialogue-text">С какими трудностями вы сталкиваетесь?</div>
+                </div>
+                <button class="reveal-interview-btn" onclick="toggleInterview('bujnicki-2')">👁️ Показать ответ</button>
+                <div class="interview-hidden" id="bujnicki-2">
+                    <div class="dialogue-line">
+                        <div class="dialogue-speaker">Буйницкий:</div>
+                        <div class="dialogue-text">Нет помещений, нет денег, власти препятствуют. Но когда зал аплодирует на белорусском языке — это того стоит. Мы пробуждаем нацию через искусство!</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Interview 6: Anton and Ivan Lutsevich -->
+            <div class="interview-container" style="margin-top: 20px;">
+                <div class="interview-person">
+                    <div class="interview-avatar">📰</div>
+                    <div>
+                        <div class="interview-name">Антон и Иван Луцкевичи</div>
+                        <div class="interview-role">Издатели газеты «Наша ніва», деятели культуры</div>
+                    </div>
+                </div>
+
+                <div class="dialogue-line">
+                    <div class="dialogue-speaker">Журналист:</div>
+                    <div class="dialogue-text">Что для вас значит «Наша ніва»?</div>
+                </div>
+                <button class="reveal-interview-btn" onclick="toggleInterview('lutsevich-1')">👁️ Показать ответ</button>
+                <div class="interview-hidden" id="lutsevich-1">
+                    <div class="dialogue-line">
+                        <div class="dialogue-speaker">Луцкевичи:</div>
+                        <div class="dialogue-text">«Наша ніва» — это голос белорусского народа. Мы доказываем, что белорусы — самостоятельный народ со своим языком, культурой, историей. Газета объединяет интеллигенцию и крестьянство.</div>
+                    </div>
+                </div>
+
+                <div class="dialogue-line">
+                    <div class="dialogue-speaker">Журналист:</div>
+                    <div class="dialogue-text">Какую цель вы преследуете?</div>
+                </div>
+                <button class="reveal-interview-btn" onclick="toggleInterview('lutsevich-2')">👁️ Показать ответ</button>
+                <div class="interview-hidden" id="lutsevich-2">
+                    <div class="dialogue-line">
+                        <div class="dialogue-speaker">Луцкевичи:</div>
+                        <div class="dialogue-text">Пробудить национальное самосознание. Мы издаём книги, учебники, собираем фольклор. Белорус должен гордиться тем, что он белорус, а не стесняться своего языка.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Interview 7: Marc Chagall -->
+            <div class="interview-container" style="margin-top: 20px;">
+                <div class="interview-person">
+                    <div class="interview-avatar">🎨</div>
+                    <div>
+                        <div class="interview-name">Марк Шагал</div>
+                        <div class="interview-role">Художник, уроженец Витебска (1887–1985)</div>
+                    </div>
+                </div>
+
+                <div class="dialogue-line">
+                    <div class="dialogue-speaker">Журналист:</div>
+                    <div class="dialogue-text">Откуда вы черпаете вдохновение для своих картин?</div>
+                </div>
+                <button class="reveal-interview-btn" onclick="toggleInterview('chagall-1')">👁️ Показать ответ</button>
+                <div class="interview-hidden" id="chagall-1">
+                    <div class="dialogue-line">
+                        <div class="dialogue-speaker">Шагал:</div>
+                        <div class="dialogue-text">Из детства, из Витебска, из нашей белорусской деревни. Любовь, скрипачи на крышах, праздники — всё это настоящая жизнь, которую я ношу в сердце. Моя родина — в каждой моей картине.</div>
+                    </div>
+                </div>
+
+                <div class="dialogue-line">
+                    <div class="dialogue-speaker">Журналист:</div>
+                    <div class="dialogue-text">Что для вас значит быть белорусом?</div>
+                </div>
+                <button class="reveal-interview-btn" onclick="toggleInterview('chagall-2')">👁️ Показать ответ</button>
+                <div class="interview-hidden" id="chagall-2">
+                    <div class="dialogue-line">
+                        <div class="dialogue-speaker">Шагал:</div>
+                        <div class="dialogue-text">Это часть моей души. Я живу в Париже, Нью-Йорке, но мир моего детства — белорусский. Цвета, запахи, люди — всё это формирует моё искусство. Я — художник мира, но корни мои — в Беларуси.</div>
+                    </div>
+                </div>
+            </div>
+
+            <h3>✍️ Ваша очередь: напишите интервью</h3>
+            <div class="alert alert-info">Выберите историческую личность и составьте воображаемое интервью (3–5 вопросов и ответов).</div>
+
+            <select id="interview-person-select" style="width: 100%; padding: 12px; border: 2px solid var(--border); border-radius: var(--radius-sm); font-size: 0.9rem; margin: 10px 0;">
+                <option value="">Выберите личность...</option>
+                <option value="kalinouski">К. Калиновский</option>
+                <option value="bogushevich">Ф. Богушевич</option>
+                <option value="koyalovich">Н.О. Коялович</option>
+                <option value="skirmunt">Роман Скирмунт</option>
+                <option value="bujnicki">Игнатий Буйницкий</option>
+                <option value="lutsevich">Антон и Иван Луцкевичи</option>
+                <option value="chagall">Марк Шагал</option>
+            </select>
+            <textarea class="answer-textarea" id="interview-text" placeholder="Напишите своё интервью здесь..." style="min-height: 200px;"></textarea>
+
+            <div class="btn-group">
+                <button class="btn btn-outline" onclick="showSection(7)">← Назад</button>
+                <button class="btn btn-primary" onclick="showSection(9)">Далее: Итоги →</button>
+            </div>
+        </div>
+    </div>
+<!-- Section 9: Summary -->
+    <div class="section" id="section-9">
+        <div class="card">
+            <h2>🏆 Итоговое обобщение (§ 32)</h2>
+
+            <div class="alert alert-warning">
+                <strong>Учебная задача:</strong> Охарактеризовать процесс формирования буржуазного общества в Беларуси на начало XX в.
+            </div>
+
+            <h3>Признаки перехода от феодального к буржуазному обществу:</h3>
+
+            <div class="accordion-item">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span>🏭 Промышленный переворот</span><span class="toggle-icon">▼</span>
+                </div>
+                <div class="accordion-body">
+                    Переход от мануфактуры к фабрике, формирование промышленной буржуазии и пролетариата (вольнонаёмных рабочих).
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span>📈 Рыночная экономика</span><span class="toggle-icon">▼</span>
+                </div>
+                <div class="accordion-body">
+                    Преодоление натурального хозяйства, становление товарно-денежных отношений. Выход Беларуси на общероссийский и европейский рынки.
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span>⚔️ Революционные преобразования</span><span class="toggle-icon">▼</span>
+                </div>
+                <div class="accordion-body">
+                    Восстания (1830–1831, 1863–1864), революции (1905–1907, февраль 1917) — скачкообразный переход от одной общественно-политической системы к другой.
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span>🇧🇾 Формирование нации</span><span class="toggle-icon">▼</span>
+                </div>
+                <div class="accordion-body">
+                    Складывание белорусской нации: общая территория, экономические связи, литературный язык, культура, национальное самосознание, стремление к собственной государственности.
+                </div>
+            </div>
+
+            <h3>📊 Итоговая таблица (заполните пропуски)</h3>
+            <div style="overflow-x: auto;">
+                <table class="summary-table">
+                    <tr>
+                        <th>Пути развития капитализма</th>
+                        <th>Революционные и реформаторские преобразования</th>
+                        <th>Признаки формирования белорусской нации</th>
+                    </tr>
+                    <tr>
+                        <td>
+                            <select class="summary-dropdown" data-correct="a1">
+                                <option value="">Выберите...</option>
+                                <option value="a1">Отмена крепостного права (1861) → свободная рабочая сила</option>
+                                <option value="a2">Столыпинская реформа (1906) → хутора, отруба</option>
+                                <option value="a3">Промышленный переворот (1860–1890-е)</option>
+                            </select>
+                        </td>
+                        <td>
+                            <select class="summary-dropdown" data-correct="b1">
+                                <option value="">Выберите...</option>
+                                <option value="b1">Восстание 1830–1831 гг.</option>
+                                <option value="b2">Восстание 1863–1864 гг. → улучшение реформы</option>
+                                <option value="b3">Крестьянская реформа 1861 г.</option>
+                            </select>
+                        </td>
+                        <td>
+                            <select class="summary-dropdown" data-correct="c1">
+                                <option value="">Выберите...</option>
+                                <option value="c1">Группа «Гомон» (1884) — признание самостоятельности</option>
+                                <option value="c2">Ф. Богушевич — ценность белорусского языка</option>
+                                <option value="c3">БСГ (1903) — первая нац. партия</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <select class="summary-dropdown" data-correct="a3">
+                                <option value="">Выберите...</option>
+                                <option value="a1">Отмена крепостного права (1861) → свободная рабочая сила</option>
+                                <option value="a2">Столыпинская реформа (1906) → хутора, отруба</option>
+                                <option value="a3">Промышленный переворот (1860–1890-е)</option>
+                            </select>
+                        </td>
+                        <td>
+                            <select class="summary-dropdown" data-correct="b3">
+                                <option value="">Выберите...</option>
+                                <option value="b1">Восстание 1830–1831 гг.</option>
+                                <option value="b2">Восстание 1863–1864 гг. → улучшение реформы</option>
+                                <option value="b3">Крестьянская реформа 1861 г.</option>
+                            </select>
+                        </td>
+                        <td>
+                            <select class="summary-dropdown" data-correct="c2">
+                                <option value="">Выберите...</option>
+                                <option value="c1">Группа «Гомон» (1884) — признание самостоятельности</option>
+                                <option value="c2">Ф. Богушевич — ценность белорусского языка</option>
+                                <option value="c3">БСГ (1903) — первая нац. партия</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <select class="summary-dropdown" data-correct="a2">
+                                <option value="">Выберите...</option>
+                                <option value="a1">Отмена крепостного права (1861) → свободная рабочая сила</option>
+                                <option value="a2">Столыпинская реформа (1906) → хутора, отруба</option>
+                                <option value="a3">Промышленный переворот (1860–1890-е)</option>
+                            </select>
+                        </td>
+                        <td>
+                            <select class="summary-dropdown" data-correct="b2">
+                                <option value="">Выберите...</option>
+                                <option value="b1">Восстание 1830–1831 гг.</option>
+                                <option value="b2">Восстание 1863–1864 гг. → улучшение реформы</option>
+                                <option value="b3">Крестьянская реформа 1861 г.</option>
+                            </select>
+                        </td>
+                        <td>
+                            <select class="summary-dropdown" data-correct="c3">
+                                <option value="">Выберите...</option>
+                                <option value="c1">Группа «Гомон» (1884) — признание самостоятельности</option>
+                                <option value="c2">Ф. Богушевич — ценность белорусского языка</option>
+                                <option value="c3">БСГ (1903) — первая нац. партия</option>
+                            </select>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="btn-group" style="justify-content: center; margin: 15px 0;">
+                <button class="btn btn-check" onclick="checkSummaryTable()">✅ Проверить таблицу</button>
+            </div>
+            <div id="summary-result"></div>
+
+            <div class="conclusion-box" style="margin-top: 25px;">
+                <h4>💡 Главный вывод урока:</h4>
+                <p>Период второй половины XIX — начала XX в. стал переломным в истории Беларуси. Произошёл переход от феодального к буржуазному обществу через реформы и революции. Одновременно шёл процесс формирования белорусской нации, оформления национальной идеи, закладывались основы белорусской культуры и литературы. Все эти процессы были тесно взаимосвязаны и подготовили условия для будущего национального самоопределения белорусского народа.</p>
+            </div>
+
+            <h3>📝 Контрольные вопросы для самопроверки</h3>
+            <div id="self-check">
+                <div class="accordion-item">
+                    <div class="accordion-header" onclick="toggleAccordion(this)">
+                        <span>1. Основные условия крестьянской реформы 1861 г.?</span><span class="toggle-icon">▼</span>
+                    </div>
+                    <div class="accordion-body">Личная свобода, наделение землёй за выкуп, временнообязанное положение, отрезки, выкупные платежи на 49 лет, крестьянская община.</div>
+                </div>
+                <div class="accordion-item">
+                    <div class="accordion-header" onclick="toggleAccordion(this)">
+                        <span>2. Как восстание 1863–1864 гг. повлияло на реформу?</span><span class="toggle-icon">▼</span>
+                    </div>
+                    <div class="accordion-body">Отмена временнообязанного положения, снижение выкупных платежей на 20%, частичный возврат отрезков — чтобы привлечь крестьян на сторону властей.</div>
+                </div>
+                <div class="accordion-item">
+                    <div class="accordion-header" onclick="toggleAccordion(this)">
+                        <span>3. «Прусский» и «Американский» пути?</span><span class="toggle-icon">▼</span>
+                    </div>
+                    <div class="accordion-body">«Прусский» — медленное приспособление помещичьего хозяйства к капитализму. «Американский» — свободное фермерское хозяйство (хутора, отруба по столыпинской реформе).</div>
+                </div>
+                <div class="accordion-item">
+                    <div class="accordion-header" onclick="toggleAccordion(this)">
+                        <span>4. Основные признаки формирования белорусской нации?</span><span class="toggle-icon">▼</span>
+                    </div>
+                    <div class="accordion-body">Формирование литературного языка, национальная литература (Купала, Колас), пресса («Наша ніва»), политические организации (БСГ), научное обоснование (Карский), рост самосознания.</div>
+                </div>
+                <div class="accordion-item">
+                    <div class="accordion-header" onclick="toggleAccordion(this)">
+                        <span>5. Различие западноруссизма и белорусоведения?</span><span class="toggle-icon">▼</span>
+                    </div>
+                    <div class="accordion-body">Западноруссизм отрицал самостоятельность белорусов (часть «общерусского» народа). Белорусоведение (Карский, Довнар-Запольский) доказывало самостоятельность белорусского языка и народа.</div>
+                </div>
+            </div>
+
+            <div class="score-display" style="margin-top: 30px; background: linear-gradient(135deg, #27ae60, #2ecc71);">
+                <div class="score-number">🎓</div>
+                <div class="score-label">Поздравляем! Вы прошли весь урок!</div>
+            </div>
+
+            <div class="btn-group">
+                <button class="btn btn-outline" onclick="showSection(8)">← Назад</button>
+                <button class="btn btn-accent" onclick="showSection(0)">🔄 Пройти заново</button>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- Scroll to top button -->
+<button class="scroll-top" id="scroll-top" onclick="scrollToTop()">↑</button>
+
+<!-- Footer -->
+<div class="footer">
+    <p>📚 Онлайн-урок по истории Беларуси | Обобщение: вторая половина XIX — начало XX в.</p>
+    <p style="margin-top: 5px; font-size: 0.8rem;">На основе учебного пособия «История Беларуси» (Правообладатель Издательский центр БГУ)</p>
+</div>
+
+<script>
+// State
+    let currentSection = 0;
+    const totalSections = 10;
+    let termsRevealed = 0;
+    let quizCorrect = 0;
+    let quizAnswered = new Set();
+    let completedSections = new Set();
+
+    // Show section
+    function showSection(index) {
+        document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+        document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+        
+        document.getElementById(`section-${index}`).classList.add('active');
+        document.querySelectorAll('.nav-tab')[index].classList.add('active');
+        
+        if (currentSection !== index) {
+            completedSections.add(currentSection);
+            document.querySelectorAll('.nav-tab')[currentSection].classList.add('completed');
+        }
+        
+        currentSection = index;
+        updateProgress();
+        
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Update progress
+    function updateProgress() {
+        const progress = ((completedSections.size) / totalSections) * 100;
+        document.getElementById('progress-fill').style.width = `${Math.min(progress, 100)}%`;
+        document.getElementById('progress-text').textContent = `Раздел ${currentSection + 1} из ${totalSections}`;
+        document.getElementById('progress-percent').textContent = `${Math.round(progress)}%`;
+    }
+
+    // Reveal term
+    function revealTerm(card) {
+        if (!card.classList.contains('revealed')) {
+            card.classList.add('revealed');
+            termsRevealed++;
+            document.getElementById('terms-revealed').textContent = termsRevealed;
+        }
+        const def = card.querySelector('.term-def');
+        const hint = card.querySelector('.term-hint');
+        def.classList.toggle('show');
+        if (def.classList.contains('show')) {
+            hint.style.display = 'none';
+        } else {
+            hint.style.display = 'block';
+        }
+    }
+
+    // Toggle accordion
+    function toggleAccordion(header) {
+        const body = header.nextElementSibling;
+        const icon = header.querySelector('.toggle-icon');
+        body.classList.toggle('show');
+        icon.style.transform = body.classList.contains('show') ? 'rotate(180deg)' : 'rotate(0deg)';
+    }
+
+    // Toggle hidden content
+    function toggleHidden(id) {
+        const el = document.getElementById(id);
+        el.classList.toggle('show');
+    }
+
+    // Toggle proof card
+    function toggleProof(card) {
+        const details = card.querySelector('.proof-details');
+        const icon = card.querySelector('.toggle-icon');
+        card.classList.toggle('open');
+        details.classList.toggle('show');
+        icon.style.transform = card.classList.contains('open') ? 'rotate(180deg)' : 'rotate(0deg)';
+    }
+
+    // Toggle interview answer
+    function toggleInterview(id) {
+        const el = document.getElementById(id);
+        el.classList.toggle('show');
+    }
+
+    // ========== TIMELINE DRAG AND DROP ==========
+    function dragTimeline(ev) {
+        ev.dataTransfer.setData("text", ev.target.dataset.answer);
+        ev.dataTransfer.setData("elementId", ev.target.id || '');
+        ev.target.classList.add('dragging');
+    }
+
+    function allowDropTimeline(ev) {
+        ev.preventDefault();
+        ev.currentTarget.classList.add('drag-over');
+    }
+
+    function leaveDropTimeline(ev) {
+        ev.currentTarget.classList.remove('drag-over');
+    }
+
+    function dropTimeline(ev) {
+        ev.preventDefault();
+        ev.currentTarget.classList.remove('drag-over');
+        
+        const answer = ev.dataTransfer.getData("text");
+        const slot = ev.currentTarget;
+        const slotYear = slot.dataset.year;
+        
+        // Find the dragged card
+        const draggedCard = document.querySelector('.timeline-card.dragging');
+        if (draggedCard) {
+            draggedCard.classList.remove('dragging');
+            
+            // If slot already has content, return old card to pool
+            const existingContent = slot.querySelector('.timeline-card');
+            if (existingContent) {
+                document.getElementById('timeline-pool').appendChild(existingContent);
+            }
+            
+            // Move card to slot
+            slot.querySelector('.slot-content').innerHTML = '';
+            slot.querySelector('.slot-content').appendChild(draggedCard);
+            draggedCard.classList.add('placed');
+            draggedCard.draggable = false;
+        }
+    }
+
+    function checkTimeline() {
+        const slots = document.querySelectorAll('.timeline-slot');
+        let correct = 0;
+        let total = 0;
+        
+        slots.forEach(slot => {
+            const card = slot.querySelector('.timeline-card');
+            if (card) {
+                total++;
+                const slotYear = slot.dataset.year;
+                const cardAnswer = card.dataset.answer;
+                
+                if (slotYear === cardAnswer) {
+                    slot.classList.add('correct');
+                    slot.classList.remove('incorrect');
+                    card.classList.remove('incorrect-card');
+                    correct++;
+                } else {
+                    slot.classList.add('incorrect');
+                    slot.classList.remove('correct');
+                    card.classList.add('incorrect-card');
+                }
+            }
+        });
+        
+        const resultDiv = document.getElementById('timeline-result');
+        if (total === 0) {
+            resultDiv.innerHTML = '<div class="check-result error">Перетащите карточки в ячейки!</div>';
+        } else if (correct === 7) {
+            resultDiv.innerHTML = '<div class="check-result success">🎉 Отлично! Все ' + correct + ' из 7 верно!</div>';
+        } else {
+            resultDiv.innerHTML = '<div class="check-result error">Верно ' + correct + ' из 7. Попробуйте ещё раз!</div>';
+        }
+    }
+
+    function resetTimeline() {
+        const pool = document.getElementById('timeline-pool');
+        const slots = document.querySelectorAll('.timeline-slot');
+        
+        slots.forEach(slot => {
+            const card = slot.querySelector('.timeline-card');
+            if (card) {
+                card.classList.remove('placed', 'incorrect-card');
+                card.draggable = true;
+                pool.appendChild(card);
+            }
+            slot.classList.remove('correct', 'incorrect');
+            slot.querySelector('.slot-content').textContent = 'Перетащите сюда описание события';
+        });
+        
+        document.getElementById('timeline-result').innerHTML = '';
+    }
+
+    // ========== COMPARISON DRAG AND DROP ==========
+    function dragComparison(ev) {
+        ev.dataTransfer.setData("text", ev.target.dataset.answer);
+        ev.target.classList.add('dragging');
+    }
+
+    function allowDropComparison(ev) {
+        ev.preventDefault();
+        ev.currentTarget.classList.add('drag-over');
+    }
+
+    function leaveDropComparison(ev) {
+        ev.currentTarget.classList.remove('drag-over');
+    }
+
+    function dropComparison(ev) {
+        ev.preventDefault();
+        ev.currentTarget.classList.remove('drag-over');
+        
+        const answer = ev.dataTransfer.getData("text");
+        const cell = ev.currentTarget;
+        const draggedCard = document.querySelector('.drag-card.dragging');
+        
+        if (draggedCard) {
+            draggedCard.classList.remove('dragging');
+            
+            // If cell already has content, return to pool
+            const existing = cell.querySelector('.drag-card');
+            if (existing) {
+                const poolId = cell.closest('.comparison-game').querySelector('.cards-pool').id;
+                document.getElementById(poolId).appendChild(existing);
+            }
+            
+            cell.appendChild(draggedCard);
+            draggedCard.classList.add('placed');
+            draggedCard.draggable = false;
+        }
+    }
+
+    function checkComparison(gameId, poolId) {
+        const game = document.getElementById(gameId);
+        const cells = game.querySelectorAll('.comparison-cell[data-answer]');
+        let correct = 0;
+        let total = 0;
+        
+        cells.forEach(cell => {
+            const card = cell.querySelector('.drag-card');
+            if (card) {
+                total++;
+                const cellAnswer = cell.dataset.answer;
+                const cardAnswer = card.dataset.answer;
+                
+                if (cellAnswer === cardAnswer) {
+                    cell.classList.add('correct');
+                    cell.classList.remove('incorrect');
+                    card.classList.remove('incorrect-card');
+                    correct++;
+                } else {
+                    cell.classList.add('incorrect');
+                    cell.classList.remove('correct');
+                    card.classList.add('incorrect-card');
+                }
+            }
+        });
+        
+        const resultDiv = game.querySelector('.btn-group');
+        const existingResult = game.querySelector('.check-result');
+        if (existingResult) existingResult.remove();
+        
+        const result = document.createElement('div');
+        result.className = 'check-result ' + (correct === total && total > 0 ? 'success' : 'error');
+        result.style.marginTop = '10px';
+        result.style.width = '100%';
+        
+        if (total === 0) {
+            result.textContent = 'Заполните ячейки!';
+            result.className = 'check-result error';
+        } else if (correct === total) {
+            result.textContent = '🎉 Отлично! Все ' + correct + ' верно!';
+        } else {
+            result.textContent = 'Верно ' + correct + ' из ' + total + '. Попробуйте ещё раз!';
+        }
+        
+        game.appendChild(result);
+    }
+
+    // ========== SUMMARY TABLE DROPDOWN ==========
+    function checkSummaryTable() {
+        const dropdowns = document.querySelectorAll('.summary-dropdown');
+        let correct = 0;
+        let total = 0;
+        
+        dropdowns.forEach(dd => {
+            if (dd.value !== '') {
+                total++;
+                if (dd.value === dd.dataset.correct) {
+                    dd.classList.add('correct');
+                    dd.classList.remove('incorrect');
+                    correct++;
+                } else {
+                    dd.classList.add('incorrect');
+                    dd.classList.remove('correct');
+                }
+            }
+        });
+        
+        const resultDiv = document.getElementById('summary-result');
+        if (total === 0) {
+            resultDiv.innerHTML = '<div class="check-result error">Выберите варианты из списков!</div>';
+        } else if (correct === 9) {
+            resultDiv.innerHTML = '<div class="check-result success">🎉 Превосходно! Все 9 из 9 верно!</div>';
+        } else {
+            resultDiv.innerHTML = '<div class="check-result error">Верно ' + correct + ' из 9. Проверьте ошибки!</div>';
+        }
+    }
+
+    // Quiz check answer
+    function checkAnswer(option, questionId, isCorrect) {
+        if (quizAnswered.has(questionId)) return;
+        quizAnswered.add(questionId);
+
+        const question = document.getElementById(questionId);
+        const feedback = document.getElementById(`${questionId}-feedback`);
+        const allOptions = question.querySelectorAll('.quiz-option');
+
+        allOptions.forEach(opt => {
+            opt.style.pointerEvents = 'none';
+        });
+
+        if (isCorrect) {
+            option.classList.add('correct-answer');
+            question.classList.add('correct');
+            feedback.className = 'quiz-feedback show correct';
+            feedback.textContent = '✅ Правильно! Отличная работа!';
+            quizCorrect++;
+        } else {
+            option.classList.add('wrong-answer');
+            question.classList.add('incorrect');
+            feedback.className = 'quiz-feedback show incorrect';
+            feedback.textContent = '❌ Неправильно. Посмотрите правильный ответ (выделен зелёным).';
+            
+            allOptions.forEach(opt => {
+                const clickHandler = opt.getAttribute('onclick');
+                if (clickHandler && clickHandler.includes('true')) {
+                    opt.classList.add('correct-answer');
+                }
+            });
+        }
+    }
+
+    // Show quiz score
+    function showQuizScore() {
+        const scoreDisplay = document.getElementById('quiz-score');
+        const scoreValue = document.getElementById('score-value');
+        scoreDisplay.style.display = 'block';
+        scoreValue.textContent = `${quizCorrect}/8`;
+        
+        if (quizCorrect >= 7) {
+            scoreDisplay.style.background = 'linear-gradient(135deg, #27ae60, #2ecc71)';
+        } else if (quizCorrect >= 5) {
+            scoreDisplay.style.background = 'linear-gradient(135deg, #f39c12, #e67e22)';
+        } else {
+            scoreDisplay.style.background = 'linear-gradient(135deg, #e74c3c, #c0392b)';
+        }
+        
+        scoreDisplay.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // Scroll to top
+    function scrollToTop() {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Show/hide scroll button
+    window.addEventListener('scroll', () => {
+        const btn = document.getElementById('scroll-top');
+        if (window.scrollY > 300) {
+            btn.classList.add('visible');
+        } else {
+            btn.classList.remove('visible');
+        }
+    });
+
+    // Initialize
+    updateProgress();
+</script>
+
+</body>
+</html>

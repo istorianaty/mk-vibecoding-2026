@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Тренажёр §48 — Республика Беларусь в мире</title>
+<style>
+:root{--bg:#f4f8ff;--card:#fff;--text:#1f2937;--muted:#6b7280;--primary:#2563eb;--primary-d:#1d4ed8;--success:#16a34a;--warn:#f59e0b;--danger:#dc2626;--border:#dbeafe;--soft:#eef4ff}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,Helvetica,sans-serif;background:linear-gradient(135deg,#eaf2ff,#f8fbff);color:var(--text);min-height:100vh}
+.container{max-width:1100px;margin:0 auto;padding:16px}
+.header{background:var(--card);border-radius:20px;padding:22px;box-shadow:0 8px 22px rgba(0,0,0,.07);margin-bottom:18px}
+.header h1{margin:0 0 6px;color:var(--primary-d);font-size:28px}
+.header p{margin:3px 0;color:var(--muted);line-height:1.5;font-size:15px}
+
+/* TABS */
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:16px 0}
+.tab-btn{border:none;background:#dbeafe;color:#1e3a8a;padding:10px 15px;border-radius:12px;cursor:pointer;font-size:14px;font-weight:700;transition:.2s}
+.tab-btn:hover{background:#bfdbfe}
+.tab-btn.active{background:var(--primary);color:#fff}
+
+.section{display:none;animation:fadeIn .25s ease}
+.section.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+.panel{background:var(--card);border-radius:18px;padding:20px;box-shadow:0 8px 22px rgba(0,0,0,.06);margin-bottom:18px}
+.panel h2{margin:0 0 10px;color:var(--primary-d);font-size:22px}
+.hint{color:var(--muted);font-size:13px;margin-bottom:12px}
+
+button{border:none;border-radius:12px;padding:11px 16px;font-size:15px;cursor:pointer;transition:.15s ease}
+.btn-p{background:var(--primary);color:#fff}
+.btn-p:hover{background:var(--primary-d)}
+.btn-s{background:#e5e7eb;color:#111827}
+.btn-s:hover{background:#d1d5db}
+.btn-suc{background:var(--success);color:#fff}
+.btn-suc:hover{background:#15803d}
+.btn-sm{padding:9px 13px;font-size:13px}
+.btn-know{background:#dcfce7;color:#166534;border:2px solid #86efac}
+.btn-know:hover{background:#bbf7d0}
+.btn-dont{background:#fee2e2;color:#991b1b;border:2px solid #fca5a5}
+.btn-dont:hover{background:#fecaca}
+
+/* CARD SINGLE */
+.card-wrap{display:flex;flex-direction:column;align-items:center;gap:14px}
+.card-counter{font-size:14px;color:var(--muted);font-weight:700}
+.progress-bar{width:100%;max-width:500px;height:8px;background:#e5e7eb;border-radius:99px;overflow:hidden}
+.progress-fill{height:100%;background:var(--primary);transition:width .3s;border-radius:99px}
+.flashcard{perspective:1000px;width:100%;max-width:500px;height:210px;cursor:pointer}
+.flashcard-inner{position:relative;width:100%;height:100%;transition:transform .6s;transform-style:preserve-3d}
+.flashcard.flipped .flashcard-inner{transform:rotateY(180deg)}
+.flashcard-face{position:absolute;width:100%;height:100%;border-radius:18px;backface-visibility:hidden;display:flex;align-items:center;justify-content:center;text-align:center;padding:18px;box-shadow:0 6px 16px rgba(0,0,0,.06);line-height:1.5}
+.flashcard-front{background:linear-gradient(135deg,#dbeafe,#eff6ff);color:#1e3a8a;border:2px solid #bfdbfe;font-size:22px;font-weight:700}
+.flashcard-back{background:linear-gradient(135deg,#ecfdf3,#f0fdf4);color:#14532d;transform:rotateY(180deg);border:2px solid #bbf7d0;font-size:16px}
+.card-nav{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:center}
+.score-line{font-size:14px;font-weight:700}
+
+/* CARD TYPE SELECTOR */
+.type-sel{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.type-btn{border:2px solid #dbeafe;background:#f9fbff;color:#1e3a8a;padding:9px 14px;border-radius:10px;cursor:pointer;font-size:13px;font-weight:700;transition:.15s}
+.type-btn:hover{border-color:var(--primary);background:#eef4ff}
+.type-btn.active{background:var(--primary);color:#fff;border-color:var(--primary)}
+
+/* TIMELINE FILL */
+.tl-slot{display:flex;align-items:stretch;gap:12px;margin-bottom:14px;position:relative;padding-left:22px;border-left:4px solid #93c5fd}
+.tl-slot::before{content:"";position:absolute;left:-12px;top:16px;width:16px;height:16px;border-radius:50%;background:var(--primary);border:3px solid #fff;box-shadow:0 0 0 2px #93c5fd}
+.tl-body{flex:1;background:#f9fbff;border:2px solid #dbeafe;border-radius:14px;padding:14px}
+.tl-date-display{font-weight:700;color:var(--primary-d);font-size:16px;margin-bottom:6px}
+.tl-event{color:var(--text);font-size:15px;margin-bottom:8px}
+.tl-input{width:100%;padding:10px;border:2px solid #dbeafe;border-radius:10px;font-size:15px;outline:none;transition:.15s}
+.tl-input:focus{border-color:var(--primary)}
+.tl-input.correct{border-color:var(--success);background:#ecfdf3}
+.tl-input.wrong{border-color:var(--danger);background:#fef2f2}
+.tl-hint{font-size:13px;color:var(--success);margin-top:4px;display:none}
+.tl-hint.show{display:block}
+.tl-controls{display:flex;gap:10px;flex-wrap:wrap;margin:14px 0}
+.tl-score{font-size:16px;font-weight:700;color:var(--primary-d);margin-top:10px}
+
+/* RANDOM */
+.random-box{text-align:center}
+.rq{font-size:21px;font-weight:700;margin:18px 0 10px;color:#111827;min-height:55px}
+.ra{margin:14px auto 0;padding:14px;border-radius:12px;background:#f8fafc;border-left:4px solid var(--warn);display:none;line-height:1.6;max-width:600px;text-align:left}
+.ra.show{display:block}
+.controls{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:14px}
+
+/* QUIZ */
+.q-card{background:var(--card);border-radius:18px;padding:20px;margin-bottom:16px;box-shadow:0 8px 20px rgba(0,0,0,.06);border-left:6px solid #bfdbfe}
+.q-title{font-size:17px;margin-bottom:12px;font-weight:700}
+.opts{display:grid;gap:9px}
+.opt{display:block;padding:11px 13px;border:2px solid #dbeafe;border-radius:12px;cursor:pointer;transition:.15s;background:#f9fbff;font-size:15px}
+.opt:hover{border-color:var(--primary);background:#eef4ff}
+.opt input{margin-right:9px;transform:scale(1.1)}
+.opt.correct{border-color:var(--success);background:#ecfdf3}
+.opt.wrong{border-color:var(--danger);background:#fef2f2}
+.expl{margin-top:12px;padding:11px 13px;border-radius:12px;background:#f8fafc;border-left:4px solid var(--warn);display:none;line-height:1.5;font-size:14px}
+.expl.show{display:block}
+
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-bottom:16px}
+.stat-c{background:var(--card);padding:16px;border-radius:14px;box-shadow:0 6px 16px rgba(0,0,0,.05)}
+.stat-c h3{margin:0 0 6px;font-size:13px;color:var(--muted);font-weight:400}
+.stat-c .val{font-size:24px;font-weight:700;color:var(--primary-d)}
+
+.res-box{background:var(--card);border-radius:18px;padding:22px;text-align:center;box-shadow:0 10px 22px rgba(0,0,0,.07);margin-top:20px;display:none}
+.res-box.show{display:block}
+.res-box h2{margin-top:0;color:var(--primary-d)}
+.badge{display:inline-block;margin-top:10px;padding:10px 16px;border-radius:999px;color:#fff;font-weight:700}
+.exc{background:var(--success)}.gd{background:var(--primary)}.avg{background:var(--warn)}.bd{background:var(--danger)}
+
+@media(max-width:700px){
+  .header h1{font-size:22px}
+  .flashcard{height:190px}
+  .flashcard-front{font-size:19px}
+  .rq{font-size:18px}
+}
+</style>
+</head>
+<body>
+<div class="container">
+<div class="header">
+  <h1>📚 Тренажёр по §48: Республика Беларусь в мире</h1>
+  <p>Карточки · Лента времени · Случайные вопросы · Тест</p>
+</div>
+
+<div class="tabs">
+  <button class="tab-btn active" onclick="showTab('cards',this)">🃏 Карточки</button>
+  <button class="tab-btn" onclick="showTab('tlfill',this)">⏳ Лента времени</button>
+  <button class="tab-btn" onclick="showTab('random',this)">🎲 Рандомный вопрос</button>
+  <button class="tab-btn" onclick="showTab('quiz',this)">✅ Тест (19 вопросов)</button>
+</div>
+
+<!-- ===== КАРТОЧКИ ===== -->
+<div class="section active" id="cards">
+  <div class="panel">
+    <h2>🃏 Карточки для запоминания</h2>
+    <p class="hint">Выбери категорию или «Все карточки». Нажми на карточку, чтобы перевернуть.</p>
+    <div class="type-sel" id="typeSel">
+      <button class="type-btn active" onclick="setCardType('all',this)">Все карточки</button>
+      <button class="type-btn" onclick="setCardType('dates',this)">📅 Даты</button>
+      <button class="type-btn" onclick="setCardType('terms',this)">📖 Понятия</button>
+      <button class="type-btn" onclick="setCardType('orgs',this)">🌐 Организации</button>
+    </div>
+    <div class="card-wrap">
+      <div class="progress-bar"><div class="progress-fill" id="cProgress"></div></div>
+      <div class="card-counter" id="cCounter">1 / 40</div>
+      <div class="flashcard" id="cFlash" onclick="document.getElementById('cFlash').classList.toggle('flipped')">
+        <div class="flashcard-inner">
+          <div class="flashcard-face flashcard-front" id="cFront"></div>
+          <div class="flashcard-face flashcard-back" id="cBack"></div>
+        </div>
+      </div>
+      <div class="card-nav">
+        <button class="btn-s btn-sm" onclick="cPrev()">← Назад</button>
+        <button class="btn-dont btn-sm" onclick="cMark(false)">❌ Не знаю</button>
+        <button class="btn-know btn-sm" onclick="cMark(true)">✅ Знаю</button>
+        <button class="btn-s btn-sm" onclick="cNext()">Далее →</button>
+      </div>
+      <div class="card-nav">
+        <button class="btn-s btn-sm" onclick="cShuffle()">🔀 Перемешать</button>
+        <button class="btn-s btn-sm" onclick="cReset()">🔄 Сначала</button>
+      </div>
+      <div class="score-line" id="cScore" style="color:var(--success)"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== ЛЕНТА ВРЕМЕНИ ===== -->
+<div class="section" id="tlfill">
+  <div class="panel">
+    <h2>⏳ Заполни ленту времени</h2>
+    <p class="hint">Для каждого события впиши правильную дату (год). Затем нажми «Проверить».</p>
+    <div class="tl-controls">
+      <button class="btn-p btn-sm" onclick="checkTimeline()">Проверить</button>
+      <button class="btn-s btn-sm" onclick="resetTimeline()">Сбросить</button>
+      <button class="btn-s btn-sm" onclick="showAllDates()">Показать все ответы</button>
+    </div>
+    <div class="tl-score" id="tlScore"></div>
+    <div id="tlContainer"></div>
+  </div>
+</div>
+
+<!-- ===== РАНДОМНЫЙ ВОПРОС ===== -->
+<div class="section" id="random">
+  <div class="panel random-box">
+    <h2>🎲 Случайный вопрос</h2>
+    <p class="hint">Ответь сам, потом проверь!</p>
+    <div class="rq" id="rQ">Нажми «Новый вопрос»</div>
+    <div class="ra" id="rA"></div>
+    <div class="controls">
+      <button class="btn-p" onclick="newRQ()">🔄 Новый вопрос</button>
+      <button class="btn-s" onclick="showRA()">👁 Показать ответ</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== ТЕСТ ===== -->
+<div class="section" id="quiz">
+  <div class="panel">
+    <h2>✅ Тест по §48 (19 вопросов)</h2>
+    <p class="hint">Выбери правильный ответ на каждый вопрос.</p>
+    <div class="controls" style="margin-bottom:16px">
+      <button class="btn-p" onclick="checkQuiz()">Проверить</button>
+      <button class="btn-s" onclick="resetQuiz()">Пройти заново</button>
+    </div>
+  </div>
+  <div class="stats">
+    <div class="stat-c"><h3>Всего</h3><div class="val">19</div></div>
+    <div class="stat-c"><h3>Правильных</h3><div class="val" id="qCorr">0</div></div>
+    <div class="stat-c"><h3>Результат</h3><div class="val" id="qPct">0%</div></div>
+  </div>
+  <div id="quizBox"></div>
+  <div class="res-box" id="resBox">
+    <h2>Результат</h2>
+    <p id="resText"></p>
+    <div id="resBadge" class="badge"></div>
+  </div>
+</div>
+</div>
+
+<script>
+// ============ DATA ============
+
+const datesCards=[
+  {f:"8 декабря 1991 г.",b:"Подписание Соглашения о создании СНГ главами России, Украины и Беларуси."},
+  {f:"21 декабря 1991 г.",b:"Беловежское соглашение поддержали руководители ещё 8 республик СССР."},
+  {f:"1992 г.",b:"В Минске открылось представительство ООН. Беларусь стала членом ОБСЕ."},
+  {f:"1995 г.",b:"Договор о создании Таможенного союза (Россия, Беларусь, Казахстан)."},
+  {f:"8 декабря 1999 г.",b:"Договор о создании Союзного государства Беларуси и России."},
+  {f:"1999 г.",b:"Саммит ОБСЕ в Стамбуле. Подписана Хартия европейской безопасности."},
+  {f:"2000 г.",b:"Создано Евразийское экономическое сообщество (ЕврАзЭС)."},
+  {f:"2001 г.",b:"Создана Шанхайская организация сотрудничества (ШОС)."},
+  {f:"2002 г.",b:"Создана ОДКБ."},
+  {f:"2003 г.",b:"ПА ОБСЕ признала Национальное собрание РБ полноценным парламентом."},
+  {f:"2005 г.",b:"А. Г. Лукашенко выдвинул инициативу по борьбе с торговлей людьми на саммите ООН."},
+  {f:"2010 г.",b:"ГА ООН приняла Глобальный план по борьбе с торговлей людьми. Беларусь — партнёр ШОС."},
+  {f:"1 января 2012 г.",b:"Единое экономическое пространство на территории ЕврАзЭС."},
+  {f:"2014 г.",b:"Подписан договор о создании ЕАЭС."},
+  {f:"1 января 2015 г.",b:"ЕАЭС начал официально функционировать."},
+  {f:"2020 г.",b:"Пандемия COVID-19. Президентские выборы. Санкции Запада."},
+  {f:"2024 г.",b:"Беларусь — полноправный член ШОС."},
+  {f:"Ноябрь 2024 г.",b:"Беларусь стала страной-партнёром БРИКС."},
+  {f:"Ст. 18 Конституции",b:"Принципы: равенство, неприменение силы, нерушимость границ, мирное урегулирование, невмешательство."}
+];
+
+const termsCards=[
+  {f:"Геополитическое положение",b:"Положение государства, определяемое территорией, географическим расположением, соседями, транспортными путями."},
+  {f:"Многовекторность",b:"Принцип внешней политики — развитие сотрудничества по разным направлениям с разными странами."},
+  {f:"Суверенитет",b:"Независимость государства во внутренней и внешней политике."},
+  {f:"Интеграция",b:"Сближение государств, создание общих экономических и политических пространств."},
+  {f:"Санкции",b:"Ограничительные меры политического или экономического характера."},
+  {f:"Стратегические союзники",b:"Государства с ключевым значением для безопасности и экономики (Россия и Китай)."},
+  {f:"Единое экономическое пространство",b:"Общее пространство для свободного экономического взаимодействия. С 1 января 2012 г."},
+  {f:"Нерушимость границ",b:"Принцип международного права: границы не изменяются силой."},
+  {f:"Невмешательство",b:"Запрет внешнего давления на политическую жизнь другого государства."},
+  {f:"«Цветная революция»",b:"Смена власти при внешней поддержке через протесты, информационное давление, создание альтернативных органов власти."}
+];
+
+const orgsCards=[
+  {f:"СНГ",b:"Содружество Независимых Государств. 8 декабря 1991 г. Беларусь — основатель. Зона свободной торговли, 280 млн чел."},
+  {f:"Союзное государство",b:"Беларусь + Россия. Договор 8 декабря 1999 г. Общее пространство в экономике, обороне, науке, культуре."},
+  {f:"ОДКБ",b:"Организация Договора о коллективной безопасности. 2002 г. Беларусь, Россия, Армения, Казахстан, Кыргызстан, Таджикистан."},
+  {f:"ЕврАзЭС",b:"Евразийское экономическое сообщество. 2000 г. С 1 января 2012 г. — Единое экономическое пространство."},
+  {f:"ЕАЭС",b:"Евразийский экономический союз. Договор 2014 г. Работает с 1 января 2015 г."},
+  {f:"ШОС",b:"Шанхайская организация сотрудничества. 2001 г. Беларусь: партнёр с 2010 г., член с 2024 г."},
+  {f:"БРИКС",b:"Крупные развивающиеся страны. ~⅓ мирового ВВП, 45% населения. Беларусь — партнёр с ноября 2024 г."},
+  {f:"ООН",b:"Организация Объединённых Наций. Представительство в Минске с 1992 г."},
+  {f:"ОБСЕ",b:"Организация по безопасности и сотрудничеству в Европе. Беларусь — член с 1992 г."},
+  {f:"ЕС",b:"Европейский союз. Был 2-м торговым партнёром. После санкций 2020-х — снижение торговли."},
+  {f:"НАТО",b:"Военно-политический союз западных государств. Расширение на восток — фактор геополитики РБ."}
+];
+
+// Timeline fill data
+const tlEvents=[
+  {event:"Подписание Соглашения о создании СНГ",answer:"1991",accept:["1991","8 декабря 1991"]},
+  {event:"В Минске открылось представительство ООН",answer:"1992",accept:["1992"]},
+  {event:"Беларусь стала членом ОБСЕ",answer:"1992",accept:["1992"]},
+  {event:"Договор о создании Таможенного союза",answer:"1995",accept:["1995"]},
+  {event:"Договор о создании Союзного государства Беларуси и России",answer:"1999",accept:["1999","8 декабря 1999"]},
+  {event:"Саммит ОБСЕ в Стамбуле, Хартия европейской безопасности",answer:"1999",accept:["1999"]},
+  {event:"Создание ЕврАзЭС",answer:"2000",accept:["2000"]},
+  {event:"Создание ШОС",answer:"2001",accept:["2001"]},
+  {event:"Создание ОДКБ",answer:"2002",accept:["2002"]},
+  {event:"ПА ОБСЕ признала Национальное собрание РБ",answer:"2003",accept:["2003"]},
+  {event:"Инициатива А. Г. Лукашенко по борьбе с торговлей людьми (саммит ООН)",answer:"2005",accept:["2005"]},
+  {event:"ГА ООН приняла Глобальный план по борьбе с торговлей людьми",answer:"2010",accept:["2010"]},
+  {event:"Единое экономическое пространство на территории ЕврАзЭС",answer:"2012",accept:["2012","1 января 2012"]},
+  {event:"Подписан договор о создании ЕАЭС",answer:"2014",accept:["2014"]},
+  {event:"ЕАЭС начал функционировать",answer:"2015",accept:["2015","1 января 2015"]},
+  {event:"Пандемия COVID-19 и президентские выборы в РБ",answer:"2020",accept:["2020"]},
+  {event:"Беларусь — полноправный член ШОС",answer:"2024",accept:["2024"]},
+  {event:"Беларусь — страна-партнёр БРИКС",answer:"2024",accept:["2024","ноябрь 2024"]}
+];
+
+const randQ=[
+  {q:"Когда подписано Соглашение о создании СНГ?",a:"8 декабря 1991 г."},
+  {q:"Когда Беларусь стала полноправным членом ШОС?",a:"В 2024 г."},
+  {q:"Когда Беларусь стала страной-партнёром БРИКС?",a:"В ноябре 2024 г."},
+  {q:"Когда начал функционировать ЕАЭС?",a:"1 января 2015 г."},
+  {q:"Когда создана ШОС?",a:"В 2001 г."},
+  {q:"Когда создана ОДКБ?",a:"В 2002 г."},
+  {q:"Когда в Минске открылось представительство ООН?",a:"В 1992 г."},
+  {q:"Кто выдвинул инициативу по борьбе с торговлей людьми на саммите ООН 2005 г.?",a:"А. Г. Лукашенко."},
+  {q:"Когда ГА ООН приняла Глобальный план по борьбе с торговлей людьми?",a:"В 2010 г."},
+  {q:"Какие страны — стратегические союзники Беларуси?",a:"Россия и Китай."},
+  {q:"Какой принцип закреплён в ст. 18 Конституции?",a:"Нерушимость границ, мирное урегулирование споров, невмешательство, неприменение силы."},
+  {q:"Что означает многовекторность?",a:"Развитие сотрудничества с разными государствами по нескольким направлениям."},
+  {q:"Какое событие 2020 года усилило дезинтеграцию в ЕС?",a:"Пандемия COVID-19."},
+  {q:"Какая организация высоко оценила усилия Беларуси по урегулированию украинского кризиса?",a:"ОБСЕ."},
+  {q:"Когда заключён Договор о Союзном государстве?",a:"8 декабря 1999 г."},
+  {q:"Когда ПА ОБСЕ признала Национальное собрание РБ?",a:"В 2003 г."},
+  {q:"На долю какого объединения ⅓ ВВП и 45% населения?",a:"БРИКС."},
+  {q:"Кто поздравил Лукашенко с победой на выборах 2020?",a:"Си Цзиньпин, В. В. Путин, К.-Ж. Токаев, Р. Эрдоган и др."},
+  {q:"С 1 января какого года — Единое экономическое пространство?",a:"С 1 января 2012 г."}
+];
+
+const quizQ=[
+  {question:"1. В какую дату главами России, Украины и Беларуси подписано Соглашение о создании СНГ?",options:["21 декабря 1991 г.","19 сентября 1991 г.","25 августа 1991 г.","27 июля 1990 г.","8 декабря 1991 г."],answer:4,expl:"Соглашение о создании СНГ подписано 8 декабря 1991 г."},
+  {question:"2. В каком году заключен Договор о создании Союзного государства?",options:["2000 г.","1994 г.","1991 г.","1999 г.","1996 г."],answer:3,expl:"Договор заключён 8 декабря 1999 г."},
+  {question:"3. С какой даты начал функционировать ЕАЭС?",options:["1 января 2012 г.","8 декабря 1999 г.","1 января 2015 г.","1 января 2024 г.","29 мая 2014 г."],answer:2,expl:"ЕАЭС — с 1 января 2015 г."},
+  {question:"4. Когда РБ стала полноправным членом ШОС?",options:["2015 г.","2022 г.","2024 г.","2010 г.","2001 г."],answer:2,expl:"Полноправный член с 2024 г."},
+  {question:"5. Когда РБ стала страной-партнёром БРИКС?",options:["Октябрь 1996 г.","Январь 2025 г.","Февраль 2021 г.","Ноябрь 2024 г.","Январь 2015 г."],answer:3,expl:"В ноябре 2024 г."},
+  {question:"6. Когда в Минске открылось представительство ООН?",options:["1992 г.","1999 г.","1991 г.","1995 г.","2005 г."],answer:0,expl:"В 1992 г."},
+  {question:"7. Кто на саммите ООН 2005 г. выдвинул инициативу по борьбе с торговлей людьми?",options:["К.-Ж. Токаев","А. Г. Лукашенко","В. В. Путин","Си Цзиньпин","С. С. Шушкевич"],answer:1,expl:"А. Г. Лукашенко."},
+  {question:"8. Когда создана ОДКБ?",options:["2000 г.","1999 г.","2002 г.","1992 г.","2015 г."],answer:2,expl:"В 2002 г."},
+  {question:"9. Когда создана ШОС?",options:["1991 г.","1999 г.","2001 г.","2024 г.","2010 г."],answer:2,expl:"В 2001 г."},
+  {question:"10. Кто поздравил Лукашенко с победой на выборах 2020?",options:["Эммануэль Макрон","Си Цзиньпин","Олаф Шольц","Джо Байден","Борис Джонсон"],answer:1,expl:"Си Цзиньпин."},
+  {question:"11. На долю какого объединения ≈⅓ ВВП и 45% населения?",options:["БРИКС","ЕАЭС","ОДКБ","СНГ","ОБСЕ"],answer:0,expl:"БРИКС."},
+  {question:"12. Когда ПА ОБСЕ признала Нац. собрание РБ?",options:["2003 г.","2020 г.","1999 г.","1995 г.","1992 г."],answer:0,expl:"В 2003 г."},
+  {question:"13. Когда ГА ООН приняла Глобальный план по борьбе с торговлей людьми?",options:["2010 г.","2024 г.","2008 г.","2005 г.","2003 г."],answer:0,expl:"В 2010 г."},
+  {question:"14. Кто возглавлял делегацию РБ на саммите ОБСЕ в Стамбуле 1999 г.?",options:["П. К. Кравченко","А. Г. Лукашенко","М. В. Мясникович","С. С. Шушкевич","В. Ф. Кебич"],answer:1,expl:"А. Г. Лукашенко."},
+  {question:"15. Стратегические союзники Беларуси?",options:["Россия и Китай","Польша и Литва","США и Великобритания","Украина и Латвия","Германия и Франция"],answer:0,expl:"Россия и Китай."},
+  {question:"16. Какое событие 2020 г. обострило отношения и усилило дезинтеграцию в ЕС?",options:["Расширение НАТО","Создание БРИКС","Стамбульский саммит","Пандемия COVID-19","Выход Великобритании из ЕС"],answer:3,expl:"Пандемия COVID-19."},
+  {question:"17. Какая организация высоко оценила усилия Беларуси по урегулированию украинского кризиса?",options:["ОБСЕ","ЮНЕСКО","НАТО","ВОЗ","БРИКС"],answer:0,expl:"ОБСЕ."},
+  {question:"18. С 1 января какого года — Единое экономическое пространство?",options:["2000 г.","2010 г.","2014 г.","2015 г.","2012 г."],answer:4,expl:"С 1 января 2012 г."},
+  {question:"19. Согласно ст. 18 Конституции РБ, на каком принципе базируется внешняя политика?",options:["Одностороннее изменение договоров","Вмешательство во внутренние дела соседей","Применение силы для решения споров","Военная агрессия с собственной территории","Нерушимость границ"],answer:4,expl:"Нерушимость границ."}
+];
+
+// ============ TABS ============
+function showTab(id,btn){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+}
+
+// ============ FLASHCARDS ============
+let cDeck=[], cIdx=0, cKnow=0, cDont=0, cType='all';
+
+function buildDeck(type){
+  let d=[];
+  if(type==='dates'||type==='all') d=d.concat(datesCards.map(c=>({...c,cat:'📅'})));
+  if(type==='terms'||type==='all') d=d.concat(termsCards.map(c=>({...c,cat:'📖'})));
+  if(type==='orgs'||type==='all') d=d.concat(orgsCards.map(c=>({...c,cat:'🌐'})));
+  return d;
+}
+
+function setCardType(type,btn){
+  document.querySelectorAll('.type-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  cType=type;
+  cDeck=buildDeck(type);
+  cIdx=0;cKnow=0;cDont=0;
+  renderC();
+}
+
+function renderC(){
+  if(!cDeck.length)return;
+  if(cIdx>=cDeck.length)cIdx=cDeck.length-1;
+  if(cIdx<0)cIdx=0;
+  const c=cDeck[cIdx];
+  document.getElementById('cFront').textContent=c.cat+' '+c.f;
+  document.getElementById('cBack').textContent=c.b;
+  document.getElementById('cCounter').textContent=(cIdx+1)+' / '+cDeck.length;
+  document.getElementById('cProgress').style.width=((cIdx+1)/cDeck.length*100)+'%';
+  document.getElementById('cScore').textContent='✅ '+cKnow+'   ❌ '+cDont;
+  document.getElementById('cFlash').classList.remove('flipped');
+}
+
+function cNext(){if(cIdx<cDeck.length-1){cIdx++;renderC()}}
+function cPrev(){if(cIdx>0){cIdx--;renderC()}}
+function cMark(k){if(k)cKnow++;else cDont++;if(cIdx<cDeck.length-1)cIdx++;renderC()}
+function cShuffle(){for(let i=cDeck.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[cDeck[i],cDeck[j]]=[cDeck[j],cDeck[i]]}cIdx=0;cKnow=0;cDont=0;renderC()}
+function cReset(){cDeck=buildDeck(cType);cIdx=0;cKnow=0;cDont=0;renderC()}
+
+cDeck=buildDeck('all');
+renderC();
+
+// ============ TIMELINE FILL ============
+function renderTimeline(){
+  const box=document.getElementById('tlContainer');
+  box.innerHTML='';
+  tlEvents.forEach((e,i)=>{
+    box.innerHTML+=`
+    <div class="tl-slot">
+      <div class="tl-body">
+        <div class="tl-event">${(i+1)}. ${e.event}</div>
+        <input class="tl-input" id="tli${i}" placeholder="Введи год…" autocomplete="off"/>
+        <div class="tl-hint" id="tlh${i}">Ответ: ${e.answer} г.</div>
+      </div>
+    </div>`;
+  });
+}
+
+function norm(s){return s.toLowerCase().replace(/[^a-zа-яё0-9]/gi,'').trim()}
+
+function checkTimeline(){
+  let correct=0;
+  tlEvents.forEach((e,i)=>{
+    const inp=document.getElementById('tli'+i);
+    const hint=document.getElementById('tlh'+i);
+    const val=norm(inp.value);
+    inp.classList.remove('correct','wrong');
+    hint.classList.remove('show');
+    let ok=false;
+    e.accept.forEach(a=>{if(norm(a)===val)ok=true});
+    if(!ok && val && e.answer && val===norm(e.answer)) ok=true;
+    if(ok){inp.classList.add('correct');correct++}
+    else{inp.classList.add('wrong');hint.classList.add('show')}
+  });
+  document.getElementById('tlScore').textContent=`Результат: ${correct} из ${tlEvents.length} (${Math.round(correct/tlEvents.length*100)}%)`;
+}
+
+function resetTimeline(){
+  tlEvents.forEach((_,i)=>{
+    const inp=document.getElementById('tli'+i);
+    inp.value='';inp.classList.remove('correct','wrong');
+    document.getElementById('tlh'+i).classList.remove('show');
+  });
+  document.getElementById('tlScore').textContent='';
+}
+
+function showAllDates(){
+  tlEvents.forEach((e,i)=>{
+    document.getElementById('tli'+i).value=e.answer;
+    document.getElementById('tli'+i).classList.remove('wrong');
+    document.getElementById('tli'+i).classList.add('correct');
+    document.getElementById('tlh'+i).classList.remove('show');
+  });
+  document.getElementById('tlScore').textContent=`Показаны все ответы.`;
+}
+
+renderTimeline();
+
+// ============ RANDOM ============
+let curR=null;
+function newRQ(){
+  curR=randQ[Math.floor(Math.random()*randQ.length)];
+  document.getElementById('rQ').textContent=curR.q;
+  const a=document.getElementById('rA');a.textContent=curR.a;a.classList.remove('show');
+}
+function showRA(){if(!curR)newRQ();document.getElementById('rA').classList.add('show')}
+
+// ============ QUIZ ============
+function renderQuiz(){
+  const box=document.getElementById('quizBox');box.innerHTML='';
+  quizQ.forEach((q,i)=>{
+    let o='';
+    q.options.forEach((op,j)=>{o+=`<label class="opt" id="qo${i}_${j}"><input type="radio" name="qr${i}" value="${j}">${op}</label>`});
+    box.innerHTML+=`<div class="q-card"><div class="q-title">${q.question}</div><div class="opts">${o}</div><div class="expl" id="qe${i}"><b>Пояснение:</b> ${q.expl}</div></div>`;
+  });
+}
+
+function checkQuiz(){
+  let c=0;
+  quizQ.forEach((q,i)=>{
+    const sel=document.querySelector(`input[name="qr${i}"]:checked`);
+    q.options.forEach((_,j)=>document.getElementById(`qo${i}_${j}`).classList.remove('correct','wrong'));
+    document.getElementById(`qo${i}_${q.answer}`).classList.add('correct');
+    if(sel){const v=+sel.value;if(v===q.answer)c++;else document.getElementById(`qo${i}_${v}`).classList.add('wrong')}
+    document.getElementById(`qe${i}`).classList.add('show');
+  });
+  const t=quizQ.length,p=Math.round(c/t*100);
+  document.getElementById('qCorr').textContent=c;
+  document.getElementById('qPct').textContent=p+'%';
+  const rb=document.getElementById('resBox');
+  document.getElementById('resText').textContent=`${c} из ${t} (${p}%)`;
+  const b=document.getElementById('resBadge');b.className='badge';
+  if(p>=90){b.textContent='Отлично!';b.classList.add('exc')}
+  else if(p>=70){b.textContent='Хорошо!';b.classList.add('gd')}
+  else if(p>=50){b.textContent='Неплохо, повтори';b.classList.add('avg')}
+  else{b.textContent='Повтори параграф';b.classList.add('bd')}
+  rb.classList.add('show');rb.scrollIntoView({behavior:'smooth'});
+}
+
+function resetQuiz(){
+  renderQuiz();
+  document.getElementById('qCorr').textContent='0';
+  document.getElementById('qPct').textContent='0%';
+  document.getElementById('resBox').classList.remove('show');
+}
+
+renderQuiz();
+</script>
+</body>
+</html>

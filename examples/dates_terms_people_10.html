@@ -1,0 +1,2155 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>История на Ты — Тренажер. 10 класс. Даты, личности и понятия</title>
+<style>
+:root {
+    --primary: #4f46e5;
+    --primary-dark: #4338ca;
+    --secondary: #10b981;
+    --accent: #f59e0b;
+    --danger: #ef4444;
+    --bg: #f8fafc;
+    --surface: #ffffff;
+    --text: #1e293b;
+    --text-muted: #64748b;
+    --border: #e2e8f0;
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+    --shadow-md: 0 4px 12px rgba(0,0,0,0.1);
+    --shadow-lg: 0 10px 30px rgba(0,0,0,0.15);
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 20px;
+    --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    min-height: 100vh;
+    font-size: clamp(14px, 1.6vw, 16px);
+}
+.header {
+    background: linear-gradient(135deg, var(--primary) 0%, #7c3aed 100%);
+    color: white;
+    padding: clamp(16px, 3vw, 24px);
+    box-shadow: var(--shadow-md);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+.header-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: clamp(18px, 2.5vw, 24px);
+    font-weight: 700;
+}
+.logo-icon {
+    font-size: 1.5em;
+    background: rgba(255,255,255,0.2);
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.home-btn {
+    background: rgba(255,255,255,0.15);
+    color: white;
+    border: 1px solid rgba(255,255,255,0.3);
+    padding: 10px 18px;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    font-weight: 600;
+    transition: var(--transition);
+    min-height: 44px;
+    font-size: 0.95em;
+}
+.home-btn:hover { background: rgba(255,255,255,0.25); }
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: clamp(16px, 3vw, 32px);
+}
+.hero {
+    text-align: center;
+    padding: clamp(24px, 5vw, 48px) 0;
+}
+.hero h1 {
+    font-size: clamp(24px, 4vw, 36px);
+    margin-bottom: 12px;
+    color: var(--text);
+}
+.hero p {
+    color: var(--text-muted);
+    font-size: clamp(14px, 1.8vw, 18px);
+    max-width: 600px;
+    margin: 0 auto;
+}
+.modules-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: clamp(16px, 2vw, 24px);
+    margin-top: clamp(24px, 4vw, 40px);
+}
+.module-card {
+    background: var(--surface);
+    border-radius: var(--radius-lg);
+    padding: clamp(24px, 3vw, 32px);
+    box-shadow: var(--shadow-sm);
+    cursor: pointer;
+    transition: var(--transition);
+    border: 2px solid transparent;
+    text-align: left;
+    position: relative;
+    overflow: hidden;
+}
+.module-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+    background: var(--module-color, var(--primary));
+}
+.module-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--module-color, var(--primary));
+}
+.module-icon {
+    font-size: 3em;
+    margin-bottom: 16px;
+    display: block;
+}
+.module-title {
+    font-size: clamp(18px, 2vw, 22px);
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: var(--text);
+}
+.module-desc {
+    color: var(--text-muted);
+    font-size: 0.95em;
+    margin-bottom: 16px;
+}
+.module-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+.tag {
+    background: var(--bg);
+    color: var(--text-muted);
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 0.8em;
+    font-weight: 500;
+}
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 20px;
+    border: none;
+    border-radius: var(--radius-sm);
+    font-weight: 600;
+    font-size: 0.95em;
+    cursor: pointer;
+    transition: var(--transition);
+    min-height: 44px;
+    text-decoration: none;
+    white-space: nowrap;
+}
+.btn-primary { background: var(--primary); color: white; }
+.btn-primary:hover { background: var(--primary-dark); transform: translateY(-1px); }
+.btn-secondary { background: var(--secondary); color: white; }
+.btn-secondary:hover { background: #059669; }
+.btn-accent { background: var(--accent); color: white; }
+.btn-accent:hover { background: #d97706; }
+.btn-danger { background: var(--danger); color: white; }
+.btn-danger:hover { background: #dc2626; }
+.btn-ghost {
+    background: var(--bg);
+    color: var(--text);
+}
+.btn-ghost:hover { background: var(--border); }
+.btn-sm { padding: 8px 14px; font-size: 0.85em; min-height: 36px; }
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.6);
+    backdrop-filter: blur(4px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 16px;
+    animation: fadeIn 0.2s;
+}
+.modal-overlay.active { display: flex; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+.modal {
+    background: var(--surface);
+    border-radius: var(--radius-lg);
+    max-width: 600px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: var(--shadow-lg);
+    animation: slideUp 0.3s;
+}
+.modal-lg { max-width: 900px; }
+@keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+.modal-header {
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    background: var(--surface);
+    z-index: 10;
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+}
+.modal-title {
+    font-size: 1.25em;
+    font-weight: 700;
+}
+.modal-close {
+    background: var(--bg);
+    border: none;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 1.2em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition);
+}
+.modal-close:hover { background: var(--border); }
+.modal-body { padding: 24px; }
+.modal-footer {
+    padding: 16px 24px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+}
+.form-group { margin-bottom: 16px; }
+.form-label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 6px;
+    font-size: 0.9em;
+    color: var(--text);
+}
+.form-control {
+    width: 100%;
+    padding: 10px 14px;
+    border: 2px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-size: 1em;
+    font-family: inherit;
+    background: var(--surface);
+    transition: var(--transition);
+    min-height: 44px;
+}
+.form-control:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+}
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 16px;
+}
+.form-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 14px;
+    background: var(--bg);
+    border-radius: var(--radius-sm);
+    transition: var(--transition);
+}
+.form-row:has(input[type="checkbox"]:checked) {
+    background: #eef2ff;
+    border: 1px solid var(--primary);
+}
+.form-row:has(input[type="checkbox"]:checked) span:first-of-type {
+    color: var(--primary);
+}
+.form-row label { font-weight: 600; min-width: 180px; font-size: 0.9em; }
+.form-row input[type="number"] {
+    width: 80px;
+    padding: 6px 10px;
+    border: 2px solid var(--border);
+    border-radius: 6px;
+    font-size: 1em;
+    text-align: center;
+}
+input[type="checkbox"], input[type="radio"] {
+    accent-color: var(--primary);
+    cursor: pointer;
+    width: 20px;
+    height: 20px;
+}
+input[type="checkbox"]:focus, input[type="radio"]:focus {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+}
+.game-screen { display: none; }
+.game-screen.active { display: block; animation: fadeIn 0.3s; }
+.breadcrumbs {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 20px;
+    font-size: 0.9em;
+    color: var(--text-muted);
+    flex-wrap: wrap;
+}
+.breadcrumbs a {
+    color: var(--primary);
+    text-decoration: none;
+    cursor: pointer;
+}
+.breadcrumbs a:hover { text-decoration: underline; }
+.hud {
+    background: var(--surface);
+    border-radius: var(--radius-md);
+    padding: 16px 20px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+    box-shadow: var(--shadow-sm);
+}
+.hud-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+}
+.streak {
+    color: var(--accent);
+    font-weight: 700;
+    font-size: 1.1em;
+}
+.timer {
+    font-size: 1.3em;
+    color: var(--primary);
+    font-variant-numeric: tabular-nums;
+}
+.timer.warning { color: var(--danger); animation: pulse 1s infinite; }
+@keyframes pulse { 50% { opacity: 0.5; } }
+.flashcard-container {
+    perspective: 1200px;
+    width: 100%;
+    max-width: 600px;
+    height: clamp(280px, 50vw, 380px);
+    margin: 24px auto;
+    cursor: pointer;
+}
+.flashcard {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.flashcard.flipped { transform: rotateY(180deg); }
+.card-face {
+    position: absolute;
+    inset: 0;
+    backface-visibility: hidden;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    padding: clamp(20px, 4vw, 32px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    overflow-y: auto;
+}
+.card-front {
+    background: linear-gradient(135deg, var(--primary) 0%, #7c3aed 100%);
+    color: white;
+}
+.card-front .card-text {
+    font-size: clamp(1.5em, 4vw, 2.2em);
+    font-weight: 700;
+    line-height: 1.3;
+}
+.card-front .card-hint {
+    margin-top: 16px;
+    opacity: 0.7;
+    font-size: 0.85em;
+}
+.card-back {
+    background: var(--surface);
+    color: var(--text);
+    transform: rotateY(180deg);
+    border: 3px solid var(--primary);
+}
+.card-back .card-text {
+    font-size: clamp(1em, 2vw, 1.2em);
+    line-height: 1.6;
+}
+.card-back ul {
+    text-align: left;
+    padding-left: 20px;
+    margin-top: 8px;
+}
+.card-back li { margin-bottom: 8px; }
+.cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 16px;
+    padding: 16px 0;
+}
+.grid-card {
+    perspective: 1000px;
+    height: 220px;
+    cursor: pointer;
+}
+.grid-card .flashcard {
+    width: 100%;
+    height: 100%;
+}
+.grid-card .card-face {
+    padding: 16px;
+    border-radius: var(--radius-md);
+}
+.grid-card .card-front .card-text {
+    font-size: 1.1em;
+}
+.grid-card .card-back .card-text {
+    font-size: 0.9em;
+}
+.matching-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    max-width: 900px;
+    margin: 0 auto;
+}
+@media (max-width: 600px) {
+    .matching-grid { grid-template-columns: 1fr; }
+}
+.match-col { display: flex; flex-direction: column; gap: 10px; }
+.match-col-title {
+    font-weight: 700;
+    padding: 8px 12px;
+    background: var(--bg);
+    border-radius: var(--radius-sm);
+    text-align: center;
+    font-size: 0.9em;
+    color: var(--text-muted);
+}
+.match-item {
+    padding: 14px 16px;
+    background: var(--surface);
+    border: 2px solid var(--border);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: var(--transition);
+    font-size: 0.95em;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+}
+.match-item:hover { border-color: var(--primary); transform: translateX(2px); }
+.match-item.selected {
+    border-color: var(--accent);
+    background: #fef3c7;
+    box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.2);
+}
+.match-item.correct {
+    background: #d1fae5;
+    border-color: var(--secondary);
+    pointer-events: none;
+}
+.match-item.wrong {
+    background: #fee2e2;
+    border-color: var(--danger);
+    animation: shake 0.4s;
+}
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-6px); }
+    75% { transform: translateX(6px); }
+}
+.chrono-list {
+    list-style: none;
+    max-width: 700px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.chrono-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: var(--surface);
+    padding: 12px 16px;
+    border-radius: var(--radius-sm);
+    border: 2px solid var(--border);
+    transition: var(--transition);
+}
+.chrono-item:hover { border-color: var(--primary); }
+.chrono-btns {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+.chrono-btns button {
+    width: 32px;
+    height: 32px;
+    border: none;
+    background: var(--bg);
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.9em;
+    transition: var(--transition);
+    min-width: 32px;
+}
+.chrono-btns button:hover { background: var(--primary); color: white; }
+.chrono-text { flex: 1; font-size: 0.95em; }
+.chrono-text strong { color: var(--primary); }
+.chrono-item.correct { border-color: var(--secondary); background: #d1fae5; }
+.chrono-item.wrong { border-color: var(--danger); background: #fee2e2; }
+.chrono-item .reveal-date {
+    display: none;
+    font-weight: 700;
+    color: var(--primary);
+    margin-right: 8px;
+}
+.chrono-item.revealed .reveal-date { display: inline; }
+.chrono-item .position-num {
+    font-weight: 700;
+    color: var(--text-muted);
+    min-width: 24px;
+}
+.achievements {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 24px;
+    justify-content: center;
+}
+.badge {
+    padding: 8px 14px;
+    background: var(--bg);
+    color: var(--text-muted);
+    border-radius: 20px;
+    font-size: 0.85em;
+    font-weight: 600;
+    opacity: 0.5;
+    transition: var(--transition);
+    border: 2px solid transparent;
+}
+.badge.unlocked {
+    background: linear-gradient(135deg, #fbbf24, #f59e0b);
+    color: white;
+    opacity: 1;
+    border-color: #f59e0b;
+    box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+    animation: pop 0.5s;
+}
+@keyframes pop {
+    0% { transform: scale(0); }
+    80% { transform: scale(1.15); }
+    100% { transform: scale(1); }
+}
+.print-preview {
+    background: var(--bg);
+    border-radius: var(--radius-md);
+    padding: 20px;
+    max-height: 60vh;
+    overflow-y: auto;
+}
+.preview-info {
+    background: #dbeafe;
+    border-left: 4px solid var(--primary);
+    padding: 12px 16px;
+    border-radius: var(--radius-sm);
+    margin-bottom: 16px;
+    font-size: 0.9em;
+    color: #1e40af;
+}
+.print-cards-container {
+    background: white;
+    padding: 10px;
+}
+.print-card-row {
+    display: flex;
+    width: 100%;
+    margin-bottom: 10px;
+    page-break-inside: avoid;
+}
+.print-card-half {
+    width: 50%;
+    height: 140px;
+    border: 1px dashed #94a3b8;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 12px;
+    font-size: 13px;
+    line-height: 1.4;
+    box-sizing: border-box;
+}
+.print-card-half.front {
+    background: #f1f5f9;
+    font-weight: 700;
+    border-right: 2px solid #475569;
+}
+.print-card-half.back {
+    background: white;
+    font-size: 11px;
+}
+.print-test {
+    background: white;
+    padding: 24px;
+    font-size: 14px;
+    line-height: 1.6;
+}
+.print-test h2 {
+    font-size: 18px;
+    margin-bottom: 12px;
+    border-bottom: 2px solid var(--primary);
+    padding-bottom: 6px;
+}
+.print-test h3 {
+    font-size: 15px;
+    margin: 16px 0 8px;
+    color: var(--primary);
+}
+.print-test ol, .print-test ul { padding-left: 24px; margin-bottom: 12px; }
+.print-test li { margin-bottom: 8px; }
+.print-test .answer-line {
+    display: inline-block;
+    width: 250px;
+    border-bottom: 1px solid #000;
+    margin-left: 8px;
+}
+.print-test .answer-line-short { width: 120px; }
+#printArea {
+    display: none;
+}
+@media print {
+    @page { margin: 15mm; size: A4; }
+    body { background: white; }
+    body * { visibility: hidden; }
+    #printArea, #printArea * { visibility: visible; }
+    #printArea {
+        display: block !important;
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        padding: 0;
+    }
+    .print-page-break {
+        page-break-before: always;
+    }
+    .print-card-half {
+        border: 1px dashed #000;
+    }
+    .print-card-half.front {
+        border-right: 2px solid #000;
+    }
+}
+.hidden { display: none !important; }
+.text-center { text-align: center; }
+.mt-16 { margin-top: 16px; }
+.mb-16 { margin-bottom: 16px; }
+@media (max-width: 768px) {
+    .header-inner { flex-direction: column; align-items: stretch; }
+    .home-btn { width: 100%; }
+    .modal { max-height: 95vh; margin: 8px; }
+    .modal-body { padding: 16px; }
+    .hud { flex-direction: column; align-items: stretch; text-align: center; }
+    .flashcard-container { height: 320px; }
+    .form-row { flex-direction: column; align-items: flex-start; }
+    .form-row label { min-width: auto; }
+}
+@media (max-width: 480px) {
+    .container { padding: 12px; }
+    .module-card { padding: 20px; }
+    .form-grid { grid-template-columns: 1fr; }
+    .cards-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
+}
+
+/* Корректирующая версия для МК: контраст, мобильные задания, обратная связь, печать */
+.input-help { display:block; color:var(--text-muted); margin-top:5px; }
+.hero-note { margin-top:10px!important; font-size:.84em!important; color:var(--text-muted); }
+.timer-expired { color:#b91c1c; font-weight:700; }
+.card-rating-panel, .feedback-block, .result-card { max-width:760px; margin:20px auto; padding:18px; background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-md); }
+.card-rating-panel[hidden], .grid-rating[hidden] { display:none !important; }
+.card-rating-panel p { text-align:center; margin-bottom:12px; font-weight:600; }
+.rating-buttons, .card-nav { display:flex; flex-wrap:wrap; gap:10px; justify-content:center; margin:18px auto; }
+.rating-notice { font-size:.85em; color:var(--text-muted); font-weight:400!important; }
+.section-tip { color:var(--text-muted); font-size:.93em; max-width:900px; margin:14px auto; }
+.inline-feedback { min-height:1.75em; margin:16px auto; text-align:center; font-weight:600; color:var(--primary); }
+.match-item { text-align:left; width:100%; font-family:inherit; color:var(--text); line-height:1.45; }
+.match-item:disabled { cursor:default; opacity:1; }
+.match-item:focus-visible, .btn:focus-visible, .grid-card:focus-visible, .flashcard-container:focus-visible { outline:3px solid var(--accent); outline-offset:3px; }
+.grid-card-wrap { min-width:0; }
+.grid-rating { display:flex; gap:4px; flex-wrap:wrap; margin-top:6px; }
+.rating-small { flex:1; background:var(--surface); border:1px solid var(--border); border-radius:6px; padding:6px 4px; font-size:11px; cursor:pointer; }
+.rating-small.selected { border-color:var(--primary); background:#eef2ff; font-weight:700; }
+.cards-grid { grid-template-columns:repeat(auto-fill,minmax(250px,1fr)); }
+.mobile-match { max-width:650px; margin:auto; }
+.mobile-match-question { background:var(--primary); color:white; font-size:clamp(19px,4vw,26px); font-weight:700; padding:24px; border-radius:var(--radius-md); text-align:center; margin:14px 0; }
+.mobile-match-options { display:flex; flex-direction:column; gap:9px; }
+.chrono-item .reveal-date { flex:0 0 auto; }
+.chrono-item.revealed .chrono-text { flex:1; }
+.chrono-item .chrono-text { min-width:0; }
+.feedback-block ol { margin:8px 0 0 25px; }
+.feedback-block p { margin-top:7px; }
+.result-card { text-align:center; padding:32px 18px; }
+.result-card h2 { margin-bottom:14px; }
+.print-instruction { margin:0 0 12px; color:#334155; font-size:12px; }
+.print-test { font-size:13px; padding:18px; }
+.print-test h2 { color:#111827; border-color:#374151; }
+.print-test h3 { color:#111827; font-size:15px; margin:12px 0 6px; }
+.test-meta { margin:12px 0; }
+.test-guide { font-size:12px; color:#475569; margin:6px 0 10px; }
+.test-part { margin:14px 0 18px; }
+.test-columns { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1.4fr); gap:16px; }
+.test-columns>div { min-width:0; }
+.answer-options { list-style:none; padding-left:0!important; }
+.test-columns li { break-inside:avoid; overflow-wrap:anywhere; margin-bottom:7px; }
+.answer-slot { white-space:nowrap; }
+.print-page-break { break-before:page; page-break-before:always; }
+@media (max-width:650px) {
+ .matching-grid { grid-template-columns:1fr; }
+ .mobile-match-options .match-item { padding:12px; }
+ .card-rating-panel { padding:12px; }
+ .rating-buttons .btn { flex:1; min-width:115px; padding:10px; }
+ .chrono-item { gap:7px; padding:10px; }
+ .chrono-btns button { width:36px; height:36px; }
+ .print-test { padding:10px; }
+ .test-columns { grid-template-columns:1fr; }
+}
+@media print {
+ body > :not(#printArea) { display:none!important; }
+ #printArea { display:block!important; position:static!important; width:100%!important; left:auto!important; top:auto!important; }
+ .print-test { font-size:11.5pt; padding:0; }
+ .print-test h2 { font-size:16pt; }
+ .print-test h3 { font-size:12.5pt; }
+ .print-card-row { break-inside:avoid; page-break-inside:avoid; }
+ .print-card-half { height:38mm; }
+ .print-card-half.back { font-size:10pt; }
+ .print-instruction { font-size:9pt; }
+ .test-columns { grid-template-columns:minmax(0,1fr) minmax(0,1.5fr); gap:7mm; }
+ .test-part { break-inside:avoid-page; page-break-inside:avoid; }
+ .test-guide { font-size:10pt; }
+}
+
+</style>
+</head>
+<body>
+
+<header class="header">
+    <div class="header-inner">
+        <div class="logo">
+            <span class="logo-icon" aria-hidden="true">📚</span>
+            <span>История на Ты</span>
+        </div>
+        <button class="home-btn" onclick="goHome()">🏠 Главная</button>
+    </div>
+</header>
+
+<main class="container" id="mainScreen">
+    <div class="hero">
+        <h1>Подготовка к ЦЭ и ЦТ. История Беларуси в контексте всемирной истории.</h1>
+        <p>Интерактивный тренажер для 10 класса. Повторяйте даты, исторических личностей и понятия. Все упражнения работают без интернета.</p><p class="hero-note">Создано учителем с помощью искусственного интеллекта · История на Ты</p>
+    </div>
+
+    <div class="modules-grid">
+        <div class="module-card" style="--module-color: #4f46e5;" onclick="openSettings('flashcards')">
+            <span class="module-icon">🃏</span>
+            <h3 class="module-title">Флеш-карты</h3>
+            <p class="module-desc">Запоминание через повторение. Одиночный режим или сетка всех карточек.</p>
+            <div class="module-tags">
+                <span class="tag">Даты</span>
+                <span class="tag">Личности</span>
+                <span class="tag">Термины</span>
+            </div>
+        </div>
+
+        <div class="module-card" style="--module-color: #10b981;" onclick="openSettings('matching')">
+            <span class="module-icon">🔗</span>
+            <h3 class="module-title">Соотношение</h3>
+            <p class="module-desc">Найдите пары в рамках одной категории: даты↔события, личности↔деятельность.</p>
+            <div class="module-tags">
+                <span class="tag">Пары</span>
+                <span class="tag">Логика</span>
+            </div>
+        </div>
+
+        <div class="module-card" style="--module-color: #f59e0b;" onclick="startChrono()">
+            <span class="module-icon">📅</span>
+            <h3 class="module-title">Хронология</h3>
+            <p class="module-desc">Расставьте события в порядке. Даты скрыты — откроются после проверки.</p>
+            <div class="module-tags">
+                <span class="tag">Порядок</span>
+                <span class="tag">Время</span>
+            </div>
+        </div>
+
+        <div class="module-card" style="--module-color: #ef4444;" onclick="openPrintPreview('cards')">
+            <span class="module-icon">🖨️</span>
+            <h3 class="module-title">Печать карточек</h3>
+            <p class="module-desc">Выберите категории и количество. Односторонняя печать: вырезать, сложить и склеить.</p>
+            <div class="module-tags">
+                <span class="tag">Офлайн</span>
+                <span class="tag">A4</span>
+            </div>
+        </div>
+
+        <div class="module-card" style="--module-color: #8b5cf6;" onclick="openPrintPreview('test')">
+            <span class="module-icon">📝</span>
+            <h3 class="module-title">Печать теста</h3>
+            <p class="module-desc">Тренировочная работа с вариантами ответов и ключами для учителя.</p>
+            <div class="module-tags">
+                <span class="tag">Бланк</span>
+                <span class="tag">Ключи</span>
+            </div>
+        </div>
+    </div>
+</main>
+
+<div class="modal-overlay" id="settingsModal">
+    <div class="modal">
+        <div class="modal-header">
+            <h3 class="modal-title" id="settingsTitle">Настройки</h3>
+            <button class="modal-close" onclick="closeModal('settingsModal')">✕</button>
+        </div>
+        <div class="modal-body">
+            <div class="form-grid">
+                <div class="form-group">
+                    <label class="form-label">Раздел</label>
+                    <select class="form-control" id="sectionSelect">
+                        <option value="all">Все разделы</option>
+                        <option value="1">Раздел I. Древнейшие цивилизации</option>
+                        <option value="2">Раздел II. Раннее и высокое средневековье</option>
+                        <option value="3">Раздел III. Позднее средневековье (ВКЛ)</option>
+                        <option value="4">Раздел IV. Раннее новое время</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Тема</label>
+                    <select class="form-control" id="topicSelect">
+                        <option value="all">Все темы</option>
+                        <option value="dates">Только даты</option>
+                        <option value="persons">Только личности</option>
+                        <option value="terms">Только термины</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Количество</label>
+                    <input type="number" class="form-control" id="countSelect" value="10" min="3" max="50"><small id="countHelp" class="input-help">От 3 до 50 карточек</small>
+                </div>
+                <div class="form-group" id="timerGroup">
+                    <label class="form-label">Таймер</label>
+                    <select class="form-control" id="timerSelect">
+                        <option value="0">Без таймера</option>
+                        <option value="60">1 минута</option>
+                        <option value="120">2 минуты</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group" id="modeGroup">
+                <label class="form-label">Режим карточек</label>
+                <select class="form-control" id="modeSelect">
+                    <option value="single">Одна за другой</option>
+                    <option value="grid">Сетка (все сразу)</option>
+                </select>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-ghost" onclick="closeModal('settingsModal')">Отмена</button>
+            <button class="btn btn-primary" onclick="startGame()">▶ Начать</button>
+        </div>
+    </div>
+</div>
+
+<div class="modal-overlay" id="cardsSettingsModal">
+    <div class="modal">
+        <div class="modal-header">
+            <h3 class="modal-title">🃏 Настройки печати карточек</h3>
+            <button class="modal-close" onclick="closeModal('cardsSettingsModal')">✕</button>
+        </div>
+        <div class="modal-body">
+            <div class="form-group"><label class="form-label" for="printSectionSelect">Раздел</label><select class="form-control" id="printSectionSelect"><option value="all">Все разделы</option>
+                         <option value="1">Раздел I. Древнейшие цивилизации</option>
+                         <option value="2">Раздел II. Раннее и высокое средневековье</option>
+                         <option value="3">Раздел III. Позднее средневековье (ВКЛ)</option>
+                         <option value="4">Раздел IV. Раннее новое время</option></select></div>
+            <div class="form-group">
+                <label class="form-label" style="margin-bottom:12px;">Выберите категории:</label>
+                <div style="display:flex;flex-direction:column;gap:10px;">
+                    <label class="form-row" style="cursor:pointer;">
+                        <input type="checkbox" id="printDates" checked>
+                        <span style="font-weight:600;">📅 Даты и события</span>
+                        <span style="color:var(--text-muted);font-size:0.85em;margin-left:auto;">
+                            (<span id="datesCount">0</span> карточек)
+                        </span>
+                    </label>
+                    <label class="form-row" style="cursor:pointer;">
+                        <input type="checkbox" id="printPersons" checked>
+                        <span style="font-weight:600;">👤 Личности</span>
+                        <span style="color:var(--text-muted);font-size:0.85em;margin-left:auto;">
+                            (<span id="personsCount">0</span> карточек)
+                        </span>
+                    </label>
+                    <label class="form-row" style="cursor:pointer;">
+                        <input type="checkbox" id="printTerms" checked>
+                        <span style="font-weight:600;">📖 Термины и понятия</span>
+                        <span style="color:var(--text-muted);font-size:0.85em;margin-left:auto;">
+                            (<span id="termsCount">0</span> карточек)
+                        </span>
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Количество карточек:</label>
+                <div style="display:flex;flex-direction:column;gap:10px;">
+                    <label class="form-row" style="cursor:pointer;">
+                        <input type="radio" name="printMode" id="printModeCount" value="count" checked>
+                        <span style="font-weight:600;">Выбрать количество</span>
+                        <input type="number" id="printCardsCount" value="12" min="2" max="30" 
+                               style="width:80px;padding:8px 12px;border:2px solid var(--border);border-radius:6px;font-size:1em;text-align:center;margin-left:auto;">
+                    </label>
+                    <label class="form-row" style="cursor:pointer;">
+                        <input type="radio" name="printMode" id="printModeAll" value="all">
+                        <span style="font-weight:600;">Все карточки</span>
+                        <span style="color:var(--text-muted);font-size:0.85em;margin-left:auto;">
+                            (все выбранные категории)
+                        </span>
+                    </label>
+                </div>
+            </div>
+            <div style="background:#dbeafe;border-left:4px solid var(--primary);padding:12px 16px;border-radius:8px;font-size:0.9em;color:#1e40af;margin-top:16px;">
+                💡 <strong>Совет:</strong> При выборе "Все карточки" будут напечатаны все карточки выбранных категорий.
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-ghost" onclick="closeModal('cardsSettingsModal')">Отмена</button>
+            <button class="btn btn-primary" onclick="generateCardsFromSettings()">👁 Предпросмотр</button>
+        </div>
+    </div>
+</div>
+
+<div class="modal-overlay" id="testSettingsModal">
+    <div class="modal">
+        <div class="modal-header">
+            <h3 class="modal-title">📝 Настройки тренировочной работы</h3>
+            <button class="modal-close" onclick="closeModal('testSettingsModal')">✕</button>
+        </div>
+        <div class="modal-body">
+            <div class="form-group"><label class="form-label" for="testSectionSelect">Раздел</label><select class="form-control" id="testSectionSelect"><option value="all">Все разделы</option>
+                         <option value="1">Раздел I. Древнейшие цивилизации</option>
+                         <option value="2">Раздел II. Раннее и высокое средневековье</option>
+                         <option value="3">Раздел III. Позднее средневековье (ВКЛ)</option>
+                         <option value="4">Раздел IV. Раннее новое время</option></select></div>
+            <div class="form-row">
+                <label>Часть А. Дата — Событие</label>
+                <input type="number" id="testPartA" value="4" min="2" max="8">
+                <span>заданий</span>
+            </div>
+            <div class="form-row">
+                <label>Часть Б. Личность — Деятельность</label>
+                <input type="number" id="testPartB" value="3" min="2" max="6">
+                <span>заданий</span>
+            </div>
+            <div class="form-row">
+                <label>Часть В. Хронология</label>
+                <input type="number" id="testPartC" value="5" min="3" max="7">
+                <span>событий</span>
+            </div>
+            <div class="form-row">
+                <label>Часть Г. Термины</label>
+                <input type="number" id="testPartD" value="3" min="2" max="6">
+                <span>заданий</span>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-ghost" onclick="closeModal('testSettingsModal')">Отмена</button>
+            <button class="btn btn-primary" onclick="generateAndPreviewTest()"> Предпросмотр</button>
+        </div>
+    </div>
+</div>
+
+<div class="modal-overlay" id="printModal">
+    <div class="modal modal-lg">
+        <div class="modal-header">
+            <h3 class="modal-title" id="printTitle">Предпросмотр печати</h3>
+            <button class="modal-close" onclick="closeModal('printModal')">✕</button>
+        </div>
+        <div class="modal-body">
+            <div class="preview-info">
+                💡 <strong>Совет:</strong> <span id="printAdvice">Выберите печать или сохранение как PDF.</span>
+            </div>
+            <div class="print-preview" id="printPreview"></div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-ghost" onclick="closeModal('printModal')">Закрыть</button>
+            <button class="btn btn-primary" onclick="doPrint()">🖨️ Распечатать</button>
+        </div>
+    </div>
+</div>
+
+<main class="container game-screen" id="gameScreen">
+    <div class="breadcrumbs">
+        <a onclick="goHome()">🏠 Главная</a>
+        <span>›</span>
+        <span id="breadcrumbCurrent">Режим</span>
+    </div>
+
+    <div class="hud">
+        <div class="hud-item">
+            <span aria-hidden="true">📌</span>
+            <span id="progressText">1 / 10</span>
+        </div>
+        <div class="hud-item" id="streakHud" style="display:none;">
+            <span>🔥</span>
+            <span class="streak" id="streakDisplay">0</span>
+        </div>
+        <div class="hud-item" id="timerHud" style="display:none;">
+            <span aria-hidden="true">⏱</span>
+            <span class="timer" id="timerDisplay">60</span>
+        </div>
+        <button class="btn btn-danger btn-sm" onclick="exitGame()">✕ Выйти</button>
+    </div>
+
+    <div id="gameContent"></div>
+
+    <div class="achievements" id="achievementsArea">
+        <div class="badge" id="badge-first">🔥 Старт</div>
+        <div class="badge" id="badge-ten"> 🃏 10 разных карточек</div>
+        <div class="badge" id="badge-match">🧠 Связист</div>
+        <div class="badge" id="badge-chrono">⏳ Хронолог</div>
+        <div class="badge" id="badge-speed">⚡ Хронология за 45 с</div>
+        <div class="badge" id="badge-streak3">🔥 Серия 3</div>
+        <div class="badge" id="badge-streak5">🔥🔥 Серия 5</div>
+    </div>
+</main>
+
+<div id="printArea"></div>
+
+<script>
+const DB = {
+    dates: [
+        { year: "24-е тыс. до н. э.", event: "Стоянка Юровичи", sortKey: -24000, section: 1 },
+        { year: "22–21-е тыс. до н. э.", event: "Стоянка Бердыж", sortKey: -22000, section: 1 },
+        { year: "12-е тыс. до н. э.", event: "Окончательное отступление ледника с территории Беларуси", sortKey: -12000, section: 1 },
+        { year: "IX–V тыс. до н. э.", event: "Мезолит в Беларуси", sortKey: -7000, section: 1 },
+        { year: "конец V — конец III тыс. до н. э.", event: "Неолит в Беларуси", sortKey: -4000, section: 1 },
+        { year: "IX–III тыс. до н. э.", event: "Неолитическая революция в мире", sortKey: -6000, section: 1 },
+        { year: "середина III тыс. до н. э.", event: "Начало земледелия на территории Беларуси", sortKey: -2500, section: 1 },
+        { year: "VII–V вв. до н. э.", event: "Освоение железа в Беларуси", sortKey: -600, section: 1 },
+        { year: "Палеолит", event: "Появление древнейших форм искусства", sortKey: -30000, section: 1 },
+        { year: "Эпоха бронзы", event: "Распространение курганных погребений", sortKey: -2000, section: 1 },
+        { year: "IV–II тыс. до н. э.", event: "Зарождение первых цивилизаций", sortKey: -3000, section: 1 },
+        { year: "313 г.", event: "Миланский эдикт", sortKey: 313, section: 1 },
+        { year: "476 г.", event: "Падение Западной Римской империи, завершение античного периода в Западной Европе", sortKey: 476, section: 2 },
+        { year: "800 г.", event: "Коронация Карла Великого", sortKey: 800, section: 2 },
+        { year: "843 г.", event: "Верденский договор", sortKey: 843, section: 2 },
+        { year: "962 г.", event: "Образование Священной Римской империи", sortKey: 962, section: 2 },
+        { year: "1066 г.", event: "Нормандское завоевание Англии", sortKey: 1066, section: 2 },
+        { year: "1219 г.", event: "Городское право Гослара", sortKey: 1219, section: 2 },
+        { year: "632–750 гг.", event: "Расширение Арабского халифата", sortKey: 632, section: 2 },
+        { year: "618–907 гг.", event: "Империя Тан", sortKey: 618, section: 2 },
+        { year: "960–1279 гг.", event: "Империя Сун", sortKey: 960, section: 2 },
+        { year: "1271–1368 гг.", event: "Империя Юань", sortKey: 1271, section: 2 },
+        { year: "1054 г.", event: "Разделение церквей", sortKey: 1054, section: 2 },
+        { year: "1096–1099 гг.", event: "Первый крестовый поход", sortKey: 1096, section: 2 },
+        { year: "1204 г.", event: "Захват Константинополя участниками Четвёртого крестового похода", sortKey: 1204, section: 2 },
+        { year: "862 г.", event: "Призвание Рюрика", sortKey: 862, section: 2 },
+        { year: "882 г.", event: "Объединение Новгорода и Киева в рамках единого государственного образования", sortKey: 882, section: 2 },
+        { year: "988 г.", event: "Крещение Руси", sortKey: 988, section: 2 },
+        { year: "1097 г.", event: "Любечский съезд", sortKey: 1097, section: 2 },
+        { year: "1067 г.", event: "Битва на Немиге", sortKey: 1067, section: 2 },
+        { year: "1101 г.", event: "Начало дробления Полоцкой земли", sortKey: 1101, section: 2 },
+        { year: "1157 г.", event: "Закрепление самостоятельности Туровского княжества", sortKey: 1157, section: 2 },
+        { year: "1201 г.", event: "Основание Риги", sortKey: 1201, section: 2 },
+        { year: "1202 г.", event: "Основание Ордена меченосцев", sortKey: 1202, section: 2 },
+        { year: "1203 г.", event: "Борьба Полоцка с крестоносцами", sortKey: 1203, section: 2 },
+        { year: "1237–1241 гг.", event: "Монгольское нашествие на Русь", sortKey: 1237, section: 2 },
+        { year: "1240 г.", event: "Невская битва", sortKey: 1240, section: 2 },
+        { year: "1242 г.", event: "Ледовое побоище", sortKey: 1242, section: 2 },
+        { year: "862 г.", event: "Первое летописное упоминание Полоцка", sortKey: 862, section: 2 },
+        { year: "992 г.", event: "Создание Полоцкой епархии", sortKey: 992, section: 2 },
+        { year: "1005 г.", event: "Создание Туровской епархии", sortKey: 1005, section: 2 },
+        { year: "1161 г.", event: "Создание креста Евфросинии Полоцкой", sortKey: 1161, section: 2 },
+        { year: "1253 г.", event: "Коронация Миндовга", sortKey: 1253, section: 3 },
+        { year: "1295–1316 гг.", event: "Правление Витеня", sortKey: 1295, section: 3 },
+        { year: "1316–1341 гг.", event: "Правление Гедимина", sortKey: 1316, section: 3 },
+        { year: "1345–1377 гг.", event: "Правление Ольгерда", sortKey: 1345, section: 3 },
+        { year: "1362 г.", event: "Битва на Синих Водах", sortKey: 1362, section: 3 },
+        { year: "1392–1430 гг.", event: "Правление Витовта", sortKey: 1392, section: 3 },
+        { year: "1468 г.", event: "Судебник Казимира", sortKey: 1468, section: 3 },
+        { year: "1385 г.", event: "Кревская уния", sortKey: 1385, section: 3 },
+        { year: "1409–1411 гг.", event: "Великая война ВКЛ и Польши с Тевтонским орденом", sortKey: 1409, section: 3 },
+        { year: "15 июля 1410 г.", event: "Грюнвальдская битва", sortKey: 1410, section: 3 },
+        { year: "1411 г.", event: "Торуньский мир", sortKey: 1411, section: 3 },
+        { year: "1434 г.", event: "Привилей Сигизмунда Кейстутовича, расширивший права православной шляхты", sortKey: 1434, section: 3 },
+        { year: "1447 г.", event: "Привилей Казимира", sortKey: 1447, section: 3 },
+        { year: "1390 г.", event: "Магдебургское право Берестью", sortKey: 1390, section: 3 },
+        { year: "1499 г.", event: "Магдебургское право Менску", sortKey: 1499, section: 3 },
+        { year: "1387 г.", event: "Католическое крещение Литвы", sortKey: 1387, section: 3 },
+        { year: "1413 г.", event: "Городельская уния", sortKey: 1413, section: 3 },
+        { year: "1586 г.", event: "Употребление наименования «белорус» С. Рысинским", sortKey: 1586, section: 4 },
+        { year: "1265 г.", event: "Начало работы парламента Англии", sortKey: 1265, section: 3 },
+        { year: "1302 г.", event: "Генеральные штаты во Франции", sortKey: 1302, section: 3 },
+        { year: "1435 г.", event: "Битва на р. Святой (у Вилькомира)", sortKey: 1435, section: 3 },
+        { year: "1453 г.", event: "Падение Константинополя", sortKey: 1453, section: 3 },
+        { year: "1378–1417 гг.", event: "Великий западный раскол", sortKey: 1378, section: 3 },
+        { year: "1439 г.", event: "Флорентийская уния", sortKey: 1439, section: 3 },
+        { year: "1664 г.", event: "Учреждение французской Ост-Индской компании", sortKey: 1664, section: 4 },
+        { year: "1618–1648 гг.", event: "Тридцатилетняя война", sortKey: 1618, section: 4 },
+        { year: "1648 г.", event: "Вестфальский мир", sortKey: 1648, section: 4 },
+        { year: "1683 г.", event: "Битва за Вену", sortKey: 1683, section: 4 },
+        { year: "1566–1609 гг.", event: "Нидерландская революция", sortKey: 1566, section: 4 },
+        { year: "1640–1660 гг.", event: "Английская революция", sortKey: 1640, section: 4 },
+        { year: "1775–1783 гг.", event: "Война за независимость США", sortKey: 1775, section: 4 },
+        { year: "1789–1799 гг.", event: "Французская революция", sortKey: 1789, section: 4 },
+        { year: "1776 г.", event: "Публикация труда Адама Смита", sortKey: 1776, section: 4 },
+        { year: "1517 г.", event: "Выступление Мартина Лютера", sortKey: 1517, section: 4 },
+        { year: "1534 г.", event: "Начало английской Реформации", sortKey: 1534, section: 4 },
+        { year: "1572 г.", event: "Варфоломеевская ночь", sortKey: 1572, section: 4 },
+        { year: "1598 г.", event: "Нантский эдикт", sortKey: 1598, section: 4 },
+        { year: "1529 г.", event: "Первый Статут ВКЛ", sortKey: 1529, section: 4 },
+        { year: "1566 г.", event: "Второй Статут ВКЛ", sortKey: 1566, section: 4 },
+        { year: "1588 г.", event: "Третий Статут ВКЛ", sortKey: 1588, section: 4 },
+        { year: "1569 г.", event: "Люблинская уния", sortKey: 1569, section: 4 },
+        { year: "1581 г.", event: "Создание Главного Трибунала ВКЛ", sortKey: 1581, section: 4 },
+        { year: "1772 г.", event: "Первый раздел Речи Посполитой", sortKey: 1772, section: 4 },
+        { year: "1791 г.", event: "Принятие Конституции Речи Посполитой 3 мая", sortKey: 1791, section: 4 },
+        { year: "1793 г.", event: "Второй раздел Речи Посполитой", sortKey: 1793, section: 4 },
+        { year: "1794 г.", event: "Восстание под руководством Тадеуша Костюшко", sortKey: 1794, section: 4 },
+        { year: "1795 г.", event: "Третий раздел Речи Посполитой", sortKey: 1795, section: 4 },
+        { year: "1558–1583 гг.", event: "Ливонская война", sortKey: 1558, section: 4 },
+        { year: "1563 г.", event: "Взятие Полоцка войсками Ивана IV", sortKey: 1563, section: 4 },
+        { year: "1564 г.", event: "Битва под Чашниками", sortKey: 1564, section: 4 },
+        { year: "1579 г.", event: "Освобождение Полоцка войсками Стефана Батория", sortKey: 1579, section: 4 },
+        { year: "1605 г.", event: "Битва под Кирхгольмом", sortKey: 1605, section: 4 },
+        { year: "1648–1651 гг.", event: "Казацко-крестьянская война", sortKey: 1648, section: 4 },
+        { year: "1654–1667 гг.", event: "Война Речи Посполитой с Россией", sortKey: 1654, section: 4 },
+        { year: "1667 г.", event: "Андрусовское перемирие", sortKey: 1667, section: 4 },
+        { year: "1700–1721 гг.", event: "Северная война", sortKey: 1700, section: 4 },
+        { year: "1557 г.", event: "Принятие «Уставы на волоки»", sortKey: 1557, section: 4 },
+        { year: "1740–1744 гг.", event: "Кричевское восстание", sortKey: 1740, section: 4 },
+        { year: "1764 г.", event: "Начало реформ при Станиславе Августе Понятовском", sortKey: 1764, section: 4 },
+        { year: "1765 г.", event: "Создание мануфактур в Гродно", sortKey: 1765, section: 4 },
+        { year: "1517 г.", event: "Начало Реформации в Европе", sortKey: 1517, section: 4 },
+        { year: "1553 г.", event: "Ранние реформатские общины ВКЛ", sortKey: 1553, section: 4 },
+        { year: "1562 г.", event: "Издание «Катехизиса» Сымона Будного", sortKey: 1562, section: 4 },
+        { year: "1579 г.", event: "Основание Виленской иезуитской академии", sortKey: 1579, section: 4 },
+        { year: "1596 г.", event: "Брестская церковная уния", sortKey: 1596, section: 4 },
+        { year: "1623 г.", event: "Восстание против униатов в Витебске, убийство Иосафата Кунцевича", sortKey: 1623, section: 4 },
+        { year: "1720 г.", event: "Замойский собор", sortKey: 1720, section: 4 },
+        { year: "6 августа 1517 г.", event: "Издание «Псалтыри» Франциском Скориной", sortKey: 1517, section: 4 },
+        { year: "1517–1519 гг.", event: "Издание книг Библии Франциском Скориной в Праге", sortKey: 1517, section: 4 },
+        { year: "1522 г.", event: "Издание «Малой подорожной книжицы» Франциска Скорины", sortKey: 1522, section: 4 },
+        { year: "1773 г.", event: "Создание Эдукационной комиссии", sortKey: 1773, section: 4 }
+    ],
+    persons: [
+        { name: "Чарльз Дарвин", desc: "Учёный, обосновавший эволюционную теорию в книге «Происхождение видов» (1859).", section: 1 },
+        { name: "Константин Великий", desc: "Римский император, с именем которого связан Миланский эдикт 313 г. о свободе христианского вероисповедания.", section: 1 },
+        { name: "Геродот", desc: "Древнегреческий историк, которого называют «отцом истории».", section: 1 },
+        { name: "Гомер", desc: "Древнегреческий поэт; ему приписывают эпические поэмы «Илиада» и «Одиссея».", section: 1 },
+        { name: "Гиппократ", desc: "Древнегреческий врач, с именем которого связаны основы врачебной этики.", section: 1 },
+        { name: "Хлодвиг", desc: "Король франков, объединивший большую часть Галлии и принявший христианство.", section: 2 },
+        { name: "Карл Великий", desc: "Король франков, создавший обширную империю; в 800 г. получил императорскую корону.", section: 2 },
+        { name: "Оттон I", desc: "Германский король, в 962 г. ставший императором Священной Римской империи.", section: 2 },
+        { name: "Юстиниан I", desc: "Византийский император VI в.; при нём составлен свод римского права («Кодекс Юстиниана»).", section: 2 },
+        { name: "Вильгельм Завоеватель", desc: "Нормандский герцог, победивший при Гастингсе в 1066 г. и ставший королём Англии.", section: 2 },
+        { name: "Фридрих II", desc: "Император, от имени которого в 1219 г. городу Гослару было даровано городское право.", section: 2 },
+        { name: "Мухаммед", desc: "Основатель ислама; его проповеди положили начало новой мировой религии.", section: 2 },
+        { name: "Чингисхан", desc: "Объединил монгольские племена и создал Монгольскую империю.", section: 2 },
+        { name: "Тайцзун", desc: "Император династии Тан; совершенствовал управление и отбор государственных чиновников.", section: 2 },
+        { name: "Иннокентий III", desc: "Папа римский, усиливший влияние церкви на политику; поддерживал крестовые походы в Прибалтику.", section: 2 },
+        { name: "Роджер Бэкон", desc: "Средневековый учёный, отстаивавший значение опытов и математики для познания природы.", section: 2 },
+        { name: "Ибн Сина (Авиценна)", desc: "Учёный и врач Востока; автор «Канона врачебной науки».", section: 2 },
+        { name: "Прокопий Кесарийский", desc: "Византийский историк VI в.; оставил описание общественной жизни славян и антов.", section: 2 },
+        { name: "Рюрик", desc: "Варяжский князь, с которым летопись связывает начало династии Рюриковичей.", section: 2 },
+        { name: "Олег", desc: "Князь, в 882 г. объединивший под своей властью Новгород и Киев.", section: 2 },
+        { name: "Ольга", desc: "Киевская княгиня, упорядочившая сбор дани: установила уроки и погосты.", section: 2 },
+        { name: "Святослав", desc: "Киевский князь, прославившийся военными походами, в том числе против Хазарского каганата.", section: 2 },
+        { name: "Владимир Святославич", desc: "Киевский князь, при котором в 988 г. произошло крещение Руси.", section: 2 },
+        { name: "Ярослав Мудрый", desc: "Киевский князь, при котором укрепилась Русь и была составлена «Русская правда».", section: 2 },
+        { name: "Рогволод", desc: "Первый известный полоцкий князь; в X в. проводил независимую от Киева политику.", section: 2 },
+        { name: "Рогнеда (Горислава, Анастасия)", desc: "Дочь Рогволода, отказавшая Владимиру; мать Изяслава, родоначальника полоцкой княжеской линии.", section: 2 },
+        { name: "Изяслав Владимирович", desc: "Сын Рогнеды и Владимира; с него началась отдельная династическая линия князей Полоцка.", section: 2 },
+        { name: "Брячислав Изяславич", desc: "Полоцкий князь, укреплявший самостоятельность Полоцка и боровшийся за торговые пути.", section: 2 },
+        { name: "Всеслав Брячиславич (Чародей)", desc: "Полоцкий князь; с ним связаны битва на Немиге (1067) и строительство Софийского собора.", section: 2 },
+        { name: "Тур", desc: "Князь, с именем которого учебник связывает раннюю историю Турова.", section: 2 },
+        { name: "Юрий Ярославич", desc: "Туровский князь, в 1157 г. отстоявший самостоятельность своего княжества.", section: 2 },
+        { name: "Борис Всеславич", desc: "Полоцкий князь, с именем которого связаны знаменитые Борисовы камни.", section: 2 },
+        { name: "Вячко", desc: "Князь Кукенойса, участвовавший в борьбе против немецких крестоносцев в Прибалтике.", section: 2 },
+        { name: "Яков Полочанин", desc: "Воин из Полоцкой земли, отличившийся в Невской битве 1240 г.", section: 2 },
+        { name: "Батый", desc: "Монгольский хан, возглавивший нашествие на земли Руси в 1237–1241 гг.", section: 2 },
+        { name: "Александр Невский", desc: "Новгородский князь, победивший в Невской битве (1240) и Ледовом побоище (1242).", section: 2 },
+        { name: "Евфросиния Полоцкая", desc: "Полоцкая просветительница, основавшая монастырь и помогавшая развитию книжной культуры.", section: 2 },
+        { name: "Кирилл Туровский", desc: "Туровский епископ, писатель и выдающийся проповедник XII в.", section: 2 },
+        { name: "Лазарь Богша", desc: "Мастер-ювелир, создавший в 1161 г. крест Евфросинии Полоцкой.", section: 2 },
+        { name: "Иван III", desc: "Московский великий князь, объединивший ряд русских земель вокруг Москвы.", section: 3 },
+        { name: "Мехмед II", desc: "Османский султан, при котором в 1453 г. был взят Константинополь.", section: 3 },
+        { name: "Миндовг", desc: "Правитель, стоявший у истоков ВКЛ; в 1253 г. был коронован как король Литвы.", section: 3 },
+        { name: "Войшелк", desc: "Сын Миндовга, великий князь ВКЛ; принял православие и монашеский постриг.", section: 3 },
+        { name: "Витень", desc: "Великий князь литовский; при нём завершилось включение Полоцкой земли в ВКЛ.", section: 3 },
+        { name: "Гедимин", desc: "Великий князь литовский, расширивший и укрепивший ВКЛ, в том числе путём мирных соглашений.", section: 3 },
+        { name: "Ольгерд", desc: "Великий князь литовский, расширивший ВКЛ; победил ордынцев на Синих Водах (1362).", section: 3 },
+        { name: "Кейстут", desc: "Один из правителей ВКЛ, руководивший борьбой против Тевтонского ордена.", section: 3 },
+        { name: "Ягайло", desc: "Великий князь литовский и король Польши; заключил Кревскую унию (1385), участвовал в Грюнвальдской битве.", section: 3 },
+        { name: "Витовт", desc: "Великий князь литовский, при котором ВКЛ достигло расцвета; один из руководителей победы под Грюнвальдом.", section: 3 },
+        { name: "Казимир Ягайлович", desc: "Великий князь литовский; издал привилей 1447 г. и Судебник 1468 г.", section: 3 },
+        { name: "Сигизмунд Кейстутович", desc: "Великий князь литовский; его привилей 1434 г. расширил права православной шляхты.", section: 3 },
+        { name: "Александр Казимирович", desc: "Великий князь литовский; при нём Менск получил магдебургское право в 1499 г.", section: 3 },
+        { name: "Соломон Рысинский", desc: "Шляхтич с Полотчины, в 1586 г. использовавший название «белорус» для обозначения своей принадлежности.", section: 4 },
+        { name: "Христофор Колумб", desc: "Мореплаватель, чья экспедиция в 1492 г. достигла островов Карибского моря.", section: 4 },
+        { name: "Васко да Гама", desc: "Португальский мореплаватель, открывший морской путь из Европы в Индию.", section: 4 },
+        { name: "Фернан Магеллан", desc: "Возглавил первую кругосветную экспедицию (1519–1522), завершённую после его гибели.", section: 4 },
+        { name: "Людовик XIV", desc: "Французский король, при котором абсолютизм достиг наивысшего развития.", section: 4 },
+        { name: "Пётр I", desc: "Российский царь и император, проводивший реформы; участник Северной войны.", section: 4 },
+        { name: "Томас Мор", desc: "Английский мыслитель-гуманист, автор книги «Утопия».", section: 4 },
+        { name: "Адам Смит", desc: "Экономист, объяснявший, как разделение труда повышает производительность.", section: 4 },
+        { name: "Франческо Петрарка", desc: "Итальянский поэт и гуманист; в учебнике приведены его мысли о достоинстве человека.", section: 4 },
+        { name: "Леонардо да Винчи", desc: "Художник и исследователь Возрождения, сочетавший искусство с изучением природы.", section: 4 },
+        { name: "Микеланджело Буонарроти", desc: "Итальянский мастер Возрождения, прославившийся скульптурой и росписями.", section: 4 },
+        { name: "Рафаэль Санти", desc: "Итальянский живописец Возрождения, известный гармоничными образами человека.", section: 4 },
+        { name: "Уильям Шекспир", desc: "Английский драматург и поэт эпохи Возрождения.", section: 4 },
+        { name: "Иероним Босх", desc: "Нидерландский живописец эпохи Возрождения; в учебнике назван среди ключевых деятелей.", section: 4 },
+        { name: "Питер Брейгель Старший", desc: "Нидерландский живописец эпохи Возрождения.", section: 4 },
+        { name: "Николай Коперник", desc: "Учёный, обосновавший гелиоцентрическую картину мира.", section: 4 },
+        { name: "Мартин Лютер", desc: "Немецкий реформатор, выступивший с 95 тезисами в 1517 г.", section: 4 },
+        { name: "Жан Кальвин", desc: "Реформатор, создавший в Женеве влиятельное направление протестантизма — кальвинизм.", section: 4 },
+        { name: "Игнатий Лойола", desc: "Основатель ордена иезуитов, важной опоры Контрреформации.", section: 4 },
+        { name: "Джон Локк", desc: "Английский мыслитель Просвещения, отстаивавший естественные права человека.", section: 4 },
+        { name: "Шарль-Луи Монтескье", desc: "Французский просветитель, обосновавший принцип разделения государственной власти.", section: 4 },
+        { name: "Вольтер", desc: "Французский просветитель, защищавший разум и веротерпимость.", section: 4 },
+        { name: "Жан-Жак Руссо", desc: "Французский просветитель, развивавший идею общественного договора.", section: 4 },
+        { name: "Дени Дидро", desc: "Французский просветитель, руководивший созданием «Энциклопедии».", section: 4 },
+        { name: "Иммануил Кант", desc: "Немецкий философ, видевший в самостоятельном мышлении основу Просвещения.", section: 4 },
+        { name: "Екатерина II", desc: "Российская императрица, проводившая политику просвещённого абсолютизма.", section: 4 },
+        { name: "Лев Сапега", desc: "Государственный деятель ВКЛ, участвовавший в подготовке Третьего Статута (1588).", section: 4 },
+        { name: "Сигизмунд II Август", desc: "Правитель Польши и ВКЛ; при нём заключена Люблинская уния и начата волочная помера.", section: 4 },
+        { name: "Стефан Баторий", desc: "Король Речи Посполитой; в ходе Ливонской войны вернул Полоцк в 1579 г.", section: 4 },
+        { name: "Станислав Август Понятовский", desc: "Последний король Речи Посполитой, сторонник государственных реформ XVIII в.", section: 4 },
+        { name: "Тадеуш Костюшко", desc: "Возглавил восстание 1794 г. за сохранение независимости Речи Посполитой.", section: 4 },
+        { name: "Якуб Ясинский", desc: "Один из руководителей восстания 1794 г. на территории ВКЛ.", section: 4 },
+        { name: "Ян Кароль Ходкевич", desc: "Гетман ВКЛ, победивший шведское войско под Кирхгольмом в 1605 г.", section: 4 },
+        { name: "Богдан Хмельницкий", desc: "Предводитель казацкого восстания в Украине, повлиявшего на события 1648–1651 гг. в Беларуси.", section: 4 },
+        { name: "Карл XII", desc: "Шведский король, чья армия действовала на территории Беларуси в Северную войну.", section: 4 },
+        { name: "Василий Ващила", desc: "Возглавил восстание жителей Кричевского староства против злоупотреблений арендаторов и администрации.", section: 4 },
+        { name: "Анна Екатерина Радзивилл", desc: "Представительница рода Радзивиллов, создававшая первые мануфактуры на белорусских землях.", section: 4 },
+        { name: "Антоний Тизенгауз", desc: "Государственный деятель ВКЛ, проводивший хозяйственные преобразования в королевских экономиях.", section: 4 },
+        { name: "Михал Казимир Огинский", desc: "Магнат, связанный со строительством канала и развитием культуры в Слониме.", section: 4 },
+        { name: "Николай Радзивилл Чёрный", desc: "Магнат ВКЛ, поддерживавший Реформацию и распространение кальвинизма.", section: 4 },
+        { name: "Сымон Будный", desc: "Белорусский мыслитель и книгоиздатель, выпустивший «Катехизис» в Несвиже (1562).", section: 4 },
+        { name: "Василий Тяпинский", desc: "Просветитель и издатель, напечатавший перевод «Евангелия» на старобелорусский язык.", section: 4 },
+        { name: "Павел из Визны", desc: "Деятель Реформации в ВКЛ, упомянутый в учебнике среди ключевых фигур.", section: 4 },
+        { name: "Ипатий Потей", desc: "Православный иерарх, один из сторонников Брестской церковной унии 1596 г.", section: 4 },
+        { name: "Кирилл Терлецкий", desc: "Православный епископ, участвовавший в подготовке Брестской церковной унии.", section: 4 },
+        { name: "Пётр Скарга", desc: "Иезуит, автор книги «О единстве Церкви Божией» и сторонник церковной унии.", section: 4 },
+        { name: "Иосафат Кунцевич", desc: "Униатский архиепископ Полоцкий, выступавший за укрепление униатской церкви.", section: 4 },
+        { name: "Мелетий Смотрицкий", desc: "Церковный писатель, участвовавший в полемике между православными и униатами.", section: 4 },
+        { name: "Франциск Скорина", desc: "Первопечатник из Полоцка; в 1517 г. издал в Праге «Псалтырь» и другие библейские книги.", section: 4 },
+        { name: "Николай Гусовский", desc: "Поэт эпохи Возрождения, автор поэмы «Песня о зубре».", section: 4 },
+        { name: "Симеон Полоцкий", desc: "Поэт, писатель и просветитель XVII в., известный также деятельностью в России.", section: 4 },
+        { name: "Казимир Семёнович", desc: "Учёный и инженер, автор труда «Великое искусство артиллерии» (1650).", section: 4 },
+        { name: "Казимир Лыщинский", desc: "Деятель научной мысли ВКЛ, упомянутый в учебнике.", section: 4 },
+        { name: "Илья Копиевич", desc: "Просветитель и издатель, усовершенствовавший кириллический шрифт.", section: 4 },
+        { name: "Мартин Почобут-Одляницкий", desc: "Учёный-астроном, руководивший Виленской обсерваторией и Главной школой ВКЛ.", section: 4 },
+        { name: "Иоахим Хрептович", desc: "Деятель Просвещения, поддерживавший культурные и экономические преобразования в ВКЛ.", section: 4 }
+    ],
+    terms: [
+        { term: "Человек умелый", def: "Ранний представитель рода Homo, изготовлявший простейшие каменные орудия труда.", section: 1 },
+        { term: "Человек прямоходящий", def: "Древний представитель рода Homo, ходивший прямо, совершенствовавший каменные орудия труда и овладевший искусственным добыванием огня.", section: 1 },
+        { term: "Человек разумный (Homo sapiens)", def: "Вид человека современного типа, обладавший развитым мышлением, речью и способностью создавать сложные орудия и культуру.", section: 1 },
+        { term: "Неандерталец", def: "Древний вид человека, живший в ледниковую эпоху; изготовлял орудия, охотился и совершал погребения умерших.", section: 1 },
+        { term: "Кроманьонец", def: "Представитель человека современного типа эпохи позднего палеолита; на территории Беларуси известны стоянки Юровичи и Бердыж.", section: 1 },
+        { term: "Праобщина", def: "Первоначальный небольшой и неустойчивый коллектив древних людей, объединявшийся для добычи пищи и защиты.", section: 1 },
+        { term: "Родовая община", def: "Коллектив кровных родственников, которые вели общее хозяйство и совместно владели землёй и орудиями труда.", section: 1 },
+        { term: "Соседская община", def: "Объединение семей по территориальному, а не кровнородственному принципу; земля находилась в общинном владении, хозяйство велось отдельными семьями.", section: 1 },
+        { term: "Собирательство", def: "Способ добывания пищи путём сбора готовых даров природы: плодов, кореньев, семян.", section: 1 },
+        { term: "Палеолит", def: "Древний каменный век, наиболее продолжительный этап каменного века.", section: 1 },
+        { term: "Мезолит", def: "Средний каменный век; период широкого распространения лука, стрел и микролитов.", section: 1 },
+        { term: "Неолит", def: "Новый каменный век; период совершенствования обработки камня и распространения производящего хозяйства.", section: 1 },
+        { term: "Бронзовый век", def: "Период древней истории, характеризующийся распространением орудий труда и оружия из бронзы.", section: 1 },
+        { term: "Железный век", def: "Период древней истории, связанный с распространением железных орудий труда и оружия.", section: 1 },
+        { term: "Микролит", def: "Небольшое каменное изделие, использовавшееся как вкладыш в составное орудие труда.", section: 1 },
+        { term: "Неолитическая революция", def: "Переход от присваивающего хозяйства (охоты, рыболовства, собирательства) к производящему (земледелию и скотоводству).", section: 1 },
+        { term: "Присваивающее хозяйство", def: "Способ хозяйствования, при котором человек получает готовые продукты природы посредством охоты, рыболовства и собирательства.", section: 1 },
+        { term: "Производящее хозяйство", def: "Способ хозяйствования, при котором человек сам производит продукты питания, выращивая растения и разводя животных.", section: 1 },
+        { term: "Земледелие", def: "Отрасль производящего хозяйства, основанная на обработке почвы и выращивании культурных растений.", section: 1 },
+        { term: "Скотоводство", def: "Отрасль производящего хозяйства, связанная с разведением и содержанием домашних животных.", section: 1 },
+        { term: "Индоевропейцы", def: "Большая общность древних племён, говоривших на родственных языках; их переселения повлияли на этническую историю Европы.", section: 1 },
+        { term: "Миграция", def: "Перемещение людей или групп населения с одной территории на другую, временное или постоянное.", section: 1 },
+        { term: "Религия", def: "Система верований и обрядов, связанная с представлениями о сверхъестественных силах и поклонением им.", section: 1 },
+        { term: "Миф", def: "Древнее повествование, объясняющее происхождение мира, природные явления и жизнь людей посредством образов богов и героев.", section: 1 },
+        { term: "Культ", def: "Почитание божества, духа, священного предмета или явления, выраженное в обрядах и ритуалах.", section: 1 },
+        { term: "Идол", def: "Изображение божества или духа, которому приписывали священные свойства и которому поклонялись.", section: 1 },
+        { term: "Тотемизм", def: "Вера в сверхъестественное родство группы людей (рода, племени) с животным, растением или иным природным объектом.", section: 1 },
+        { term: "Анимизм", def: "Вера в существование души и духов, в одушевлённость природы и её явлений.", section: 1 },
+        { term: "Фетишизм", def: "Поклонение неодушевлённым предметам, которым приписывают сверхъестественные свойства.", section: 1 },
+        { term: "Магия", def: "Совокупность действий и обрядов, совершаемых с целью повлиять на природу, животных или человека сверхъестественным способом.", section: 1 },
+        { term: "Жрец", def: "Человек, исполняющий религиозные обряды и выступающий посредником между людьми и почитаемыми божествами.", section: 1 },
+        { term: "Курган", def: "Искусственная земляная насыпь над древним захоронением, часто содержащая погребальный инвентарь.", section: 1 },
+        { term: "Петроглиф", def: "Изображение, выбитое или нанесённое краской на поверхность камня или скалы.", section: 1 },
+        { term: "Цивилизация", def: "Стадия развития общества, для которой характерны города, государство, социальное неравенство, развитая культура и хозяйство.", section: 1 },
+        { term: "Государство", def: "Система власти, обеспечивающая управление обществом на определённой территории путём принятия законов и создания органов власти.", section: 1 },
+        { term: "Речные цивилизации", def: "Древнейшие цивилизации, сформировавшиеся в долинах крупных рек и опиравшиеся на земледелие, в том числе орошаемое.", section: 1 },
+        { term: "Полис", def: "Древнегреческий город-государство с прилегающей сельской территорией и коллективом граждан.", section: 1 },
+        { term: "Монархия", def: "Форма правления, при которой верховная власть сосредоточена в руках одного правителя — монарха.", section: 1 },
+        { term: "Республика", def: "Форма государственного правления, при которой высшие органы власти избираются или формируются не по наследственному принципу.", section: 1 },
+        { term: "Деспотия", def: "Форма государственного правления, при которой верховная власть сосредоточена в руках неограниченного правителя.", section: 1 },
+        { term: "Гражданин", def: "Член политического сообщества, обладающий определёнными правами и несущий обязанности.", section: 1 },
+        { term: "Античность", def: "История и культура Древней Греции и Древнего Рима.", section: 1 },
+        { term: "Гражданская община", def: "Коллектив полноправных граждан государства, объединённых общими правами, обязанностями и участием в общественной жизни.", section: 1 },
+        { term: "Великая греческая колонизация", def: "Основание греками многочисленных поселений-колоний на побережьях Средиземного и Чёрного морей в VIII–VI вв. до н. э.", section: 1 },
+        { term: "Христианство", def: "Мировая монотеистическая религия, возникшая в I в. в Иудее и основанная на вере в Иисуса Христа.", section: 1 },
+        { term: "Великое переселение народов", def: "Массовые миграции различных племён в Европе и Азии в IV–VII вв., изменившие политическую и этническую карту Европы.", section: 2 },
+        { term: "Варварское королевство", def: "Государство, основанное варварскими, прежде всего германскими, племенами на территории бывшей Западной Римской империи.", section: 2 },
+        { term: "Феодальная раздробленность", def: "Состояние государства, при котором его земли фактически разделены между самостоятельными или слабо зависимыми от центра феодальными владетелями.", section: 2 },
+        { term: "Реконкиста", def: "Борьба христианских государств Пиренейского полуострова за отвоевание земель у арабов-мусульман в VIII–XV вв.", section: 2 },
+        { term: "Феодализм", def: "Отношения поземельной и личной зависимости между людьми, основой которых служит собственность на землю.", section: 2 },
+        { term: "Феод", def: "Наследственное земельное владение, пожалованное за службу господином-сеньором своему вассалу.", section: 2 },
+        { term: "Бенефиций", def: "Земельное владение, предоставлявшееся в пожизненное пользование при условии несения службы.", section: 2 },
+        { term: "Вассал", def: "Феодал, получавший владение от сеньора и обязанный ему службой и верностью.", section: 2 },
+        { term: "Сеньор", def: "Феодал, предоставлявший земельное владение своему вассалу и обязанный защищать его.", section: 2 },
+        { term: "Феодальная лестница", def: "Иерархия соподчинения феодалов, основанная на сеньориально-вассальных отношениях.", section: 2 },
+        { term: "Оброк", def: "Повинность зависимого крестьянина в пользу землевладельца, уплачиваемая продуктами хозяйства.", section: 2 },
+        { term: "Барщина", def: "Повинность зависимого крестьянина, заключавшаяся в бесплатной работе в хозяйстве землевладельца.", section: 2 },
+        { term: "Чинш", def: "Денежный платёж крестьянина землевладельцу за пользование земельным наделом.", section: 2 },
+        { term: "Натуральное хозяйство", def: "Хозяйство, в котором продукты производятся главным образом для собственного потребления, а не для продажи.", section: 2 },
+        { term: "Магдебургское право", def: "Система городского права, предоставлявшая городу самоуправление, собственные административные и судебные органы и хозяйственные привилегии.", section: 2 },
+        { term: "Халифат", def: "Государство мусульман во главе с религиозно-политическим правителем — халифом.", section: 2 },
+        { term: "Ислам", def: "Мировая монотеистическая религия, возникшая в VII в. в Аравии; её основателем и пророком считается Мухаммед.", section: 2 },
+        { term: "Шариат", def: "Совокупность религиозных и правовых предписаний ислама, регулирующих поведение мусульман.", section: 2 },
+        { term: "Конфуцианство", def: "Учение, возникшее в Древнем Китае и основанное на идеях нравственного самосовершенствования, уважения старших и общественного порядка.", section: 2 },
+        { term: "Традиционное общество", def: "Общество, в котором хозяйство, социальные отношения и жизнь людей определяются устойчивыми обычаями и религиозными нормами.", section: 2 },
+        { term: "Варна", def: "Одна из четырёх крупных наследственных социальных групп традиционного индийского общества.", section: 2 },
+        { term: "Каста", def: "Замкнутая наследственная социальная группа в Индии, принадлежность к которой определяет занятия и правила поведения человека.", section: 2 },
+        { term: "Самурай", def: "Представитель военно-служилого сословия средневековой Японии, служивший феодальному господину.", section: 2 },
+        { term: "Сегун", def: "Военный правитель Японии, в руках которого с XII в. находилась фактическая власть при сохранении императора.", section: 2 },
+        { term: "Католицизм", def: "Одно из главных направлений христианства, церковная организация которого возглавляется папой римским.", section: 2 },
+        { term: "Православие", def: "Одно из главных направлений христианства, исторически связанное с восточной церковной традицией Византии.", section: 2 },
+        { term: "Буддизм", def: "Мировая религия, возникшая в Индии и связанная с учением Будды о преодолении страданий.", section: 2 },
+        { term: "Папа римский", def: "Глава Римско-католической церкви.", section: 2 },
+        { term: "Патриарх", def: "Высший духовный руководитель отдельной православной церкви.", section: 2 },
+        { term: "Инквизиция", def: "Церковный суд и система учреждений, преследовавших в католической Европе обвиняемых в ереси.", section: 2 },
+        { term: "Крестовый поход", def: "Военное предприятие, осуществлявшееся под религиозными лозунгами с санкции католической церкви.", section: 2 },
+        { term: "Университет", def: "Высшее учебное заведение, объединявшее преподавателей и учащихся и дававшее образование по нескольким областям знаний.", section: 2 },
+        { term: "Схоластика", def: "Средневековая система учёности и преподавания, стремившаяся логически обосновать религиозные истины с помощью рассуждений.", section: 2 },
+        { term: "Хроника", def: "Историческое сочинение, излагающее события во временной последовательности.", section: 2 },
+        { term: "Миниатюра", def: "Небольшое живописное изображение, обычно украшающее рукописную книгу.", section: 2 },
+        { term: "Икона", def: "Живописное изображение Христа, Богоматери, святых или священных событий, предназначенное для религиозного почитания.", section: 2 },
+        { term: "Фреска", def: "Роспись красками по сырой штукатурке стены или свода здания.", section: 2 },
+        { term: "Мозаика", def: "Изображение, составленное из небольших кусочков камня, стекла или другого материала.", section: 2 },
+        { term: "Романский стиль", def: "Стиль средневековой европейской архитектуры, отличающийся массивными стенами, небольшими окнами и полуциркульными арками.", section: 2 },
+        { term: "Готический стиль", def: "Стиль средневековой европейской архитектуры с устремлёнными вверх конструкциями, стрельчатыми арками и большими окнами с витражами.", section: 2 },
+        { term: "Славяне", def: "Группа родственных народов, объединённых историческим происхождением и близкими славянскими языками.", section: 2 },
+        { term: "Анты", def: "Одна из групп раннесредневековых славян, упоминаемая византийскими авторами; расселялась между Днестром и Днепром.", section: 2 },
+        { term: "Кривичи-полочане", def: "Восточнославянская племенная общность, заселявшая земли в бассейне Западной Двины и связанная с возникновением Полоцка.", section: 2 },
+        { term: "Дреговичи", def: "Восточнославянская племенная общность, проживавшая преимущественно на территории Полесья, между Припятью и Березиной.", section: 2 },
+        { term: "Радимичи", def: "Восточнославянская племенная общность, жившая преимущественно в бассейне реки Сож.", section: 2 },
+        { term: "Балты", def: "Группа родственных племён, говоривших на балтийских языках и населявших значительную часть белорусских земель до расселения славян.", section: 2 },
+        { term: "Вече", def: "Народное собрание, участвовавшее в решении важных вопросов жизни древнерусского города и земли.", section: 2 },
+        { term: "Князь", def: "Правитель княжества, руководивший войском, управлением, судом и сбором дани.", section: 2 },
+        { term: "Варяги", def: "Выходцы из Скандинавии, участвовавшие в торговле, военных походах и политической жизни Древней Руси.", section: 2 },
+        { term: "Полюдье", def: "Объезд князем с дружиной подвластных земель для сбора дани.", section: 2 },
+        { term: "Погост", def: "Установленный пункт, куда население доставляло дань после реформы княгини Ольги.", section: 2 },
+        { term: "Урок", def: "Установленная властью фиксированная норма или размер дани.", section: 2 },
+        { term: "Дружина", def: "Вооружённый отряд приближённых князя, служивший ему военной и управленческой опорой.", section: 2 },
+        { term: "«Русская правда»", def: "Сборник правовых норм Древней Руси, формировавшийся начиная с правления Ярослава Мудрого.", section: 2 },
+        { term: "Княжество", def: "Государственное или территориально-политическое образование во главе с князем.", section: 2 },
+        { term: "Княжеская династия", def: "Род правителей, в котором княжеская власть передаётся между представителями одной семьи по наследству.", section: 2 },
+        { term: "Удел", def: "Часть княжеских владений, переданная в управление одному из членов правящей династии.", section: 2 },
+        { term: "Крестоносцы", def: "Участники крестовых походов и члены духовно-рыцарских орденов, действовавших под религиозными лозунгами.", section: 2 },
+        { term: "Данническая зависимость", def: "Форма политической зависимости, выражавшаяся прежде всего в обязательной уплате дани более сильному правителю или государству.", section: 2 },
+        { term: "Дань", def: "Обязательный сбор деньгами или продуктами с подвластного населения в пользу князя или другого властителя.", section: 2 },
+        { term: "Вервь", def: "Сельская территориальная община в Древней Руси, объединённая общими повинностями и ответственностью её членов.", section: 2 },
+        { term: "Детинец", def: "Укреплённая центральная часть древнерусского города, где находились главные общественные и оборонительные сооружения.", section: 2 },
+        { term: "Посад", def: "Торгово-ремесленная часть древнерусского города за пределами детинца.", section: 2 },
+        { term: "Ремесло", def: "Производство изделий преимущественно ручным трудом с использованием специальных навыков и инструментов.", section: 2 },
+        { term: "Язычество", def: "Совокупность дохристианских традиционных верований и культов, часто связанных с почитанием многих богов и сил природы.", section: 2 },
+        { term: "Христианизация", def: "Процесс распространения и утверждения христианства среди населения.", section: 2 },
+        { term: "Епархия", def: "Церковно-административный округ, находящийся под управлением епископа.", section: 2 },
+        { term: "Митрополит", def: "Высший церковный иерарх, возглавляющий митрополию или крупную церковную область.", section: 2 },
+        { term: "Летопись", def: "Историческое повествование, излагающее события по годам (летам).", section: 2 },
+        { term: "Житие", def: "Произведение церковной литературы, повествующее о жизни, подвигах и почитании святого.", section: 2 },
+        { term: "Берестяная грамота", def: "Письменный документ, текст которого процарапан на бересте — верхнем слое коры берёзы.", section: 2 },
+        { term: "Зодчество", def: "Искусство проектирования и сооружения зданий; архитектура.", section: 2 },
+        { term: "Централизация", def: "Процесс объединения территорий и сосредоточения государственной власти и управления в едином центре.", section: 3 },
+        { term: "Парламент", def: "Сословно-представительный орган Англии, возникший в XIII в. и участвовавший в решении государственных вопросов.", section: 3 },
+        { term: "Генеральные штаты", def: "Сословно-представительный орган Франции, объединявший представителей духовенства, дворянства и третьего сословия.", section: 3 },
+        { term: "Кортесы", def: "Сословно-представительные собрания в государствах Пиренейского полуострова.", section: 3 },
+        { term: "Рейхстаг", def: "Сословно-представительный орган Священной Римской империи.", section: 3 },
+        { term: "Сейм", def: "Сословно-представительный орган, действовавший в Великом Княжестве Литовском и других европейских государствах.", section: 3 },
+        { term: "Сословно-представительная монархия", def: "Форма монархического правления, при которой в управлении государством участвуют органы представительства сословий.", section: 3 },
+        { term: "Восточная деспотия", def: "Система управления, для которой характерны неограниченная власть государя и слабость правовых гарантий подданных.", section: 3 },
+        { term: "Сословие", def: "Социальная группа с закреплёнными обычаями или законами правами и обязанностями, передававшимися, как правило, по наследству.", section: 3 },
+        { term: "Товарно-денежное хозяйство", def: "Хозяйство, в котором продукция производится для обмена и продажи, а расчёты широко осуществляются деньгами.", section: 3 },
+        { term: "Мануфактура", def: "Предприятие, основанное на разделении труда между работниками и преимущественно ручном производстве.", section: 3 },
+        { term: "Разделение труда", def: "Распределение процесса изготовления продукта между работниками, каждый из которых выполняет отдельную операцию.", section: 3 },
+        { term: "Цех", def: "Объединение ремесленников одной или родственных специальностей, регулирующее производство и положение своих членов.", section: 3 },
+        { term: "Наёмный рабочий", def: "Человек, который не владеет предприятием и работает за плату у владельца производства.", section: 3 },
+        { term: "Банк", def: "Учреждение, осуществляющее денежные операции, хранение средств, выдачу ссуд и иные финансовые услуги.", section: 3 },
+        { term: "Ганзейский союз (Ганза)", def: "Торгово-политический союз северогерманских городов, содействовавший торговле и охране торговых путей.", section: 3 },
+        { term: "Индульгенция", def: "Грамота католической церкви об отпущении временного наказания за грехи, ставшая объектом критики реформаторов.", section: 3 },
+        { term: "Церковная уния", def: "Объединение церковных организаций или заключение соглашения о церковном единстве при определённых условиях.", section: 3 },
+        { term: "Духовно-рыцарский орден", def: "Военно-религиозная организация рыцарей, соединявшая монашеские обеты с военной службой.", section: 3 },
+        { term: "Великое княжество", def: "Государство или крупное княжеское объединение во главе с великим князем.", section: 3 },
+        { term: "Господарь", def: "Наименование верховного правителя Великого Княжества Литовского в документах и политической практике.", section: 3 },
+        { term: "Династия Гедиминовичей", def: "Правящий род, происходивший от великого князя Гедимина и занимавший великокняжеский престол ВКЛ.", section: 3 },
+        { term: "Великокняжеская власть", def: "Полномочия и институты верховного правления великого князя в государстве.", section: 3 },
+        { term: "Судебник", def: "Сборник законодательных норм, прежде всего регулирующих судебные отношения; в ВКЛ известен Судебник Казимира 1468 г.", section: 3 },
+        { term: "Шляхта", def: "Привилегированное военно-служилое сословие феодалов Великого Княжества Литовского и Речи Посполитой.", section: 3 },
+        { term: "Магнаты", def: "Наиболее богатые и влиятельные представители землевладельческой знати, занимавшие важные государственные должности.", section: 3 },
+        { term: "Мещане", def: "Жители городов и местечек, составлявшие особое городское сословие.", section: 3 },
+        { term: "Мещанство", def: "Городское сословие жителей городов и местечек, объединённых общими правами и повинностями.", section: 3 },
+        { term: "Привилей", def: "Законодательный акт в ВКЛ, которым великие князья предоставляли или подтверждали особые права определённых групп населения или учреждений.", section: 3 },
+        { term: "Крепостное право", def: "Система юридически закреплённой зависимости крестьян от землевладельца, ограничивавшая их личную свободу и право перехода.", section: 3 },
+        { term: "Феодальное землевладение", def: "Владение землёй феодалами с получением доходов от труда и повинностей зависимых крестьян.", section: 3 },
+        { term: "Местечко", def: "Небольшое городское поселение, соединявшее торгово-ремесленные функции с особенностями сельского хозяйства.", section: 3 },
+        { term: "Магистрат", def: "Выборный орган городского самоуправления и суда в городах с магдебургским правом, состоявший из рады и лавы.", section: 3 },
+        { term: "Рада", def: "Часть городского магистрата, ведавшая управлением и хозяйственными делами города.", section: 3 },
+        { term: "Лава", def: "Судебная часть городского магистрата, рассматривавшая судебные дела.", section: 3 },
+        { term: "Ратуша", def: "Здание, в котором размещались органы городского самоуправления и проходили заседания магистрата.", section: 3 },
+        { term: "Юридика", def: "Часть города, находившаяся под властью магната или церковного владельца и не подчинявшаяся суду и администрации магистрата.", section: 3 },
+        { term: "Конфессия", def: "Вероисповедание, направление внутри религии со своим вероучением и церковной организацией.", section: 3 },
+        { term: "Иудаизм", def: "Древняя монотеистическая религия еврейского народа.", section: 3 },
+        { term: "Веротерпимость", def: "Признание возможности существования разных вероисповеданий и отказ от преследования людей из-за их веры.", section: 3 },
+        { term: "Митрополия", def: "Крупная церковно-административная область, объединяющая епархии и возглавляемая митрополитом.", section: 3 },
+        { term: "Замок-кастель", def: "Тип оборонительного замка правильной, обычно четырёхугольной формы, со стенами и башнями.", section: 3 },
+        { term: "Витраж", def: "Изображение или орнамент из цветного стекла, устанавливаемое в оконном проёме.", section: 3 },
+        { term: "Иконопись", def: "Искусство создания икон, то есть религиозных живописных изображений.", section: 3 },
+        { term: "Народность", def: "Устойчивая историческая общность людей, характеризующаяся общностью происхождения, территории, языка и культуры.", section: 3 },
+        { term: "Русины", def: "Историческое самоназвание восточнославянского населения, связанного с наследием Древней Руси.", section: 3 },
+        { term: "Самоназвание", def: "Название, которым народ или группа людей обозначает самих себя.", section: 3 },
+        { term: "Этническое самосознание", def: "Осознание людьми принадлежности к определённому народу, его исторической, языковой и культурной общности.", section: 3 },
+        { term: "Колониализм", def: "Система господства ряда европейских держав над зависимыми странами и территориями, основанная на их политическом подчинении и эксплуатации.", section: 4 },
+        { term: "Колония", def: "Территория, находящаяся под политической и экономической властью другого государства — метрополии.", section: 4 },
+        { term: "Метрополия", def: "Государство, владеющее колониями и управляющее ими в собственных интересах.", section: 4 },
+        { term: "Экспансия", def: "Расширение территории, власти, хозяйственного или политического влияния государства на другие земли и народы.", section: 4 },
+        { term: "Ост-Индская компания", def: "Привилегированное торговое объединение европейских купцов, наделённое государством монопольными правами торговли.", section: 4 },
+        { term: "«Торговый треугольник»", def: "Система торговых связей Нового времени между Европой, Африкой и Америкой, включавшая перевозку товаров, сырья и невольников.", section: 4 },
+        { term: "Абсолютизм", def: "Форма правления, при которой монарх обладает неограниченной верховной властью.", section: 4 },
+        { term: "Абсолютная монархия", def: "Монархия, при которой вся полнота верховной власти сосредоточена в руках монарха.", section: 4 },
+        { term: "Империя", def: "Крупное государство, объединяющее обширные территории и народы под единой верховной властью.", section: 4 },
+        { term: "Государственный суверенитет", def: "Самостоятельность и независимость государства в осуществлении власти на своей территории и в международных отношениях.", section: 4 },
+        { term: "Революция", def: "Коренное, качественное изменение общественного и политического строя, нередко происходящее в ходе борьбы за власть.", section: 4 },
+        { term: "Конституционная монархия", def: "Форма монархии, при которой полномочия монарха ограничены конституцией и законами.", section: 4 },
+        { term: "Права человека", def: "Основные права и свободы, принадлежащие человеку.", section: 4 },
+        { term: "Капитализм", def: "Общественный строй, основанный на частной собственности, наёмном труде и рыночной экономике.", section: 4 },
+        { term: "Капитал", def: "Средства и имущество, используемые для организации производства и получения прибыли.", section: 4 },
+        { term: "Буржуазия", def: "Общественная группа владельцев капитала, предприятий и других средств производства, использующих наёмный труд.", section: 4 },
+        { term: "Пролетариат", def: "Наёмные работники, не владеющие средствами производства и живущие за счёт продажи своего труда.", section: 4 },
+        { term: "Огораживания", def: "Ограничение или прекращение общего пользования земельными угодьями путём их присвоения и ограждения землевладельцами.", section: 4 },
+        { term: "Промышленная революция", def: "Переход от ручного труда и мануфактур к широкому применению машин и фабричному производству.", section: 4 },
+        { term: "Возрождение (Ренессанс)", def: "Культурная эпоха, связанная с обращением к античному наследию, интересом к человеку и расцветом искусства и науки.", section: 4 },
+        { term: "Гуманизм", def: "Мировоззрение, утверждающее ценность человеческой личности, силу разума и возможности человека.", section: 4 },
+        { term: "Антропоцентризм", def: "Взгляд на мир, при котором человек рассматривается как центральная ценность и предмет познания.", section: 4 },
+        { term: "Утопия", def: "Изображение вымышленного идеального общества, противопоставляемого недостаткам действительности.", section: 4 },
+        { term: "Перспектива", def: "Способ изображения пространства на плоскости, позволяющий передать глубину и удалённость предметов.", section: 4 },
+        { term: "Светское искусство", def: "Искусство, не ограниченное религиозными сюжетами и обращённое к земной жизни и человеку.", section: 4 },
+        { term: "Реформация", def: "Широкое религиозное и общественное движение XVI в. за преобразование католической церкви, приведшее к возникновению протестантизма.", section: 4 },
+        { term: "Протестантизм", def: "Одно из основных направлений христианства, возникшее в результате Реформации.", section: 4 },
+        { term: "Лютеранство", def: "Направление протестантизма, возникшее на основе учения Мартина Лютера.", section: 4 },
+        { term: "Кальвинизм", def: "Направление протестантизма, связанное с учением Жана Кальвина и идеей божественного предопределения.", section: 4 },
+        { term: "Контрреформация", def: "Движение католической церкви за укрепление своих позиций и противодействие распространению протестантизма.", section: 4 },
+        { term: "Иезуиты", def: "Члены католического ордена Общества Иисуса, участвовавшие в Контрреформации, образовании и миссионерстве.", section: 4 },
+        { term: "Просвещение", def: "Идейное движение XVII–XVIII вв., провозгласившее ценность разума, науки, образования и общественного прогресса.", section: 4 },
+        { term: "Просвещённый абсолютизм", def: "Политика монархов XVIII в., стремившихся проводить реформы под влиянием идей Просвещения.", section: 4 },
+        { term: "Разделение властей", def: "Принцип устройства государства, предполагающий разграничение законодательной, исполнительной и судебной властей.", section: 4 },
+        { term: "Естественное право", def: "Представление о правах, принадлежащих человеку от рождения и не зависящих от воли государства.", section: 4 },
+        { term: "Классицизм", def: "Направление искусства, ориентированное на античные образцы, ясность, порядок, симметрию и строгие правила.", section: 4 },
+        { term: "Статуты ВКЛ", def: "Общегосударственные своды законов Великого Княжества Литовского; были приняты в 1529, 1566 и 1588 гг.", section: 4 },
+        { term: "Рада ВКЛ", def: "Совет высших сановников и землевладельческой знати при великом князе, участвовавший в управлении государством.", section: 4 },
+        { term: "Люблинская уния", def: "Государственный союз ВКЛ и Польского королевства 1569 г., в результате которого возникла Речь Посполитая.", section: 4 },
+        { term: "Федерация", def: "Форма государственного объединения, при которой составные части сохраняют часть собственных органов власти и полномочий.", section: 4 },
+        { term: "Либерум вето", def: "Право депутата сейма Речи Посполитой единолично прекратить его работу и сорвать принятие решений.", section: 4 },
+        { term: "Конфедерация", def: "В политической истории Речи Посполитой — союз шляхты для совместных политических действий.", section: 4 },
+        { term: "Повстанцы", def: "Участники вооружённого выступления против действующей власти или существующего порядка.", section: 4 },
+        { term: "Крылатые гусары", def: "Тяжёлая ударная кавалерия Речи Посполитой, известная характерным вооружением и крылатыми украшениями доспехов.", section: 4 },
+        { term: "Казачество", def: "Военно-социальная общность, возникшая на южных окраинах восточнославянских земель.", section: 4 },
+        { term: "Интервенция", def: "Военное вмешательство одного или нескольких государств во внутренние дела или на территорию другого государства.", section: 4 },
+        { term: "Перемирие", def: "Соглашение воюющих сторон о временном прекращении военных действий.", section: 4 },
+        { term: "Фольварк", def: "Крупное землевладельческое хозяйство, производившее сельскохозяйственную продукцию на продажу с использованием труда зависимых крестьян.", section: 4 },
+        { term: "Волока", def: "Земельная мера и единица распределения земли при аграрной реформе XVI в. в ВКЛ; около 21,36 га.", section: 4 },
+        { term: "Волочная помера", def: "Аграрная реформа ВКЛ XVI в., связанная с измерением земель на волоки, упорядочением землепользования и крестьянских повинностей.", section: 4 },
+        { term: "Похожие крестьяне", def: "Категория зависимых крестьян, сохранявших право переходить от одного землевладельца к другому.", section: 4 },
+        { term: "Непохожие крестьяне", def: "Категория зависимых крестьян, не имевших права свободного перехода от одного землевладельца к другому.", section: 4 },
+        { term: "Крестьянские повинности", def: "Обязательные работы и платежи крестьян в пользу землевладельца или государства.", section: 4 },
+        { term: "Магнатское землевладение", def: "Сосредоточение крупных земельных владений в руках наиболее влиятельной феодальной знати — магнатов.", section: 4 },
+        { term: "Экономическая реформа", def: "Целенаправленные преобразования системы хозяйства и управления экономикой.", section: 4 },
+        { term: "Антитринитаризм", def: "Течение Реформации, отвергавшее христианское учение о Троице.", section: 4 },
+        { term: "Орден иезуитов", def: "Католический монашеский орден «Общество Иисуса», сыгравший важную роль в Контрреформации.", section: 4 },
+        { term: "Униатская церковь", def: "Церковь, образованная в результате Брестской унии 1596 г.; признала главенство папы римского, сохранив восточный обряд.", section: 4 },
+        { term: "Православные братства", def: "Объединения православных горожан, создававшиеся для защиты веры, поддержки храмов, школ и книгопечатания.", section: 4 },
+        { term: "Религиозная полемика", def: "Публичный спор и борьба мнений между представителями разных конфессий.", section: 4 },
+        { term: "Книгопечатание", def: "Тиражирование текстов и изображений с помощью печатных форм и печатного оборудования.", section: 4 },
+        { term: "Гравюра", def: "Печатное изображение, получаемое с обработанной деревянной, металлической или иной формы.", section: 4 },
+        { term: "Меценатство", def: "Материальная и организационная поддержка науки, искусства, образования и культуры состоятельными покровителями.", section: 4 },
+        { term: "Летописание", def: "Создание и ведение летописей — письменных записей об исторических событиях по годам.", section: 4 },
+        { term: "Коллегиум", def: "Учебное заведение, часто связанное с религиозным орденом, дававшее среднее или повышенное образование.", section: 4 },
+        { term: "Академия", def: "Высшее учебное или научное учреждение.", section: 4 },
+        { term: "Научный трактат", def: "Письменное сочинение, систематически излагающее исследование или рассуждение.", section: 4 },
+        { term: "Барокко", def: "Стиль искусства и архитектуры XVI–XVIII вв., отличавшийся пышностью, динамикой форм, выразительностью.", section: 4 },
+        { term: "Рококо", def: "Художественный стиль XVIII в., которому свойственны изящество, прихотливый орнамент и утончённая декоративность.", section: 4 },
+        { term: "Батлейка", def: "Белорусский народный кукольный театр, представления которого разыгрывались в специальном ящике-сцене.", section: 4 },
+        { term: "Интермедия", def: "Небольшая, часто комическая сценка, исполнявшаяся между частями театрального представления.", section: 4 },
+        { term: "Школьный театр", def: "Театральные постановки, организованные в учебных заведениях и исполняемые преимущественно учащимися.", section: 4 },
+        { term: "Сарматизм", def: "Представление шляхты Речи Посполитой о своём якобы происхождении от древних сарматов.", section: 4 },
+        { term: "Старейшина", def: "Наиболее опытный член родовой общины, руководивший её жизнью и участвовавший в решении общих вопросов.", section: 1 },
+        { term: "Племя", def: "Объединение нескольких родов, связанных общим происхождением и культурными традициями.", section: 1 },
+        { term: "Ирригация", def: "Искусственное орошение земель с помощью каналов и других сооружений.", section: 1 },
+        { term: "Феодал", def: "Владелец феода — земельной собственности, получавший доходы от зависимых крестьян.", section: 2 },
+        { term: "Зависимый крестьянин", def: "Земледелец, пользовавшийся землёй феодала и обязанный выполнять в его пользу повинности.", section: 2 },
+        { term: "Гильдия", def: "Объединение купцов, создававшееся для организации торговли и защиты общих торговых интересов.", section: 2 },
+        { term: "Епископ", def: "Высшее духовное лицо, руководящее епархией.", section: 2 },
+        { term: "Протекционизм", def: "Политика государства по поддержке отечественного производства и ограничению конкуренции иностранных товаров.", section: 4 },
+        { term: "Аграрный переворот", def: "Глубокие изменения в земледелии и организации сельского хозяйства.", section: 4 },
+        { term: "Фольварочно-барщинная система", def: "Форма хозяйства в ВКЛ, при которой товарная продукция фольварков производилась трудом зависимых крестьян, отрабатывавших барщину.", section: 4 },
+        { term: "Тяглые крестьяне", def: "Крестьяне, пользовавшиеся земельными наделами и обязанные отрабатывать барщину.", section: 4 },
+        { term: "Осадные крестьяне", def: "Крестьяне, пользовавшиеся земельными наделами и уплачивавшие за них денежный чинш.", section: 4 },
+        { term: "Крестьяне-слуги", def: "Крестьяне, получавшие наделы за дворовую, ремесленную или другую специальную службу.", section: 4 },
+        { term: "Челядь невольная", def: "Зависимые люди, выполнявшие работы в хозяйстве владельца.", section: 4 },
+        { term: "Огородники", def: "Категория зависимых жителей, имевших небольшие земельные участки.", section: 4 },
+        { term: "Диссиденты", def: "В Речи Посполитой XVIII в. — некатолики, прежде всего православные и протестанты, права которых ограничивались.", section: 4 },
+        { term: "Полонизация", def: "Распространение польского языка, культуры и политических традиций среди населения других земель.", section: 4 }
+    ]
+};
+
+const state = {
+  mode: '', data: [], fullDeck: [], index: 0, viewMode: 'single',
+  timerInterval: null, timeLeft: 0, ratings: new Map(), viewed: new Set(),
+  round: 1, streak: 0, runId: 0,
+  achievements: { first:false, ten:false, match:false, chrono:false, speed:false, streak3:false, streak5:false }
+};
+let matchState = null;
+let chronoState = null;
+
+function shuffle(items) {
+  const result = [...items];
+  for (let i = result.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [result[i], result[j]] = [result[j], result[i]];
+  }
+  return result;
+}
+function escapeHTML(value) {
+  return String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+function checkedCount(id, low, high) {
+  const input = document.getElementById(id);
+  const value = Number(input.value);
+  const result = Number.isFinite(value) ? Math.max(low, Math.min(high, Math.floor(value))) : low;
+  input.value = result;
+  return result;
+}
+function getGroupedDates() {
+  const groups = new Map();
+  DB.dates.forEach(item => {
+    const key = `${item.section}|${item.year}`;
+    if (!groups.has(key)) groups.set(key, { year:item.year, events:[], sortKey:item.sortKey, section:item.section });
+    if (!groups.get(key).events.includes(item.event)) groups.get(key).events.push(item.event);
+  });
+  return [...groups.values()];
+}
+function filterBySection(data, section) {
+  return section === 'all' ? data : data.filter(item => item.section === Number(section));
+}
+function showMessage(message) {
+  document.getElementById('gameContent').innerHTML = `<div class="feedback-block">${escapeHTML(message)}</div>`;
+}
+function openModal(id) { document.getElementById(id).classList.add('active'); }
+function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+function unlock(id) {
+  if (state.achievements[id]) return;
+  state.achievements[id] = true;
+  document.getElementById(`badge-${id}`)?.classList.add('unlocked');
+}
+function updateStreakDisplay() {
+  const hud = document.getElementById('streakHud');
+  if (state.streak > 0) {
+    hud.style.display = 'flex';
+    document.getElementById('streakDisplay').textContent = state.streak;
+  } else hud.style.display = 'none';
+}
+function incrementStreak() {
+  state.streak++;
+  updateStreakDisplay();
+  if (state.streak >= 3) unlock('streak3');
+  if (state.streak >= 5) unlock('streak5');
+}
+function resetStreak() { state.streak = 0; updateStreakDisplay(); }
+function cleanupTimer() { clearInterval(state.timerInterval); state.timerInterval = null; }
+function enterGame(title) {
+  cleanupTimer();
+  state.runId++;
+  document.getElementById('mainScreen').style.display = 'none';
+  document.getElementById('gameScreen').classList.add('active');
+  document.getElementById('breadcrumbCurrent').textContent = title;
+  document.getElementById('timerHud').style.display = 'none';
+  document.getElementById('streakHud').style.display = 'none';
+  window.scrollTo(0, 0);
+}
+function exitGame() {
+  cleanupTimer();
+  state.runId++;
+  document.getElementById('gameScreen').classList.remove('active');
+  document.getElementById('mainScreen').style.display = 'block';
+}
+function goHome() { exitGame(); window.scrollTo(0, 0); }
+function openSettings(mode) {
+  state.mode = mode;
+  document.getElementById('settingsTitle').textContent = mode === 'matching' ? '🔗 Найдите соответствия' : '🃏 Флеш-карты';
+  document.getElementById('timerGroup').style.display = mode === 'flashcards' ? 'block' : 'none';
+  document.getElementById('modeGroup').style.display = mode === 'flashcards' ? 'block' : 'none';
+  const count = document.getElementById('countSelect');
+  count.value = mode === 'matching' ? '5' : '10';
+  count.max = mode === 'matching' ? '10' : '50';
+  document.getElementById('countHelp').textContent = mode === 'matching' ? 'От 3 до 10 пар' : 'От 3 до 50 карточек';
+  document.getElementById('topicSelect').options[0].textContent = mode === 'matching' ? 'Случайная категория' : 'Все темы';
+  openModal('settingsModal');
+}
+function makeFlashPool(section, topic) {
+  let pool = [];
+  if (topic === 'all' || topic === 'dates') {
+    pool = pool.concat(filterBySection(getGroupedDates(), section).map(d => ({
+      type:'date', key:`date|${d.section}|${d.year}`, q:d.year, a:d.events.join('; ')
+    })));
+  }
+  if (topic === 'all' || topic === 'persons') {
+    pool = pool.concat(filterBySection(DB.persons, section).map(p => ({
+      type:'person', key:`person|${p.name}`, q:p.name, a:p.desc
+    })));
+  }
+  if (topic === 'all' || topic === 'terms') {
+    pool = pool.concat(filterBySection(DB.terms, section).map(t => ({
+      type:'term', key:`term|${t.term}`, q:t.term, a:t.def
+    })));
+  }
+  return pool;
+}
+function startGame() {
+  const section = document.getElementById('sectionSelect').value;
+  const topic = document.getElementById('topicSelect').value;
+  const count = checkedCount('countSelect', 3, state.mode === 'matching' ? 10 : 50);
+  let pool = makeFlashPool(section, topic);
+  if (pool.length < 1) { alert('В выбранном разделе нет материалов. Измените настройки.'); return; }
+  closeModal('settingsModal');
+  state.round = 1;
+  state.streak = 0;
+  if (state.mode === 'flashcards') {
+    state.data = shuffle(pool).slice(0, count);
+    state.fullDeck = [...state.data];
+    state.index = 0;
+    state.ratings = new Map();
+    state.viewed = new Set();
+    state.viewMode = document.getElementById('modeSelect').value;
+    enterGame('Флеш-карты');
+    state.viewMode === 'grid' ? renderCardsGrid() : renderFlashcard();
+  } else {
+    enterGame('Соответствия');
+    renderMatching();
+  }
+}
+function markViewed(item) {
+  state.viewed.add(item.key);
+  unlock('first');
+  if (state.viewed.size >= 10) unlock('ten');
+}
+function startCardTimer() {
+  cleanupTimer();
+  const value = Number(document.getElementById('timerSelect').value);
+  const hud = document.getElementById('timerHud');
+  const timer = document.getElementById('timerDisplay');
+  if (!value) { hud.style.display = 'none'; return; }
+  hud.style.display = 'flex';
+  state.timeLeft = value;
+  timer.classList.remove('warning');
+  timer.textContent = `${value} с`;
+  const session = state.runId;
+  state.timerInterval = setInterval(() => {
+    if (session !== state.runId) { cleanupTimer(); return; }
+    state.timeLeft--;
+    timer.textContent = `${state.timeLeft} с`;
+    if (state.timeLeft <= 10) timer.classList.add('warning');
+    if (state.timeLeft <= 0) {
+      cleanupTimer();
+      if (!document.getElementById('flashcard')?.classList.contains('flipped')) flipCard();
+      const panel = document.getElementById('ratingPanel');
+      if (panel) panel.insertAdjacentHTML('afterbegin', '<p class="timer-expired">Время вышло. Ответ открыт — оцените себя.</p>');
+    }
+  }, 1000);
+}
+function renderFlashcard() {
+  if (state.index >= state.data.length) { endGame('flashcards'); return; }
+  const item = state.data[state.index];
+  document.getElementById('progressText').textContent = `Карточка ${state.index + 1} из ${state.data.length} · круг ${state.round}`;
+  const rating = state.ratings.get(item.key);
+  document.getElementById('gameContent').innerHTML = `
+    <div class="flashcard-container" role="button" tabindex="0" aria-label="Перевернуть карточку" onclick="flipCard()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();flipCard()}">
+      <div class="flashcard" id="flashcard">
+        <div class="card-face card-front"><div class="card-text">${escapeHTML(item.q)}</div><div class="card-hint">Нажмите, чтобы увидеть ответ</div></div>
+        <div class="card-face card-back"><div class="card-text">${escapeHTML(item.a)}</div></div>
+      </div>
+    </div>
+    <div class="card-rating-panel" id="ratingPanel" hidden>
+      <p>Насколько уверенно вы вспомнили ответ?</p>
+      <div class="rating-buttons">
+        <button class="btn btn-secondary" onclick="rateCard('know')">✓ Знаю</button>
+        <button class="btn btn-accent" onclick="rateCard('partial')">◐ Частично</button>
+        <button class="btn btn-danger" onclick="rateCard('unknown')">✕ Не знаю</button>
+      </div>
+      ${rating ? `<p class="rating-notice">Предыдущая оценка: ${ratingLabel(rating)}. Можно изменить.</p>` : ''}
+    </div>
+    <div class="card-nav">
+      <button class="btn btn-ghost" onclick="prevCard()" ${state.index===0?'disabled':''}>← Назад</button>
+      <button class="btn btn-ghost" onclick="rateCard('unknown')">Пропустить</button>
+    </div>`;
+  startCardTimer();
+}
+function ratingLabel(rating) { return ({know:'Знаю',partial:'Частично',unknown:'Не знаю'})[rating] || 'Не оценено'; }
+function flipCard() {
+  const card = document.getElementById('flashcard');
+  if (!card) return;
+  card.classList.toggle('flipped');
+  if (card.classList.contains('flipped')) {
+    markViewed(state.data[state.index]);
+    document.getElementById('ratingPanel').hidden = false;
+  } else document.getElementById('ratingPanel').hidden = true;
+}
+function rateCard(rating) {
+  if (state.index >= state.data.length) return;
+  const item = state.data[state.index];
+  state.ratings.set(item.key, rating);
+  if (rating === 'know') incrementStreak(); else resetStreak();
+  cleanupTimer();
+  state.index++;
+  renderFlashcard();
+}
+function prevCard() {
+  if (state.index < 1) return;
+  cleanupTimer();
+  state.index--;
+  renderFlashcard();
+}
+function renderCardsGrid() {
+  cleanupTimer();
+  document.getElementById('timerHud').style.display = 'none';
+  document.getElementById('progressText').textContent = `Карточки: ${state.data.length} · круг ${state.round}`;
+  const html = state.data.map((item, i) => `
+    <div class="grid-card-wrap">
+      <div class="grid-card" role="button" tabindex="0" aria-label="Открыть карточку ${i+1}" onclick="toggleGridCard(${i})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleGridCard(${i})}">
+        <div class="flashcard" id="gridCard-${i}">
+          <div class="card-face card-front"><div class="card-text">${escapeHTML(item.q)}</div></div>
+          <div class="card-face card-back"><div class="card-text">${escapeHTML(item.a)}</div></div>
+        </div>
+      </div>
+      <div class="grid-rating" id="gridRating-${i}" ${state.ratings.has(item.key)?'':'hidden'}>
+        <button aria-label="Знаю" class="rating-small ${state.ratings.get(item.key)==='know'?'selected':''}" onclick="rateGridCard(${i},'know')">Знаю</button>
+        <button aria-label="Частично" class="rating-small ${state.ratings.get(item.key)==='partial'?'selected':''}" onclick="rateGridCard(${i},'partial')">Частично</button>
+        <button aria-label="Не знаю" class="rating-small ${state.ratings.get(item.key)==='unknown'?'selected':''}" onclick="rateGridCard(${i},'unknown')">Не знаю</button>
+      </div>
+    </div>`).join('');
+  document.getElementById('gameContent').innerHTML = `
+    <p class="section-tip">Откройте карточку, вспомните ответ и отметьте результат.</p>
+    <div class="cards-grid">${html}</div>
+    <div class="card-nav">
+      <button class="btn btn-ghost" onclick="flipAllCards()">Показать все ответы</button>
+      <button class="btn btn-ghost" onclick="resetAllCards()">Скрыть ответы</button>
+      <button class="btn btn-ghost" onclick="shuffleAndRender()">Перемешать</button>
+      <button class="btn btn-primary" onclick="endGame('flashcards')">Завершить круг</button>
+    </div>`;
+}
+function toggleGridCard(i) {
+  const card = document.getElementById(`gridCard-${i}`);
+  if (!card) return;
+  card.classList.toggle('flipped');
+  if (card.classList.contains('flipped')) {
+    markViewed(state.data[i]);
+    document.getElementById(`gridRating-${i}`).hidden = false;
+  }
+}
+function rateGridCard(i, rating) {
+  const item = state.data[i];
+  state.ratings.set(item.key, rating);
+  if (rating === 'know') incrementStreak(); else resetStreak();
+  const parent = document.getElementById(`gridRating-${i}`);
+  parent.querySelectorAll('button').forEach(b => b.classList.toggle('selected', b.getAttribute('aria-label') === ratingLabel(rating)));
+}
+function flipAllCards() {
+  state.data.forEach((item,i) => {
+    document.getElementById(`gridCard-${i}`).classList.add('flipped');
+    document.getElementById(`gridRating-${i}`).hidden = false;
+    markViewed(item);
+  });
+}
+function resetAllCards() { state.data.forEach((_,i) => document.getElementById(`gridCard-${i}`).classList.remove('flipped')); }
+function shuffleAndRender() { state.data=shuffle(state.data); renderCardsGrid(); }
+function startFlashReview() {
+  const difficult = state.data.filter(item => state.ratings.get(item.key) !== 'know');
+  if (!difficult.length) return;
+  difficult.forEach(item => state.ratings.delete(item.key));
+  state.data = shuffle(difficult);
+  state.index = 0;
+  state.round++;
+  state.viewMode = 'single';
+  renderFlashcard();
+}
+
+function matchingPool(section, category) {
+  if (category === 'date') return filterBySection(getGroupedDates(),section).map(d=>({q:d.year,a:d.events.join('; ')}));
+  if (category === 'person') return filterBySection(DB.persons,section).map(p=>({q:p.name,a:p.desc}));
+  return filterBySection(DB.terms,section).map(t=>({q:t.term,a:t.def}));
+}
+function renderMatching() {
+  const section = document.getElementById('sectionSelect').value;
+  const topic = document.getElementById('topicSelect').value;
+  const requested = checkedCount('countSelect', 3, 10);
+  const map = {dates:'date', persons:'person', terms:'term'};
+  const categories = topic === 'all' ? shuffle(['date','person','term']) : [map[topic]];
+  const category = categories.find(cat=>matchingPool(section,cat).length>=3);
+  if (!category) { showMessage('Для выбранного раздела недостаточно материалов для составления пар. Выберите другой раздел или тему.'); return; }
+  const items = matchingPool(section, category);
+  const subset = shuffle(items).slice(0,requested).map((p,i)=>({...p,id:i}));
+  matchState = {category, items:subset, mistakes:0, pairs:0, mobileIndex:0, locked:false, started:performance.now()};
+  document.getElementById('timerHud').style.display = 'none';
+  const titles = {date:['ДАТА','СОБЫТИЕ'],person:['ЛИЧНОСТЬ','ДЕЯТЕЛЬНОСТЬ'],term:['ПОНЯТИЕ','ОПРЕДЕЛЕНИЕ']};
+  if (window.matchMedia('(max-width: 650px)').matches) {
+    matchState.mobileOptions = shuffle([...subset]);
+    renderMobileMatching();
+    return;
+  }
+  const left = shuffle(subset), right = shuffle(subset);
+  document.getElementById('progressText').textContent = `Соответствия: 0 из ${subset.length} · ошибок: 0`;
+  document.getElementById('gameContent').innerHTML = `
+    <p class="section-tip">Выберите запись слева, затем соответствующее объяснение справа.</p>
+    <div class="matching-grid">
+      <div class="match-col"><div class="match-col-title">${titles[category][0]}</div>
+        ${left.map(p=>`<button type="button" class="match-item" data-id="${p.id}" onclick="selectMatch(this,'left')">${escapeHTML(p.q)}</button>`).join('')}
+      </div>
+      <div class="match-col"><div class="match-col-title">${titles[category][1]}</div>
+        ${right.map(p=>`<button type="button" class="match-item" data-id="${p.id}" onclick="selectMatch(this,'right')">${escapeHTML(p.a)}</button>`).join('')}
+      </div>
+    </div><div id="matchFeedback" class="inline-feedback" role="status" aria-live="polite"></div>`;
+  matchState.left = null; matchState.right = null;
+}
+function selectMatch(el, side) {
+  const ms = matchState;
+  if (!ms || ms.locked || el.classList.contains('correct')) return;
+  const col = el.parentElement;
+  col.querySelectorAll('.match-item').forEach(node=>node.classList.remove('selected'));
+  el.classList.add('selected');
+  ms[side] = el;
+  if (!ms.left || !ms.right) return;
+  const l=ms.left,r=ms.right;
+  const feedback = document.getElementById('matchFeedback');
+  if (l.dataset.id === r.dataset.id) {
+    l.classList.add('correct'); r.classList.add('correct');
+    l.classList.remove('selected'); r.classList.remove('selected');
+    l.disabled=true; r.disabled=true;
+    ms.pairs++; incrementStreak();
+    feedback.textContent = 'Верно! Продолжайте.';
+  } else {
+    ms.mistakes++; resetStreak();
+    ms.locked=true;
+    l.classList.add('wrong'); r.classList.add('wrong');
+    feedback.textContent='Пока неверно. Попробуйте другую пару.';
+    const run=state.runId;
+    setTimeout(()=>{
+      if (run!==state.runId || ms!==matchState) return;
+      l.classList.remove('wrong','selected');r.classList.remove('wrong','selected');ms.locked=false;
+    },650);
+  }
+  ms.left=null;ms.right=null;
+  document.getElementById('progressText').textContent=`Соответствия: ${ms.pairs} из ${ms.items.length} · ошибок: ${ms.mistakes}`;
+  if (ms.pairs === ms.items.length) { unlock('match'); endGame('matching'); }
+}
+function renderMobileMatching() {
+  const ms = matchState;
+  const index = ms.mobileIndex;
+  document.getElementById('progressText').textContent = `Пара ${index+1} из ${ms.items.length} · ошибок: ${ms.mistakes}`;
+  if (index >= ms.items.length) { unlock('match'); endGame('matching'); return; }
+  const item = ms.items[index];
+  const title = {date:'Какое событие относится к дате?', person:'Выберите характеристику личности', term:'Выберите определение'}[ms.category];
+  const options = ms.mobileOptions;
+  document.getElementById('gameContent').innerHTML = `
+    <div class="mobile-match">
+      <p class="section-tip">${title}</p>
+      <div class="mobile-match-question">${escapeHTML(item.q)}</div>
+      <div class="mobile-match-options">
+        ${options.map(p=>`<button class="match-item" type="button" data-id="${p.id}" onclick="chooseMobileMatch(${p.id},this)">${escapeHTML(p.a)}</button>`).join('')}
+      </div><div id="mobileFeedback" role="status" class="inline-feedback" aria-live="polite"></div>
+    </div>`;
+}
+function chooseMobileMatch(id, el) {
+  const ms=matchState;
+  if (!ms || ms.locked) return;
+  const item=ms.items[ms.mobileIndex];
+  const fb=document.getElementById('mobileFeedback');
+  if (id !== item.id) {
+    ms.mistakes++; resetStreak();
+    el.classList.add('wrong');fb.textContent='Неверно. Попробуйте еще раз.';
+    document.getElementById('progressText').textContent = `Пара ${ms.mobileIndex+1} из ${ms.items.length} · ошибок: ${ms.mistakes}`;
+    return;
+  }
+  ms.locked=true;ms.pairs++;incrementStreak();
+  el.classList.add('correct');fb.textContent='Верно!';
+  const run=state.runId;
+  setTimeout(()=>{
+    if (run!==state.runId || ms!==matchState) return;
+    ms.mobileIndex++;ms.locked=false;
+    renderMobileMatching();
+  },250);
+}
+
+function getChronoPool() {
+  // Используем точные годы. Для раздела I оставляем лишь заведомо не пересекающиеся периоды.
+  // Остальные протяженные/пересекающиеся эпохи исключены из хронологии.
+  const safeAncient = new Set([
+    'Стоянка Юровичи', 'Стоянка Бердыж',
+    'Окончательное отступление ледника с территории Беларуси',
+    'Мезолит в Беларуси', 'Зарождение первых цивилизаций',
+    'Освоение железа в Беларуси'
+  ]);
+  return DB.dates.filter(d=>/^\d{3,4} г\.$/.test(d.year) && d.sortKey>0 ||
+    d.section===1 && safeAncient.has(d.event));
+}
+function startChrono() {
+  enterGame('Хронология');
+  const sections = [...new Set(getChronoPool().map(d=>d.section))]
+    .filter(section=>new Set(getChronoPool().filter(d=>d.section===section).map(d=>d.sortKey)).size>=5);
+  const section = shuffle(sections)[0];
+  const pool = shuffle(getChronoPool().filter(d=>d.section===section));
+  const picked = [];
+  const years = new Set();
+  for (const d of pool) {
+    if (years.has(d.sortKey)) continue;
+    years.add(d.sortKey); picked.push({year:d.year,event:d.event,sortKey:d.sortKey});
+    if(picked.length===5) break;
+  }
+  chronoState = {data:shuffle(picked), checked:false, started:performance.now(), section};
+  renderChronoList();
+}
+function renderChronoList() {
+  const cs=chronoState;
+  const sorted=[...cs.data].sort((a,b)=>a.sortKey-b.sortKey);
+  const count=cs.checked ? cs.data.filter((d,i)=>d.sortKey===sorted[i].sortKey).length : null;
+  document.getElementById('progressText').textContent = cs.checked ? `Правильных позиций: ${count} из ${cs.data.length}` : `5 событий · раздел ${cs.section}`;
+  const complete = count===cs.data.length;
+  document.getElementById('gameContent').innerHTML = `
+    <p class="section-tip">Расположите события от раннего к позднему. Годы появятся после проверки. Для задания отобраны события и периоды, которые можно расположить однозначно.</p>
+    <ul class="chrono-list">
+    ${cs.data.map((d,i)=>`<li class="chrono-item ${cs.checked?(d.sortKey===sorted[i].sortKey?'correct':'wrong'):''} ${cs.checked?'revealed':''}">
+      <span class="position-num">${i+1}.</span><span class="reveal-date">${escapeHTML(d.year)} —</span>
+      <span class="chrono-text">${escapeHTML(d.event)}</span>
+      ${cs.checked ? '' : `<div class="chrono-btns"><button aria-label="Выше" title="Переместить выше" onclick="moveChrono(${i},-1)" ${i===0?'disabled':''}>▲</button><button aria-label="Ниже" title="Переместить ниже" onclick="moveChrono(${i},1)" ${i===cs.data.length-1?'disabled':''}>▼</button></div>`}
+    </li>`).join('')}</ul>
+    ${cs.checked ? `<div class="feedback-block"><strong>${complete?'Все события расположены правильно!':'Есть ошибки в последовательности.'}</strong>
+      <p>Верных позиций: ${count} из ${cs.data.length}. Время: ${Math.round(cs.elapsed)} с.</p>
+      ${complete?'':`<p><strong>Правильный порядок:</strong></p><ol>${sorted.map(d=>`<li>${escapeHTML(d.year)} — ${escapeHTML(d.event)}</li>`).join('')}</ol>`}</div>
+      <div class="card-nav"><button class="btn btn-ghost" onclick="retryChrono()">Попробовать еще раз</button><button class="btn btn-primary" onclick="startChrono()">Другие события</button><button class="btn btn-ghost" onclick="goHome()">Главная</button></div>`
+      : '<div class="card-nav"><button class="btn btn-primary" onclick="checkChrono()">Проверить порядок</button></div>'}`;
+}
+function moveChrono(i,direction) {
+  if (!chronoState || chronoState.checked) return;
+  const j=i+direction;
+  if(j<0 || j>=chronoState.data.length) return;
+  [chronoState.data[i],chronoState.data[j]]=[chronoState.data[j],chronoState.data[i]];
+  renderChronoList();
+}
+function checkChrono() {
+  if(!chronoState || chronoState.checked) return;
+  chronoState.checked=true;
+  chronoState.elapsed=(performance.now()-chronoState.started)/1000;
+  const sorted=[...chronoState.data].sort((a,b)=>a.sortKey-b.sortKey);
+  const success=chronoState.data.every((d,i)=>d.sortKey===sorted[i].sortKey);
+  if(success) {
+    unlock('chrono');
+    if(chronoState.elapsed<=45) unlock('speed');
+    incrementStreak();
+  } else resetStreak();
+  renderChronoList();
+}
+function retryChrono() {
+  if(!chronoState) return;
+  chronoState.data=shuffle(chronoState.data);
+  chronoState.checked=false;
+  chronoState.started=performance.now();
+  renderChronoList();
+}
+function endGame(mode) {
+  cleanupTimer();
+  document.getElementById('timerHud').style.display='none';
+  if(mode==='flashcards') {
+    const total=state.data.length;
+    const know=state.data.filter(d=>state.ratings.get(d.key)==='know').length;
+    const partial=state.data.filter(d=>state.ratings.get(d.key)==='partial').length;
+    const unknown=state.data.filter(d=>state.ratings.get(d.key)==='unknown').length;
+    const skipped=total-know-partial-unknown;
+    document.getElementById('progressText').textContent = `Итог круга ${state.round}`;
+    document.getElementById('gameContent').innerHTML=`<div class="result-card"><h2>Итоги повторения</h2>
+      <p>Знаю: <strong>${know}</strong> · Частично: <strong>${partial}</strong> · Не знаю: <strong>${unknown}</strong> · Не оценено: <strong>${skipped}</strong></p>
+      <p class="section-tip">Это ваша самооценка, а не автоматическая экзаменационная оценка.</p>
+      <div class="card-nav">${know<total?'<button class="btn btn-primary" onclick="startFlashReview()">Повторить сложные и неоцененные</button>':''}
+      <button class="btn btn-ghost" onclick="goHome()">Главное меню</button></div></div>`;
+  } else if(mode==='matching') {
+    document.getElementById('progressText').textContent='Итог задания';
+    const elapsed=Math.round((performance.now()-matchState.started)/1000);
+    document.getElementById('gameContent').innerHTML=`<div class="result-card"><h2>Все пары найдены!</h2>
+    <p>Верных пар: <strong>${matchState.pairs}</strong> · Ошибочных попыток: <strong>${matchState.mistakes}</strong> · Время: ${elapsed} с</p>
+    <div class="card-nav"><button class="btn btn-primary" onclick="renderMatching()">Новый набор</button><button class="btn btn-ghost" onclick="goHome()">Главная</button></div></div>`;
+  }
+}
+
+function sectionName(section) {
+  return ({all:'Все разделы',1:'Раздел I',2:'Раздел II',3:'Раздел III',4:'Раздел IV'})[section] || 'Все разделы';
+}
+function openPrintPreview(type) {
+  if(type==='cards') {
+    document.getElementById('datesCount').textContent=getGroupedDates().length;
+    document.getElementById('personsCount').textContent=DB.persons.length;
+    document.getElementById('termsCount').textContent=DB.terms.length;
+    openModal('cardsSettingsModal');
+  } else openModal('testSettingsModal');
+}
+function showPrintPreview(title, html, message) {
+  document.getElementById('printTitle').textContent=title;
+  document.getElementById('printPreview').innerHTML=html;
+  document.getElementById('printArea').innerHTML=html;
+  document.getElementById('printAdvice').textContent=message;
+  openModal('printModal');
+}
+function generateCardsFromSettings() {
+  const section=document.getElementById('printSectionSelect').value;
+  const categories=[];
+  if(document.getElementById('printDates').checked) categories.push('dates');
+  if(document.getElementById('printPersons').checked) categories.push('persons');
+  if(document.getElementById('printTerms').checked) categories.push('terms');
+  if(!categories.length) { alert('Выберите хотя бы одну категорию.'); return; }
+  const items=categories.flatMap(cat=>{
+    if(cat==='dates') return filterBySection(getGroupedDates(),section).map(d=>({front:d.year,back:d.events.join('; ')}));
+    if(cat==='persons') return filterBySection(DB.persons,section).map(p=>({front:p.name,back:p.desc}));
+    return filterBySection(DB.terms,section).map(t=>({front:t.term,back:t.def}));
+  });
+  if(!items.length) { alert('Для заданного раздела нет карточек этой категории.'); return; }
+  const all=document.getElementById('printModeAll').checked;
+  const count=checkedCount('printCardsCount',2,30);
+  const cards=shuffle(items).slice(0,all?items.length:count);
+  const html=`<div class="print-cards-container"><p class="print-instruction">${escapeHTML(sectionName(section))} · ${cards.length} карточек. Вырежьте полоску по внешнему контуру, согните по центральной линии и склейте половины. <strong>Односторонняя печать.</strong></p>
+    ${cards.map(c=>`<div class="print-card-row"><div class="print-card-half front">${escapeHTML(c.front)}</div><div class="print-card-half back">${escapeHTML(c.back)}</div></div>`).join('')}</div>`;
+  closeModal('cardsSettingsModal');
+  showPrintPreview(`Печать карточек (${cards.length})`,html,'Для карточек выберите одностороннюю печать A4; вырежьте полоски, сложите пополам и склейте. Можно сохранить как PDF.');
+}
+function letter(i) { return 'АБВГДЕЖЗИКЛМН'[i] || String(i+1); }
+function matchBlock(title, items, label, questionKey, answerKey) {
+  const choices=shuffle(items.map((item,i)=>({id:i,answer:item[answerKey]})));
+  const answers=new Map(choices.map((c,i)=>[c.id,letter(i)]));
+  return {
+    html:`<section class="test-part"><h3>${escapeHTML(title)}</h3><p class="test-guide">${escapeHTML(label)}</p>
+      <div class="test-columns"><div><strong>Вопросы</strong><ol>${items.map(d=>`<li>${escapeHTML(d[questionKey])} — <span class="answer-slot">____</span></li>`).join('')}</ol></div>
+      <div><strong>Варианты ответов</strong><ul class="answer-options">${choices.map((d,i)=>`<li><b>${letter(i)}.</b> ${escapeHTML(d.answer)}</li>`).join('')}</ul></div></div></section>`,
+    key:items.map((d,i)=>`${i+1}–${answers.get(i)}`).join('; ')
+  };
+}
+function testSource(section, cat) {
+  if(cat==='date') return filterBySection(getGroupedDates(),section).map(d=>({q:d.year,a:d.events.join('; ')}));
+  if(cat==='person') return filterBySection(DB.persons,section).map(p=>({q:p.name,a:p.desc}));
+  return filterBySection(DB.terms,section).map(t=>({q:t.term,a:t.def}));
+}
+function generateAndPreviewTest() {
+  const section=document.getElementById('testSectionSelect').value;
+  const counts={date:checkedCount('testPartA',2,8),person:checkedCount('testPartB',2,6),chrono:checkedCount('testPartC',3,7),term:checkedCount('testPartD',2,6)};
+  const dates=shuffle(testSource(section,'date')).slice(0,counts.date);
+  const persons=shuffle(testSource(section,'person')).slice(0,counts.person);
+  const terms=shuffle(testSource(section,'term')).slice(0,counts.term);
+  const chronologyPool=shuffle(filterBySection(getChronoPool(),section));
+  const seenYears=new Set(), chronology=[];
+  for (const d of chronologyPool) {
+    if(seenYears.has(d.sortKey)) continue;
+    chronology.push(d);seenYears.add(d.sortKey);
+    if(chronology.length>=counts.chrono) break;
+  }
+  if(dates.length<2 || persons.length<2 || terms.length<2 || chronology.length<3) {
+    alert('Выберите раздел с достаточным количеством дат, личностей и понятий или включите все разделы.'); return;
+  }
+  const a=matchBlock(`Часть А. Даты и события (${dates.length})`,dates,'Установите соответствие между датами и событиями. Запишите буквы ответов.','q','a');
+  const b=matchBlock(`Часть Б. Личности и деятельность (${persons.length})`,persons,'Соотнесите исторических деятелей с их характеристиками.','q','a');
+  const d=matchBlock(`Часть Г. Термины и определения (${terms.length})`,terms,'Соотнесите понятия с определениями.','q','a');
+  const chronoLabels=chronology.map((item,i)=>({...item,number:i+1}));
+  const chronoCorrect=[...chronoLabels].sort((x,y)=>x.sortKey-y.sortKey);
+  const keyC=chronoCorrect.map(x=>x.number).join('–');
+  const actual={date:dates.length,person:persons.length,chrono:chronology.length,term:terms.length};
+  const reduced=Object.entries(counts).some(([key,num])=>actual[key]<num);
+  const html=`<div class="print-test">
+    <h2>Тренировочная работа · 10 класс</h2>
+    <p><strong>История Беларуси в контексте всемирной истории</strong> · ${escapeHTML(sectionName(section))}</p>
+    <p class="test-meta">Фамилия, имя: ___________________________________ Класс: ______ Дата: __________</p>
+    <p class="test-guide">Учебная практика по материалу курса. Не является официальным вариантом ЦЭ/ЦТ.</p>
+    ${reduced?'<p class="test-guide">По выбранному разделу часть заданий сформирована из меньшего количества доступных записей.</p>':''}
+    ${a.html}${b.html}
+    <section class="test-part"><h3>Часть В. Хронологическая последовательность (${chronology.length})</h3>
+       <p class="test-guide">Расположите события от более раннего к более позднему. Запишите последовательность номеров.</p>
+       <ol>${chronoLabels.map(x=>`<li>${escapeHTML(x.event)}</li>`).join('')}</ol>
+       <p>Ответ: _____________________________________</p></section>
+    ${d.html}</div>
+    <div class="print-page-break"></div>
+    <div class="print-test test-keys"><h2>Ключи для учителя</h2>
+      <p>Тренировочная работа · ${escapeHTML(sectionName(section))}</p>
+      <p><strong>Часть А:</strong> ${a.key}</p><p><strong>Часть Б:</strong> ${b.key}</p>
+      <p><strong>Часть В:</strong> ${keyC}</p><p><strong>Часть Г:</strong> ${d.key}</p>
+      <h3>Образец правильной хронологии</h3><ol>${chronoCorrect.map(x=>`<li>${escapeHTML(x.year)} — ${escapeHTML(x.event)}</li>`).join('')}</ol>
+      <p class="test-guide">Ключ формируется вместе с конкретным случайным вариантом задания. Для новой работы создайте новый вариант.</p></div>`;
+  closeModal('testSettingsModal');
+  showPrintPreview('Тренировочная проверочная работа',html,'Проверьте предпросмотр перед печатью. Ключи для учителя начинаются с новой страницы. В диалоге печати можно выбрать «Сохранить как PDF».');
+}
+function doPrint() { window.print(); }
+
+document.querySelectorAll('.modal-overlay').forEach(node=>node.addEventListener('click',e=>{
+  if(e.target===node)node.classList.remove('active');
+}));
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape')document.querySelectorAll('.modal-overlay.active').forEach(node=>node.classList.remove('active'));
+});
+
+</script>
+</body>
+</html>

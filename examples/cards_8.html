@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<!-- saved from url=(0253)file:///G:/%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D0%B0/%D0%A3%D1%80%D0%BE%D0%BA%D0%B8/8/%D0%BA%D0%B0%D1%80%D1%82%D0%BE%D1%87%D0%BA%D0%B8/%D0%BA%D0%B0%D1%80%D1%82%D0%BE%D1%87%D0%BA%D0%B8%20%D0%BA%20%D0%BE%D0%B1%D0%BE%D0%B1%D1%89%D0%B5%D0%BD%D0%B8%D1%8E%202.html -->
+<html lang="ru"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Электронные карточки: Беларусь 1861–1917</title>
+<style>
+  :root{
+    --primary:#0056b3;
+    --accent:#0099ff;
+    --success:#28a745;
+    --danger:#dc3545;
+    --bg:#f0f4f8;
+    --card:#ffffff;
+    --text:#333;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:var(--bg);color:var(--text);line-height:1.5}
+  header{background:linear-gradient(135deg,var(--primary),var(--accent));color:#fff;padding:24px 16px;text-align:center;box-shadow:0 4px 12px rgba(0,0,0,.15)}
+  header h1{margin:0 0 8px;font-size:1.6rem}
+  header p{margin:0;opacity:.9;font-size:.95rem}
+  nav{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;padding:12px;background:#fff;position:sticky;top:0;z-index:50;box-shadow:0 2px 6px rgba(0,0,0,.08)}
+  nav button{border:none;background:#e3f2fd;color:var(--primary);padding:10px 16px;border-radius:20px;font-weight:700;cursor:pointer;transition:.2s;font-size:.9rem}
+  nav button:hover{background:#bbdefb}
+  nav button.active{background:var(--primary);color:#fff}
+  .section{display:none;padding:20px;max-width:980px;margin:0 auto}
+  .section.active{display:block}
+  h2{margin-top:0;color:var(--primary)}
+
+  /* Карточки (flip) */
+  .card-stage{perspective:1000px;width:100%;max-width:620px;height:360px;margin:20px auto;cursor:pointer}
+  .card-inner{width:100%;height:100%;position:relative;transform-style:preserve-3d;transition:transform .7s cubic-bezier(.4,.2,.2,1)}
+  .card-inner.flipped{transform:rotateY(180deg)}
+  .card-face{position:absolute;width:100%;height:100%;backface-visibility:hidden;border-radius:16px;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:24px;text-align:center;box-shadow:0 10px 30px rgba(0,0,0,.12)}
+  .card-front{background:var(--card);color:var(--text)}
+  .card-back{background:linear-gradient(135deg,var(--primary),var(--accent));color:#fff;transform:rotateY(180deg)}
+  .card-front h3, .card-back h3{margin:8px 0 4px;font-size:1.25rem}
+  .card-front .meta, .card-back .meta{color:#666;font-size:.95rem}
+  .card-back .meta{color:#e0e0e0}
+  .card-back p{font-size:1.05rem;line-height:1.5;margin:4px 0}
+  .card-controls{display:flex;justify-content:center;gap:12px;margin-top:12px;flex-wrap:wrap}
+  .btn{padding:10px 18px;border:none;border-radius:10px;background:var(--primary);color:#fff;font-weight:700;cursor:pointer;transition:.2s}
+  .btn:hover{background:#004494}
+  .btn.secondary{background:#6c757d}
+  .btn.secondary:hover{background:#565e64}
+  .btn.success{background:var(--success)}
+  .btn.danger{background:var(--danger)}
+
+  /* Счёт */
+  #scorePanel{position:fixed;top:12px;right:12px;background:#fff;padding:10px 16px;border-radius:12px;box-shadow:0 4px 12px rgba(0,0,0,.15);font-weight:700;z-index:100;display:flex;align-items:center;gap:8px}
+  #scoreValue{color:var(--primary);font-size:1.3rem}
+  .badge{font-size:.75rem;padding:2px 8px;border-radius:10px;background:#e9ecef;color:#495057}
+
+  /* Настройки запоминания */
+  .learn-setup{background:#fff;padding:20px;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,.08);margin-bottom:20px;display:flex;flex-direction:column;gap:15px}
+  .setup-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  .learn-categories-list{display:flex;gap:15px;flex-wrap:wrap}
+  .learn-categories-list label{cursor:pointer;user-select:none;display:flex;align-items:center;gap:5px}
+
+  /* Колесо */
+  .wheel-wrap{text-align:center;margin:20px 0}
+  #wheelCanvas{max-width:100%;height:auto}
+  .wheel-result{margin-top:12px;padding:16px;background:#fff;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,.08);display:none}
+
+  /* Тесты */
+  .quiz-box{background:#fff;padding:20px;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,.08);margin:12px 0}
+  .quiz-options{display:flex;flex-direction:column;gap:8px;margin-top:12px}
+  .opt-btn{text-align:left;padding:12px;border:2px solid #dee2e6;background:#fff;border-radius:10px;cursor:pointer;transition:.2s;font-size:.95rem}
+  .opt-btn:hover{border-color:var(--accent)}
+  .opt-btn.correct{border-color:var(--success);background:#e9f7ec}
+  .opt-btn.wrong{border-color:var(--danger);background:#fbe9eb}
+  .quiz-feedback{font-weight:700;margin-top:8px;min-height:24px}
+
+  /* Систематизация */
+  .drop-zones{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin:12px 0}
+  .drop-zone{background:#fff;border:2px dashed #adb5bd;border-radius:12px;padding:12px;min-height:180px;transition:.2s}
+  .drop-zone h4{margin:0 0 8px;color:var(--primary);font-size:.95rem}
+  .drop-zone.hover{border-color:var(--primary);background:#f8f9ff}
+  .sort-pool{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
+  .sort-chip{background:#e3f2fd;border:1px solid #90caf9;padding:8px 12px;border-radius:20px;cursor:grab;font-size:.9rem;user-select:none;touch-action:manipulation}
+  .sort-chip:active{cursor:grabbing}
+  .sort-chip.placed{background:#fff;border-style:dashed}
+
+  /* Печать */
+  .print-actions{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+  .print-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+  .print-card{border:1px dashed #333;background:#fff;display:flex;height:130px;position:relative;overflow:hidden;page-break-inside:avoid}
+  .print-side{flex:1;padding:10px;font-size:11px;display:flex;align-items:center;justify-content:center;text-align:center}
+  .print-side.front{font-weight:700}
+  .print-divider{position:absolute;left:50%;top:0;bottom:0;border-left:2px dashed #999}
+  .print-divider::after{content:"СГИБ";position:absolute;top:2px;left:-14px;font-size:9px;color:#666;background:#fff;padding:0 4px}
+  @media print{
+    body *{visibility:hidden}
+    .print-area,.print-area *{visibility:visible}
+    .print-area{position:absolute;left:0;top:0;width:100%}
+    .no-print{display:none!important}
+    .print-grid{grid-template-columns:repeat(2,1fr);gap:8px}
+    .print-card{height:120px;border:1px solid #000}
+  }
+
+  /* Модалка колеса */
+  .modal{position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:center;justify-content:center;z-index:200;padding:16px}
+  .modal.active{display:flex}
+  .modal-box{background:#fff;border-radius:16px;padding:24px;max-width:560px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.3)}
+  .modal-box h3{margin-top:0;color:var(--primary)}
+
+  /* Адаптив */
+  @media (max-width:640px){
+    .card-stage{height:300px}
+    .print-grid{grid-template-columns:1fr}
+    nav button{font-size:.85rem;padding:8px 12px}
+  }
+  .hidden{display:none!important}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Электронные карточки</h1>
+  <p>Беларусь в 1861–1917 гг. · Урок обобщения</p>
+</header>
+
+<nav class="no-print">
+  <button onclick="showSection('home')" class="active">Главная</button>
+  <button onclick="showSection('learn')">Учить карточки</button>
+  <button onclick="showSection('random')">Случайная</button>
+  <button onclick="showSection('wheel')">Колесо фортуны</button>
+  <button onclick="showSection('test')">Тесты</button>
+  <button onclick="showSection('sort')">Систематизация</button>
+  <button onclick="showSection('print')">Печать</button>
+</nav>
+
+<div id="scorePanel" class="no-print">
+  <span>Баллы:</span>
+  <span id="scoreValue">0</span>
+  <span class="badge" id="gradeBadge">0/10</span>
+  <button class="btn secondary" style="padding:4px 10px;font-size:.8rem" onclick="resetScore()">Сброс</button>
+</div>
+
+<!-- ГЛАВНАЯ -->
+<section id="home" class="section active">
+  <h2>Добро пожаловать!</h2>
+  <p>Выберите режим работы:</p>
+  <div style="display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))">
+    <div class="quiz-box" style="cursor:pointer" onclick="showSection('learn')">
+      <h3>📚 Учить карточки</h3>
+      <p>Переворачивайте карточки: даты, понятия, личности. <b></b></p>
+    </div>
+    <div class="quiz-box" style="cursor:pointer" onclick="showSection('random')">
+      <h3>🎲 Случайная карточка</h3>
+      <p>Рандомайзер для быстрого повторения.</p>
+    </div>
+    <div class="quiz-box" style="cursor:pointer" onclick="showSection('wheel')">
+      <h3>🎯 Колесо фортуны</h3>
+      <p>Крутите колесо: вопросы, баллы, сюрпризы.</p>
+    </div>
+    <div class="quiz-box" style="cursor:pointer" onclick="showSection('test')">
+      <h3>✅ Тесты</h3>
+      <p>Проверьте знание дат, личностей и терминов.</p>
+    </div>
+    <div class="quiz-box" style="cursor:pointer" onclick="showSection('sort')">
+      <h3>🧩 Систематизация</h3>
+      <p>Распределите события по тематическим группам.</p>
+    </div>
+    <div class="quiz-box" style="cursor:pointer" onclick="showSection('print')">
+      <h3>🖨️ Печать карточек</h3>
+      <p>Вырежьте и сложите по линии сгиба для работы офлайн.</p>
+    </div>
+  </div>
+  <div style="margin-top:20px;padding:16px;background:#fff;border-radius:12px">
+    <h3>Шкала оценивания (10-балльная)</h3>
+    <ul>
+      <li><b>10 баллов</b> — «Выдающееся знание» (все тесты пройдены, систематизация верна)</li>
+      <li><b>8–9</b> — «Хорошее знание» (1–2 ошибки)</li>
+      <li><b>6–7</b> — «Удовлетворительное знание» (есть пробелы)</li>
+      <li><b>4–5</b> — «Ниже среднего» (требуется повторение)</li>
+      <li><b>0–3</b> — «Нужно подучить» (много ошибок)</li>
+    </ul>
+  </div>
+</section>
+
+<!-- УЧИТЬ -->
+<section id="learn" class="section">
+  <h2>Учить карточки (Запоминание)</h2>
+  <div id="learnSetup" class="learn-setup no-print">
+    <div class="setup-row">
+        <b>1. Количество карточек:</b>
+        <select id="learnCount" class="btn secondary" style="padding: 8px 12px;">
+            <option value="10">10</option>
+            <option value="20">20</option>
+            <option value="5">5</option>
+            <option value="-1">Все</option>
+        </select>
+    </div>
+    <div class="setup-row">
+        <b>2. Категории для смешивания:</b>
+        <div id="learnCategories" class="learn-categories-list">
+            <label><input type="checkbox" name="cat" value="chronology" checked=""> 📅 Даты</label>
+            <label><input type="checkbox" name="cat" value="concepts"> 📖 Понятия</label>
+            <label><input type="checkbox" name="cat" value="persons"> 👤 Личности</label>
+        </div>
+    </div>
+    <div class="setup-row">
+       <button class="btn success" onclick="startLearnSession()">🚀 Начать</button>
+    </div>
+  </div>
+  
+  <div id="learnStage" class="card-stage hidden" onclick="flipCard()">
+    <div class="card-inner" id="learnCard">
+      <div class="card-face card-front"></div>
+      <div class="card-face card-back"></div>
+    </div>
+  </div>
+  <div id="learnControls" class="card-controls no-print hidden">
+    <button class="btn secondary" onclick="prevCard()">← Назад</button>
+    <span id="learnCounter" style="align-self:center;font-weight:700;color:var(--primary)">0 / 0</span>
+    <button class="btn secondary" onclick="nextCard()">Вперёд →</button>
+    <button class="btn" style="background:#e3f2fd;color:var(--primary)" onclick="showLearnSetup()">⚙️ Настройки</button>
+  </div>
+</section>
+
+<!-- СЛУЧАЙНАЯ -->
+<section id="random" class="section">
+  <h2>Случайная карточка</h2>
+  <div class="card-controls no-print">
+    <button class="btn" onclick="showRandom()">🎲 Показать случайную</button>
+  </div>
+  <div id="randomStage" class="card-stage" onclick="flipRandom()">
+    <div class="card-inner" id="randomCard">
+      <div class="card-face card-front"><p>Нажмите кнопку выше</p></div>
+      <div class="card-face card-back"></div>
+    </div>
+  </div>
+</section>
+
+<!-- КОЛЕСО -->
+<section id="wheel" class="section">
+  <h2>Колесо фортуны</h2>
+  <div class="wheel-wrap no-print">
+    <canvas id="wheelCanvas" width="400" height="400"></canvas>
+    <div style="margin-top:10px">
+      <button class="btn" onclick="spinWheel()">🎯 Крутить колесо</button>
+    </div>
+    <div id="wheelResult" class="wheel-result"></div>
+  </div>
+</section>
+
+<!-- ТЕСТЫ -->
+<section id="test" class="section">
+  <h2>Тесты</h2>
+  <div class="card-controls no-print">
+    <button class="btn" onclick="startTest('dates')">📅 Даты</button>
+    <button class="btn" onclick="startTest('persons')">👤 Личности</button>
+    <button class="btn" onclick="startTest('concepts')">📖 Понятия</button>
+    <button class="btn" onclick="startTest('mixed')">🔀 Смешанный</button>
+  </div>
+  <div id="quizContainer"></div>
+</section>
+
+<!-- СИСТЕМАТИЗАЦИЯ -->
+<section id="sort" class="section">
+  <h2>Систематизация знаний</h2>
+  <p>Перетащите (или нажмите) карточки в нужные группы. Затем нажмите <b>Проверить</b>.</p>
+  <div class="drop-zones">
+    <div class="drop-zone" data-cat="reforms" ondragover="allowDrop(event)" ondrop="drop(event)" onclick="selectZone(this)">
+      <h4>📜 Реформы и законы</h4>
+      <div class="zone-content"></div>
+    </div>
+    <div class="drop-zone" data-cat="rev" ondragover="allowDrop(event)" ondrop="drop(event)" onclick="selectZone(this)">
+      <h4>⚔️ Восстания, революции, войны</h4>
+      <div class="zone-content"></div>
+    </div>
+    <div class="drop-zone" data-cat="culture" ondragover="allowDrop(event)" ondrop="drop(event)" onclick="selectZone(this)">
+      <h4>🎭 Культура и нац. движение</h4>
+      <div class="zone-content"></div>
+    </div>
+    <div class="drop-zone" data-cat="politics" ondragover="allowDrop(event)" ondrop="drop(event)" onclick="selectZone(this)">
+      <h4>🏛️ Партии и организации</h4>
+      <div class="zone-content"></div>
+    </div>
+  </div>
+  <div class="sort-pool no-print" id="sortPool"><div class="sort-chip" draggable="true" data-cat="reforms" data-idx="0">Столыпинская аграрная реформа (1906)</div><div class="sort-chip" draggable="true" data-cat="rev" data-idx="1">Курловский расстрел (1905)</div><div class="sort-chip" draggable="true" data-cat="culture" data-idx="2">Буйницкий, Карский, Ластовский</div><div class="sort-chip" draggable="true" data-cat="reforms" data-idx="3">Городская реформа (1875)</div><div class="sort-chip" draggable="true" data-cat="rev" data-idx="4">Кровавое воскресенье (1905)</div><div class="sort-chip" draggable="true" data-cat="rev" data-idx="5">Восстание Калиновского (1863–1864)</div><div class="sort-chip" draggable="true" data-cat="culture" data-idx="6">Газета «Наша Ніва» (1906–1915)</div><div class="sort-chip" draggable="true" data-cat="reforms" data-idx="7">Школьная реформа (1864)</div><div class="sort-chip" draggable="true" data-cat="politics" data-idx="8">РСДРП (1897)</div><div class="sort-chip" draggable="true" data-cat="culture" data-idx="9">Богушевич, Богданович, Купала, Колас</div><div class="sort-chip" draggable="true" data-cat="rev" data-idx="10">Первая российская революция (1905–1907)</div><div class="sort-chip" draggable="true" data-cat="reforms" data-idx="11">Отмена крепостного права (1861)</div><div class="sort-chip" draggable="true" data-cat="rev" data-idx="12">Февральская революция (1917)</div><div class="sort-chip" draggable="true" data-cat="politics" data-idx="13">Фрунзе, Луцкевичи, Скирмунт</div><div class="sort-chip" draggable="true" data-cat="politics" data-idx="14">БСГ (1903)</div><div class="sort-chip" draggable="true" data-cat="reforms" data-idx="15">Введение земств (1911)</div><div class="sort-chip" draggable="true" data-cat="culture" data-idx="16">Группа «Гомон» (1884)</div><div class="sort-chip" draggable="true" data-cat="politics" data-idx="17">БНК (1915)</div><div class="sort-chip" draggable="true" data-cat="rev" data-idx="18">Первая мировая война (1914)</div><div class="sort-chip" draggable="true" data-cat="culture" data-idx="19">«Мужыцкая праўда» (1862–1863)</div></div>
+  <div class="card-controls no-print">
+    <button class="btn success" onclick="checkSort()">✅ Проверить</button>
+    <button class="btn secondary" onclick="initSort()">🔄 Новая попытка</button>
+  </div>
+  <div id="sortFeedback" style="margin-top:10px;font-weight:700"></div>
+</section>
+
+<!-- ПЕЧАТЬ -->
+<section id="print" class="section print-area">
+  <h2 class="no-print">Печать карточек</h2>
+  <div class="print-actions no-print">
+    <button class="btn" onclick="preparePrint()">Подготовить все карточки</button>
+    <button class="btn secondary" onclick="window.print()">Печать (Ctrl+P)</button>
+    <span style="align-self:center;color:#666;font-size:.9rem">Вырежьте по рамкам, согните по линии «СГИБ»</span>
+  </div>
+  <div id="printGrid" class="print-grid"><div class="print-card"><div class="print-side front">19 февраля (3 марта) 1861 г.<br><b>Отмена крепостного права в России</b></div><div class="print-divider"></div><div class="print-side">Манифест Александра II. Крестьяне получили личную свободу, но за землю должны были платить выкупные платежи.</div></div><div class="print-card"><div class="print-side front">1862–1863 гг.<br><b>Издание газеты «Мужыцкая праўда»</b></div><div class="print-divider"></div><div class="print-side">Нелегальная газета К. Калиновского, Ф. Рожанского, В. Врублевского. 7 номеров на белорусском языке латиницей. Призыв крестьян к борьбе за землю и свободу.</div></div><div class="print-card"><div class="print-side front">1863–1864 гг.<br><b>Восстание под руководством К. Калиновского</b></div><div class="print-divider"></div><div class="print-side">Направлено против самодержавия и остатков крепостничества.</div></div><div class="print-card"><div class="print-side front">1 мая 1863 г. / 1 января 1864 г.<br><b>Отмена временнообязанного состояния крестьян в белорусских губерниях</b></div><div class="print-divider"></div><div class="print-side">Под влиянием восстания власти ускорили выкуп и снизили платежи на 20 %.</div></div><div class="print-card"><div class="print-side front">1864 г.<br><b>Начало школьной реформы</b></div><div class="print-divider"></div><div class="print-side">Школа объявлена всесословной. В Беларуси не было земских школ, действовали «Временные правила» М. Н. Муравьёва.</div></div><div class="print-card"><div class="print-side front">1875 г.<br><b>Городская реформа в Беларуси</b></div><div class="print-divider"></div><div class="print-side">Распространение на 32 города Беларуси Городового положения 1870 г. Введены городские думы на 4 года на основе имущественного ценза.</div></div><div class="print-card"><div class="print-side front">1870–1880-е гг.<br><b>Деятельность народников в Беларуси</b></div><div class="print-divider"></div><div class="print-side">«Хождение в народ», пропаганда социализма среди крестьян. В 1879 г. – создание «Народной воли».</div></div><div class="print-card"><div class="print-side front">1884 г.<br><b>Создание группы «Гомон» в Петербурге</b></div><div class="print-divider"></div><div class="print-side">Белорусские студенты-народники первыми заявили о существовании белорусской нации и её праве на самостоятельность.</div></div><div class="print-card"><div class="print-side front">1897 г.<br><b>I съезд РСДРП в Минске</b></div><div class="print-divider"></div><div class="print-side">Провозглашено создание Российской социал-демократической рабочей партии.</div></div><div class="print-card"><div class="print-side front">1897 г.<br><b>Первая всеобщая перепись населения</b></div><div class="print-divider"></div><div class="print-side">Зафиксировала национальный и социальный состав Беларуси (6,7 млн жителей, около 2/3 православных).</div></div><div class="print-card"><div class="print-side front">1903 г.<br><b>Окончательное оформление БСГ</b></div><div class="print-divider"></div><div class="print-side">Первая белорусская политическая партия. Программа: автономия Беларуси, передача земли крестьянам, 8-часовой рабочий день.</div></div><div class="print-card"><div class="print-side front">9 января 1905 г.<br><b>«Кровавое воскресенье» в Петербурге</b></div><div class="print-divider"></div><div class="print-side">Расстрел мирного шествия рабочих. Начало Первой российской революции 1905–1907 гг.</div></div><div class="print-card"><div class="print-side front">17 октября 1905 г.<br><b>Манифест Николая II</b></div><div class="print-divider"></div><div class="print-side">Провозглашены политические свободы и создание Государственной думы.</div></div><div class="print-card"><div class="print-side front">18 октября 1905 г.<br><b>«Курловский расстрел» в Минске</b></div><div class="print-divider"></div><div class="print-side">Расстрел демонстрации в честь Манифеста по приказу губернатора П. Г. Курлова. Около 50 убитых, 300 раненых.</div></div><div class="print-card"><div class="print-side front">1905–1907 гг.<br><b>Первая российская революция в Беларуси</b></div><div class="print-divider"></div><div class="print-side">Стачки, демонстрации, создание Советов. Поражение революции.</div></div><div class="print-card"><div class="print-side front">1906–1915 гг.<br><b>Выход газеты «Наша Ніва»</b></div><div class="print-divider"></div><div class="print-side">Легальное белорусское издание в Вильно. Сыграло огромную роль в пробуждении национального самосознания.</div></div><div class="print-card"><div class="print-side front">9 ноября 1906 г.<br><b>Начало столыпинской аграрной реформы</b></div><div class="print-divider"></div><div class="print-side">Указ о выходе крестьян из общины, закреплении земли в личную собственность, создании хуторов и отрубов.</div></div><div class="print-card"><div class="print-side front">1911 г.<br><b>Введение земств в Витебской, Могилевской и Минской губерниях</b></div><div class="print-divider"></div><div class="print-side">Органы местного самоуправления. В Гродненской и Виленской губерниях земства не вводились (недоверие к польским помещикам).</div></div><div class="print-card"><div class="print-side front">1 августа 1914 г.<br><b>Начало Первой мировой войны для России</b></div><div class="print-divider"></div><div class="print-side">В Беларуси введено военное положение. Западная часть оккупирована германскими войсками (август–сентябрь 1915 г.).</div></div><div class="print-card"><div class="print-side front">1915 г.<br><b>Образование БНК в Вильно</b></div><div class="print-divider"></div><div class="print-side">Благотворительная и национально-культурная организация. Выдвинула идею возрождения Великого Княжества Литовского.</div></div><div class="print-card"><div class="print-side front">Март 1917 г.<br><b>Февральская революция в Беларуси</b></div><div class="print-divider"></div><div class="print-side">4 марта в Минске создана народная милиция, Советы. Возникло двоевластие.</div></div><div class="print-card"><div class="print-side front"><b>«Американский» путь развития капитализма</b></div><div class="print-divider"></div><div class="print-side">Развитие капитализма в сельском хозяйстве на основе свободных крестьянских хозяйств без феодальных пережитков (столыпинская реформа создавала условия для этого пути).</div></div><div class="print-card"><div class="print-side front"><b>Автономия</b></div><div class="print-divider"></div><div class="print-side">Широкое внутреннее самоуправление Беларуси в составе Российской демократической республики (требование БСГ, гомоновцев).</div></div><div class="print-card"><div class="print-side front"><b>Белорусская национальная идея</b></div><div class="print-divider"></div><div class="print-side">Совокупность представлений о белорусах как о самостоятельной нации, имеющей право на собственное государственное существование.</div></div><div class="print-card"><div class="print-side front"><b>Временнообязанные крестьяне</b></div><div class="print-divider"></div><div class="print-side">Крестьяне после реформы 1861 г., которые не выкупили землю и продолжали выполнять повинности (барщину или оброк) в пользу помещика.</div></div><div class="print-card"><div class="print-side front"><b>Выкупные платежи</b></div><div class="print-divider"></div><div class="print-side">Сумма, которую крестьяне должны были выплачивать государству за полученную землю (49 лет с 6 % ежегодно).</div></div><div class="print-card"><div class="print-side front"><b>Двоевластие</b></div><div class="print-divider"></div><div class="print-side">Ситуация после Февральской революции 1917 г.: одновременно существовали Советы (революционно-демократическая власть) и органы Временного правительства (буржуазная власть).</div></div><div class="print-card"><div class="print-side front"><b>Западноруссизм</b></div><div class="print-divider"></div><div class="print-side">Идейное течение, признававшее особенности белорусов как части «общерусского этноса», но отрицавшее их право на самостоятельность (лидер – М. О. Коялович).</div></div><div class="print-card"><div class="print-side front"><b>Земства</b></div><div class="print-divider"></div><div class="print-side">Выборные органы местного самоуправления (вели хозяйство, образование, медицину). В Беларуси введены только в 1911 г. в трёх губерниях.</div></div><div class="print-card"><div class="print-side front"><b>Милитаризация промышленности</b></div><div class="print-divider"></div><div class="print-side">Подчинение экономической жизни военным целям в годы Первой мировой войны (предприятия работали без выходных, использовался труд женщин и детей).</div></div><div class="print-card"><div class="print-side front"><b>Нация</b></div><div class="print-divider"></div><div class="print-side">Историческая общность людей, характеризующаяся единством территории, экономики, языка, культуры и самосознания (в том числе стремлением к своей государственности).</div></div><div class="print-card"><div class="print-side front"><b>Оккупация</b></div><div class="print-divider"></div><div class="print-side">Захват западной части Беларуси германскими войсками (1915 г.). Сопровождался реквизициями, налогами, принудительными работами.</div></div><div class="print-card"><div class="print-side front"><b>Отработки</b></div><div class="print-divider"></div><div class="print-side">Система хозяйствования, при которой малоземельные крестьяне работали на помещика за аренду полей, пастбищ или за займы (сохранялась в Могилевской и Витебской губерниях).</div></div><div class="print-card"><div class="print-side front"><b>Отруб</b></div><div class="print-divider"></div><div class="print-side">Участок земли, выделенный крестьянину из общинной земли в одном месте (взамен чересполосицы), но без переноса усадьбы.</div></div><div class="print-card"><div class="print-side front"><b>«Прусский» путь развития капитализма</b></div><div class="print-divider"></div><div class="print-side">Медленное развитие капитализма в сельском хозяйстве при сохранении помещичьего землевладения и крестьянских отработок (характерно для Беларуси после 1861 г.).</div></div><div class="print-card"><div class="print-side front"><b>Хутор</b></div><div class="print-divider"></div><div class="print-side">Обособленный участок земли, который крестьянин закреплял в личную собственность и переносил туда усадьбу (тип сельского поселения).</div></div><div class="print-card"><div class="print-side front"><b>Чересполосица</b></div><div class="print-divider"></div><div class="print-side">Раздробленность крестьянского земельного надела на несколько узких полос, расположенных в разных местах (пережиток феодализма). Столыпинская реформа пыталась её ликвидировать.</div></div><div class="print-card"><div class="print-side front"><b>«Курловский расстрел»</b></div><div class="print-divider"></div><div class="print-side">Трагическое событие 18 октября 1905 г. в Минске – расстрел мирной демонстрации по приказу губернатора П. Г. Курлова.</div></div><div class="print-card"><div class="print-side front"><b>«Кровавое воскресенье»</b></div><div class="print-divider"></div><div class="print-side">Расстрел 9 января 1905 г. в Петербурге мирного шествия рабочих к Зимнему дворцу; начало Первой российской революции.</div></div><div class="print-card"><div class="print-side front"><b>Тутэйшыя</b></div><div class="print-divider"></div><div class="print-side">Частое самоназвание белорусского населения в XIX веке.</div></div><div class="print-card"><div class="print-side front"><b>Богданович Максим</b><br>1891–1917</div><div class="print-divider"></div><div class="print-side">Поэт, автор сборника «Вянок». Стихотворение-гимн «Пагоня».</div></div><div class="print-card"><div class="print-side front"><b>Богушевич Франтишек</b><br>1840–1900</div><div class="print-divider"></div><div class="print-side">Поэт, основоположник новой белорусской литературы. Сборники «Дудка белорусская», «Смык белорусский». Призывал не забывать родной язык.</div></div><div class="print-card"><div class="print-side front"><b>Буйницкий Игнат</b><br>1861–1917</div><div class="print-divider"></div><div class="print-side">«Отец белорусского театра». Создал первую профессиональную белорусскую труппу (1910–1913).</div></div><div class="print-card"><div class="print-side front"><b>Гуттен-Чапский Кароль (Карл) фон</b><br>1860–1904</div><div class="print-divider"></div><div class="print-side">Городской голова Минска в 1890–1901 гг. При нём появились конка, электростанция, телефон, театр, библиотека.</div></div><div class="print-card"><div class="print-side front"><b>Довнар-Запольский Митрофан</b><br>1867–1934</div><div class="print-divider"></div><div class="print-side">Историк, выступал с идеей самобытности белорусского этноса и его праве на самостоятельное политическое будущее.</div></div><div class="print-card"><div class="print-side front"><b>Калиновский Кастусь (Константин)</b><br>1838–1864</div><div class="print-divider"></div><div class="print-side">Руководитель восстания 1863–1864 гг. в Беларуси и Литве. Издатель «Мужыцкой праўды». Казнён. Автор «Писем из-под виселицы».</div></div><div class="print-card"><div class="print-side front"><b>Карский Евфимий</b><br>1861–1931</div><div class="print-divider"></div><div class="print-side">Академик, основатель белорусского научного языкознания. Труд «Белорусы» доказал самостоятельность белорусского языка.</div></div><div class="print-card"><div class="print-side front"><b>Колас Якуб (Константин Мицкевич)</b><br>1882–1956</div><div class="print-divider"></div><div class="print-side">Классик белорусской литературы. Поэмы «Новая зямля», «Сымон-музыкант». Учитель, участник революционных событий.</div></div><div class="print-card"><div class="print-side front"><b>Коялович Михаил Осипович</b><br>1828–1891</div><div class="print-divider"></div><div class="print-side">Историк, идеолог западноруссизма. Считал белорусов частью русского народа.</div></div><div class="print-card"><div class="print-side front"><b>Купала Янка (Иван Луцевич)</b><br>1882–1942</div><div class="print-divider"></div><div class="print-side">Классик белорусской литературы. Сборники «Жалейка», «Гусляр», поэмы «Курган», «Бондаровна». Редактор «Нашай Нівы».</div></div><div class="print-card"><div class="print-side front"><b>Ластовский Вацлав</b><br>1883–1938</div><div class="print-divider"></div><div class="print-side">Историк, первым написал историю Беларуси на белорусском языке. Первым высказал идею полной независимости Беларуси (1917 г.).</div></div><div class="print-card"><div class="print-side front"><b>Луцкевичи, братья Иван и Антон</b><br>1881–1919, 1884–1942</div><div class="print-divider"></div><div class="print-side">Лидеры БСГ, издатели «Нашай Нівы». Иван – собиратель белорусских древностей. Антон – публицист, дипломат.</div></div><div class="print-card"><div class="print-side front"><b>Муравьёв Михаил Николаевич</b><br>1796–1866</div><div class="print-divider"></div><div class="print-side">Виленский генерал-губернатор, подавивший восстание 1863–1864 гг. Проводил политику русификации.</div></div><div class="print-card"><div class="print-side front"><b>Пашкевич Алоиза (Тётка)</b><br>1876–1916</div><div class="print-divider"></div><div class="print-side">Поэтесса, революционерка, одна из основателей БСГ. Издала учебник для детей на белорусском языке.</div></div><div class="print-card"><div class="print-side front"><b>Скирмунт Роман</b><br>1868–1939</div><div class="print-divider"></div><div class="print-side">Крупный землевладелец, лидер Белорусского народного комитета (БНК) в 1917 г. Депутат I Государственной думы.</div></div><div class="print-card"><div class="print-side front"><b>Столыпин Пётр Аркадьевич</b><br>1862–1911</div><div class="print-divider"></div><div class="print-side">Председатель Совета министров, инициатор аграрной реформы (разрушение общины, хутора, переселенческая политика). В 1902–1903 гг. – гродненский губернатор.</div></div><div class="print-card"><div class="print-side front"><b>Фрунзе Михаил Васильевич</b><br>1885–1925</div><div class="print-divider"></div><div class="print-side">Профессиональный революционер, создатель большевистской организации в Минске. В марте 1917 г. возглавил минскую народную милицию.</div></div></div>
+</section>
+
+<!-- Модалка для колеса -->
+<div class="modal no-print" id="wheelModal" onclick="if(event.target===this)closeModal()">
+  <div class="modal-box">
+    <h3 id="modalTitle">Вопрос</h3>
+    <div id="modalBody"></div>
+    <div class="card-controls" style="margin-top:12px">
+      <button class="btn secondary" onclick="closeModal()">Закрыть</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ================= ДАННЫЕ ================= */
+const dataSources = {
+chronology:[
+  {date:"19 февраля (3 марта) 1861 г.", title:"Отмена крепостного права в России", desc:"Манифест Александра II. Крестьяне получили личную свободу, но за землю должны были платить выкупные платежи."},
+  {date:"1862–1863 гг.", title:"Издание газеты «Мужыцкая праўда»", desc:"Нелегальная газета К. Калиновского, Ф. Рожанского, В. Врублевского. 7 номеров на белорусском языке латиницей. Призыв крестьян к борьбе за землю и свободу."},
+  {date:"1863–1864 гг.", title:"Восстание под руководством К. Калиновского", desc:"Направлено против самодержавия и остатков крепостничества."},
+  {date:"1 мая 1863 г. / 1 января 1864 г.", title:"Отмена временнообязанного состояния крестьян в белорусских губерниях", desc:"Под влиянием восстания власти ускорили выкуп и снизили платежи на 20 %."},
+  {date:"1864 г.", title:"Начало школьной реформы", desc:"Школа объявлена всесословной. В Беларуси не было земских школ, действовали «Временные правила» М. Н. Муравьёва."},
+  {date:"1875 г.", title:"Городская реформа в Беларуси", desc:"Распространение на 32 города Беларуси Городового положения 1870 г. Введены городские думы на 4 года на основе имущественного ценза."},
+  {date:"1870–1880-е гг.", title:"Деятельность народников в Беларуси", desc:"«Хождение в народ», пропаганда социализма среди крестьян. В 1879 г. – создание «Народной воли»."},
+  {date:"1884 г.", title:"Создание группы «Гомон» в Петербурге", desc:"Белорусские студенты-народники первыми заявили о существовании белорусской нации и её праве на самостоятельность."},
+  {date:"1897 г.", title:"I съезд РСДРП в Минске", desc:"Провозглашено создание Российской социал-демократической рабочей партии."},
+  {date:"1897 г.", title:"Первая всеобщая перепись населения", desc:"Зафиксировала национальный и социальный состав Беларуси (6,7 млн жителей, около 2/3 православных)."},
+  {date:"1903 г.", title:"Окончательное оформление БСГ", desc:"Первая белорусская политическая партия. Программа: автономия Беларуси, передача земли крестьянам, 8-часовой рабочий день."},
+  {date:"9 января 1905 г.", title:"«Кровавое воскресенье» в Петербурге", desc:"Расстрел мирного шествия рабочих. Начало Первой российской революции 1905–1907 гг."},
+  {date:"17 октября 1905 г.", title:"Манифест Николая II", desc:"Провозглашены политические свободы и создание Государственной думы."},
+  {date:"18 октября 1905 г.", title:"«Курловский расстрел» в Минске", desc:"Расстрел демонстрации в честь Манифеста по приказу губернатора П. Г. Курлова. Около 50 убитых, 300 раненых."},
+  {date:"1905–1907 гг.", title:"Первая российская революция в Беларуси", desc:"Стачки, демонстрации, создание Советов. Поражение революции."},
+  {date:"1906–1915 гг.", title:"Выход газеты «Наша Ніва»", desc:"Легальное белорусское издание в Вильно. Сыграло огромную роль в пробуждении национального самосознания."},
+  {date:"9 ноября 1906 г.", title:"Начало столыпинской аграрной реформы", desc:"Указ о выходе крестьян из общины, закреплении земли в личную собственность, создании хуторов и отрубов."},
+  {date:"1911 г.", title:"Введение земств в Витебской, Могилевской и Минской губерниях", desc:"Органы местного самоуправления. В Гродненской и Виленской губерниях земства не вводились (недоверие к польским помещикам)."},
+  {date:"1 августа 1914 г.", title:"Начало Первой мировой войны для России", desc:"В Беларуси введено военное положение. Западная часть оккупирована германскими войсками (август–сентябрь 1915 г.)."},
+  {date:"1915 г.", title:"Образование БНК в Вильно", desc:"Благотворительная и национально-культурная организация. Выдвинула идею возрождения Великого Княжества Литовского."},
+  {date:"Март 1917 г.", title:"Февральская революция в Беларуси", desc:"4 марта в Минске создана народная милиция, Советы. Возникло двоевластие."}
+],
+concepts:[
+  {term:"«Американский» путь развития капитализма", def:"Развитие капитализма в сельском хозяйстве на основе свободных крестьянских хозяйств без феодальных пережитков (столыпинская реформа создавала условия для этого пути)."},
+  {term:"Автономия", def:"Широкое внутреннее самоуправление Беларуси в составе Российской демократической республики (требование БСГ, гомоновцев)."},
+  {term:"Белорусская национальная идея", def:"Совокупность представлений о белорусах как о самостоятельной нации, имеющей право на собственное государственное существование."},
+  {term:"Временнообязанные крестьяне", def:"Крестьяне после реформы 1861 г., которые не выкупили землю и продолжали выполнять повинности (барщину или оброк) в пользу помещика."},
+  {term:"Выкупные платежи", def:"Сумма, которую крестьяне должны были выплачивать государству за полученную землю (49 лет с 6 % ежегодно)."},
+  {term:"Двоевластие", def:"Ситуация после Февральской революции 1917 г.: одновременно существовали Советы (революционно-демократическая власть) и органы Временного правительства (буржуазная власть)."},
+  {term:"Западноруссизм", def:"Идейное течение, признававшее особенности белорусов как части «общерусского этноса», но отрицавшее их право на самостоятельность (лидер – М. О. Коялович)."},
+  {term:"Земства", def:"Выборные органы местного самоуправления (вели хозяйство, образование, медицину). В Беларуси введены только в 1911 г. в трёх губерниях."},
+  {term:"Милитаризация промышленности", def:"Подчинение экономической жизни военным целям в годы Первой мировой войны (предприятия работали без выходных, использовался труд женщин и детей)."},
+  {term:"Нация", def:"Историческая общность людей, характеризующаяся единством территории, экономики, языка, культуры и самосознания (в том числе стремлением к своей государственности)."},
+  {term:"Оккупация", def:"Захват западной части Беларуси германскими войсками (1915 г.). Сопровождался реквизициями, налогами, принудительными работами."},
+  {term:"Отработки", def:"Система хозяйствования, при которой малоземельные крестьяне работали на помещика за аренду полей, пастбищ или за займы (сохранялась в Могилевской и Витебской губерниях)."},
+  {term:"Отруб", def:"Участок земли, выделенный крестьянину из общинной земли в одном месте (взамен чересполосицы), но без переноса усадьбы."},
+  {term:"«Прусский» путь развития капитализма", def:"Медленное развитие капитализма в сельском хозяйстве при сохранении помещичьего землевладения и крестьянских отработок (характерно для Беларуси после 1861 г.)."},
+  {term:"Хутор", def:"Обособленный участок земли, который крестьянин закреплял в личную собственность и переносил туда усадьбу (тип сельского поселения)."},
+  {term:"Чересполосица", def:"Раздробленность крестьянского земельного надела на несколько узких полос, расположенных в разных местах (пережиток феодализма). Столыпинская реформа пыталась её ликвидировать."},
+  {term:"«Курловский расстрел»", def:"Трагическое событие 18 октября 1905 г. в Минске – расстрел мирной демонстрации по приказу губернатора П. Г. Курлова."},
+  {term:"«Кровавое воскресенье»", def:"Расстрел 9 января 1905 г. в Петербурге мирного шествия рабочих к Зимнему дворцу; начало Первой российской революции."},
+  {term:"Тутэйшыя", def:"Частое самоназвание белорусского населения в XIX веке."}
+],
+persons:[
+  {name:"Богданович Максим", years:"1891–1917", activity:"Поэт, автор сборника «Вянок». Стихотворение-гимн «Пагоня»."},
+  {name:"Богушевич Франтишек", years:"1840–1900", activity:"Поэт, основоположник новой белорусской литературы. Сборники «Дудка белорусская», «Смык белорусский». Призывал не забывать родной язык."},
+  {name:"Буйницкий Игнат", years:"1861–1917", activity:"«Отец белорусского театра». Создал первую профессиональную белорусскую труппу (1910–1913)."},
+  {name:"Гуттен-Чапский Кароль (Карл) фон", years:"1860–1904", activity:"Городской голова Минска в 1890–1901 гг. При нём появились конка, электростанция, телефон, театр, библиотека."},
+  {name:"Довнар-Запольский Митрофан", years:"1867–1934", activity:"Историк, выступал с идеей самобытности белорусского этноса и его праве на самостоятельное политическое будущее."},
+  {name:"Калиновский Кастусь (Константин)", years:"1838–1864", activity:"Руководитель восстания 1863–1864 гг. в Беларуси и Литве. Издатель «Мужыцкой праўды». Казнён. Автор «Писем из-под виселицы»."},
+  {name:"Карский Евфимий", years:"1861–1931", activity:"Академик, основатель белорусского научного языкознания. Труд «Белорусы» доказал самостоятельность белорусского языка."},
+  {name:"Колас Якуб (Константин Мицкевич)", years:"1882–1956", activity:"Классик белорусской литературы. Поэмы «Новая зямля», «Сымон-музыкант». Учитель, участник революционных событий."},
+  {name:"Коялович Михаил Осипович", years:"1828–1891", activity:"Историк, идеолог западноруссизма. Считал белорусов частью русского народа."},
+  {name:"Купала Янка (Иван Луцевич)", years:"1882–1942", activity:"Классик белорусской литературы. Сборники «Жалейка», «Гусляр», поэмы «Курган», «Бондаровна». Редактор «Нашай Нівы»."},
+  {name:"Ластовский Вацлав", years:"1883–1938", activity:"Историк, первым написал историю Беларуси на белорусском языке. Первым высказал идею полной независимости Беларуси (1917 г.)."},
+  {name:"Луцкевичи, братья Иван и Антон", years:"1881–1919, 1884–1942", activity:"Лидеры БСГ, издатели «Нашай Нівы». Иван – собиратель белорусских древностей. Антон – публицист, дипломат."},
+  {name:"Муравьёв Михаил Николаевич", years:"1796–1866", activity:"Виленский генерал-губернатор, подавивший восстание 1863–1864 гг. Проводил политику русификации."},
+  {name:"Пашкевич Алоиза (Тётка)", years:"1876–1916", activity:"Поэтесса, революционерка, одна из основателей БСГ. Издала учебник для детей на белорусском языке."},
+  {name:"Скирмунт Роман", years:"1868–1939", activity:"Крупный землевладелец, лидер Белорусского народного комитета (БНК) в 1917 г. Депутат I Государственной думы."},
+  {name:"Столыпин Пётр Аркадьевич", years:"1862–1911", activity:"Председатель Совета министров, инициатор аграрной реформы (разрушение общины, хутора, переселенческая политика). В 1902–1903 гг. – гродненский губернатор."},
+  {name:"Фрунзе Михаил Васильевич", years:"1885–1925", activity:"Профессиональный революционер, создатель большевистской организации в Минске. В марте 1917 г. возглавил минскую народную милицию."}
+]
+};
+const { chronology, concepts, persons } = dataSources; // для обратной совместимости с др. функциями
+
+/* ================= НАВИГАЦИЯ И СЧЁТ ================= */
+let score=parseInt(localStorage.getItem('bh_score')||'0');
+function updateScore(delta){
+  score=Math.max(0,Math.min(10,score+delta));
+  localStorage.setItem('bh_score',String(score));
+  document.getElementById('scoreValue').textContent=score;
+  document.getElementById('gradeBadge').textContent=score+'/10';
+}
+function resetScore(){score=0;updateScore(0);}
+function showSection(id){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
+  const btn=[...document.querySelectorAll('nav button')].find(b=>b.getAttribute('onclick').includes(id));
+  if(btn)btn.classList.add('active');
+}
+updateScore(0);
+
+/* ================= УЧИТЬ КАРТОЧКИ (НОВАЯ ВЕРСИЯ) ================= */
+let learnCards=[], learnIdx=0;
+
+function startLearnSession() {
+    const count = parseInt(document.getElementById('learnCount').value);
+    const selectedCats = [...document.querySelectorAll('#learnCategories input:checked')].map(cb => cb.value);
+    
+    if (selectedCats.length === 0) {
+        alert('Пожалуйста, выберите хотя бы одну категорию.');
+        return;
+    }
+
+    let pool = [];
+    selectedCats.forEach(cat => {
+        pool.push(...dataSources[cat].map(item => ({...item, type: cat})));
+    });
+
+    shuffle(pool);
+    learnCards = (count === -1) ? pool : pool.slice(0, count);
+    
+    if (learnCards.length === 0) {
+        alert('Не найдено карточек по вашему выбору. Попробуйте другие настройки.');
+        return;
+    }
+
+    learnIdx = 0;
+    document.getElementById('learnSetup').classList.add('hidden');
+    document.getElementById('learnStage').classList.remove('hidden');
+    document.getElementById('learnControls').classList.remove('hidden');
+    renderLearn();
+}
+
+function showLearnSetup() {
+    document.getElementById('learnSetup').classList.remove('hidden');
+    document.getElementById('learnStage').classList.add('hidden');
+    document.getElementById('learnControls').classList.add('hidden');
+}
+
+function renderLearn(){
+    if (learnCards.length === 0) return;
+    const card = learnCards[learnIdx];
+    const inner = document.getElementById('learnCard');
+    inner.classList.remove('flipped');
+    
+    let frontHTML = '', backHTML = '', possibleFronts = [];
+
+    // Определяем возможные лицевые стороны и полную обратную сторону
+    switch(card.type) {
+        case 'chronology':
+            possibleFronts = ['date', 'title', 'desc'];
+            backHTML = `<div class="meta">${card.date}</div><h3>${card.title}</h3><p>${card.desc}</p>`;
+            break;
+        case 'concepts':
+            possibleFronts = ['term', 'def'];
+            backHTML = `<h3>${card.term}</h3><p>${card.def}</p>`;
+            break;
+        case 'persons':
+            possibleFronts = ['name', 'activity'];
+            backHTML = `<h3>${card.name}</h3><div class="meta">${card.years}</div><p>${card.activity}</p>`;
+            break;
+    }
+
+    // Случайно выбираем, что показать на лицевой стороне
+    const frontKey = possibleFronts[Math.floor(Math.random() * possibleFronts.length)];
+    const frontContent = card[frontKey];
+
+    // Форматируем лицевую сторону
+    if (['title', 'term', 'name'].includes(frontKey)) {
+        frontHTML = `<h3>${frontContent}</h3>`;
+    } else if (['date', 'years'].includes(frontKey)) {
+        frontHTML = `<div class="meta" style="font-size:1.2rem;">${frontContent}</div>`;
+    } else {
+        frontHTML = `<p>${frontContent}</p>`;
+    }
+    frontHTML += `<div class="meta" style="margin-top:20px; font-style:italic;">(Что это за событие/понятие/личность?)</div>`;
+
+    inner.querySelector('.card-front').innerHTML = frontHTML;
+    inner.querySelector('.card-back').innerHTML = backHTML;
+    document.getElementById('learnCounter').textContent = (learnIdx + 1) + ' / ' + learnCards.length;
+}
+
+function flipCard(){document.getElementById('learnCard').classList.toggle('flipped');}
+function nextCard(){if(learnIdx<learnCards.length-1){learnIdx++;renderLearn();}}
+function prevCard(){if(learnIdx>0){learnIdx--;renderLearn();}}
+
+/* ================= СЛУЧАЙНАЯ КАРТОЧКА ================= */
+function showRandom(){
+  const all=[
+    ...chronology.map(c=>({front:`<div class="meta">📅 ${c.date}</div><h3>${c.title}</h3>`, back:`<p>${c.desc}</p>`})),
+    ...concepts.map(c=>({front:`<h3>📖 ${c.term}</h3>`, back:`<p>${c.def}</p>`})),
+    ...persons.map(c=>({front:`<h3>👤 ${c.name}</h3><div class="meta">${c.years}</div>`, back:`<p>${c.activity}</p>`}))
+  ];
+  const item=all[Math.floor(Math.random()*all.length)];
+  const inner=document.getElementById('randomCard');
+  inner.classList.remove('flipped');
+  inner.querySelector('.card-front').innerHTML=item.front;
+  inner.querySelector('.card-back').innerHTML=item.back;
+}
+function flipRandom(){document.getElementById('randomCard').classList.toggle('flipped');}
+
+/* ================= КОЛЕСО ФОРТУНЫ ================= */
+const wheelItems=[
+  {label:'Даты', color:'#FF6384', type:'date', points:1},
+  {label:'События', color:'#36A2EB', type:'event', points:1},
+  {label:'Личности', color:'#FFCE56', type:'person', points:1},
+  {label:'Понятия', color:'#4BC0C0', type:'concept', points:1},
+  {label:'+1 балл', color:'#9966FF', type:'bonus', points:1},
+  {label:'Вопрос на 2 балла', color:'#FF9F40', type:'challenge', points:2},
+  {label:'Пропуск', color:'#C9CBCF', type:'skip', points:0},
+  {label:'−1 балл', color:'#FF4444', type:'penalty', points:-1}
+];
+const canvas=document.getElementById('wheelCanvas');
+const ctx=canvas.getContext('2d');
+let wheelAngle=0, isSpinning=false;
+
+function drawWheel(){
+  const cx=canvas.width/2, cy=canvas.height/2, r=180;
+  const slice=(2*Math.PI)/wheelItems.length;
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  wheelItems.forEach((it,i)=>{
+    ctx.beginPath(); ctx.moveTo(cx,cy);
+    ctx.arc(cx,cy,r,i*slice+wheelAngle,(i+1)*slice+wheelAngle);
+    ctx.fillStyle=it.color; ctx.fill(); ctx.stroke();
+    ctx.save();
+    ctx.translate(cx,cy); ctx.rotate(i*slice+slice/2+wheelAngle);
+    ctx.textAlign="right"; ctx.fillStyle="#fff"; ctx.font="bold 16px sans-serif";
+    ctx.fillText(it.label,r-10,5);
+    ctx.restore();
+  });
+  // стрелка
+  ctx.beginPath(); ctx.moveTo(cx,r+10); ctx.lineTo(cx-10,r+30); ctx.lineTo(cx+10,r+30); ctx.fillStyle="#333"; ctx.fill();
+}
+drawWheel();
+
+function spinWheel(){
+  if(isSpinning)return;
+  isSpinning=true;
+  let speed=Math.random()*0.3+0.25;
+  let decel=0.002;
+  function loop(){
+    if(!isSpinning)return;
+    wheelAngle+=speed;
+    speed-=decel;
+    drawWheel();
+    if(speed<=0){isSpinning=false; resolveWheel();}
+    else requestAnimationFrame(loop);
+  }
+  loop();
+}
+
+function resolveWheel(){
+  const slice=(2*Math.PI)/wheelItems.length;
+  let idx=Math.floor(((2*Math.PI)-(wheelAngle%(2*Math.PI))-Math.PI/2)/slice)%wheelItems.length;
+  if(idx<0)idx+=wheelItems.length;
+  const it=wheelItems[idx];
+  const res=document.getElementById('wheelResult');
+  res.style.display='block';
+  if(it.type==='bonus'){updateScore(1); res.innerHTML='<b>+1 балл!</b> 🎉';}
+  else if(it.type==='penalty'){updateScore(-1); res.innerHTML='<b>−1 балл</b> 😬';}
+  else if(it.type==='skip'){res.innerHTML='<b>Пропуск хода</b> 😌';}
+  else if(it.type==='challenge'){res.innerHTML='<b>Вопрос на 2 балла!</b>'; setTimeout(()=>askWheelQuestion(it.type,2),600);}
+  else {res.innerHTML='<b>Категория: '+it.label+'</b>'; setTimeout(()=>askWheelQuestion(it.type,1),600);}
+}
+
+function askWheelQuestion(type,points){
+  let pool, q, correct, options=[];
+  if(type==='date'){pool=chronology; const item=pool[Math.floor(Math.random()*pool.length)]; q=`Когда произошло событие:<br><b>${item.title}</b>?`; correct=item.date; options=shuffle([correct,...pool.filter(x=>x!==item).sort(()=>0.5-Math.random()).slice(0,3).map(x=>x.date)]);}
+  else if(type==='event'){pool=chronology; const item=pool[Math.floor(Math.random()*pool.length)]; q=`Что произошло <b>${item.date}</b>?`; correct=item.title; options=shuffle([correct,...pool.filter(x=>x!==item).sort(()=>0.5-Math.random()).slice(0,3).map(x=>x.title)]);}
+  else if(type==='person'){pool=persons; const item=pool[Math.floor(Math.random()*pool.length)]; q=`Кто это?<br><b>${item.activity}</b>`; correct=item.name; options=shuffle([correct,...pool.filter(x=>x!==item).sort(()=>0.5-Math.random()).slice(0,3).map(x=>x.name)]);}
+  else if(type==='concept'){pool=concepts; const item=pool[Math.floor(Math.random()*pool.length)]; q=`Что означает понятие:<br><b>${item.term}</b>?`; correct=item.def; options=shuffle([correct,...pool.filter(x=>x!==item).sort(()=>0.5-Math.random()).slice(0,3).map(x=>x.def)]);}
+  else {pool=chronology.concat(persons,concepts); const item=pool[Math.floor(Math.random()*pool.length)]; q='Случайный вопрос (ответ найдите в карточках)'; correct='Любой'; options=['Продолжить'];}
+  openModal('Колесо фортуны — вопрос', q, options, correct, points);
+}
+
+/* ================= ТЕСТЫ ================= */
+function startTest(category){
+  const container=document.getElementById('quizContainer');
+  container.innerHTML='';
+  let questions=[];
+  if(category==='dates'){
+    const pool=chronology;
+    pool.sort(()=>0.5-Math.random()).slice(0,5).forEach(item=>{
+      const wrong=pool.filter(x=>x!==item).sort(()=>0.5-Math.random()).slice(0,3).map(x=>x.date);
+      questions.push({q:`Когда произошло событие: <b>${item.title}</b>?`, options:shuffle([item.date,...wrong]), correct:item.date});
+    });
+  }else if(category==='persons'){
+    const pool=persons;
+    pool.sort(()=>0.5-Math.random()).slice(0,5).forEach(item=>{
+      const wrong=pool.filter(x=>x!==item).sort(()=>0.5-Math.random()).slice(0,3).map(x=>x.activity);
+      questions.push({q:`Кто такой <b>${item.name}</b>?`, options:shuffle([item.activity,...wrong]), correct:item.activity});
+    });
+  }else if(category==='concepts'){
+    const pool=concepts;
+    pool.sort(()=>0.5-Math.random()).slice(0,5).forEach(item=>{
+      const wrong=pool.filter(x=>x!==item).sort(()=>0.5-Math.random()).slice(0,3).map(x=>x.def);
+      questions.push({q:`Что означает понятие <b>${item.term}</b>?`, options:shuffle([item.def,...wrong]), correct:item.def});
+    });
+  }else{
+    // mixed
+    const all=[...chronology.map(x=>({...x,kind:'ch'})), ...persons.map(x=>({...x,kind:'p'})), ...concepts.map(x=>({...x,kind:'c'}))];
+    all.sort(()=>0.5-Math.random()).slice(0,6).forEach(item=>{
+      if(item.kind==='ch'){
+        const wrong=all.filter(x=>x.kind==='ch'&&x.title!==item.title).sort(()=>0.5-Math.random()).slice(0,3).map(x=>x.date);
+        questions.push({q:`Когда произошло: <b>${item.title}</b>?`, options:shuffle([item.date,...wrong]), correct:item.date});
+      }else if(item.kind==='p'){
+        const wrong=all.filter(x=>x.kind==='p'&&x.name!==item.name).sort(()=>0.5-Math.random()).slice(0,3).map(x=>x.activity);
+        questions.push({q:`Кто такой <b>${item.name}</b>?`, options:shuffle([item.activity,...wrong]), correct:item.activity});
+      }else{
+        const wrong=all.filter(x=>x.kind==='c'&&x.term!==item.term).sort(()=>0.5-Math.random()).slice(0,3).map(x=>x.def);
+        questions.push({q:`Что означает <b>${item.term}</b>?`, options:shuffle([item.def,...wrong]), correct:item.def});
+      }
+    });
+  }
+  questions.forEach((qq,i)=>{
+    const box=document.createElement('div'); box.className='quiz-box';
+    box.innerHTML=`<div><b>Вопрос ${i+1}:</b> ${qq.q}</div><div class="quiz-options" id="opt_${i}"></div><div class="quiz-feedback" id="fb_${i}"></div>`;
+    container.appendChild(box);
+    const optDiv=document.getElementById('opt_'+i);
+    qq.options.forEach(opt=>{
+      const b=document.createElement('button'); b.className='opt-btn'; b.textContent=opt;
+      b.onclick=function(){
+        if(box.dataset.answered)return;
+        box.dataset.answered='1';
+        const isCorrect=opt===qq.correct;
+        this.classList.add(isCorrect?'correct':'wrong');
+        if(!isCorrect){ [...optDiv.children].forEach(ch=>{if(ch.textContent===qq.correct)ch.classList.add('correct');}); }
+        document.getElementById('fb_'+i).innerHTML=isCorrect?'<span style="color:var(--success)">Правильно! +1 балл</span>':'<span style="color:var(--danger)">Ошибка. Правильный ответ выделен.</span>';
+        if(isCorrect)updateScore(1);
+      };
+      optDiv.appendChild(b);
+    });
+  });
+}
+
+/* ================= СИСТЕМАТИЗАЦИЯ ================= */
+const sortData=[
+  {text:"Отмена крепостного права (1861)", cat:"reforms"},
+  {text:"Школьная реформа (1864)", cat:"reforms"},
+  {text:"Городская реформа (1875)", cat:"reforms"},
+  {text:"Столыпинская аграрная реформа (1906)", cat:"reforms"},
+  {text:"Введение земств (1911)", cat:"reforms"},
+  {text:"Восстание Калиновского (1863–1864)", cat:"rev"},
+  {text:"Кровавое воскресенье (1905)", cat:"rev"},
+  {text:"Курловский расстрел (1905)", cat:"rev"},
+  {text:"Первая российская революция (1905–1907)", cat:"rev"},
+  {text:"Первая мировая война (1914)", cat:"rev"},
+  {text:"Февральская революция (1917)", cat:"rev"},
+  {text:"«Мужыцкая праўда» (1862–1863)", cat:"culture"},
+  {text:"Группа «Гомон» (1884)", cat:"culture"},
+  {text:"Газета «Наша Ніва» (1906–1915)", cat:"culture"},
+  {text:"Богушевич, Богданович, Купала, Колас", cat:"culture"},
+  {text:"Буйницкий, Карский, Ластовский", cat:"culture"},
+  {text:"РСДРП (1897)", cat:"politics"},
+  {text:"БСГ (1903)", cat:"politics"},
+  {text:"БНК (1915)", cat:"politics"},
+  {text:"Фрунзе, Луцкевичи, Скирмунт", cat:"politics"}
+];
+let selectedChip=null;
+
+function initSort(){
+  selectedChip=null;
+  document.querySelectorAll('.zone-content').forEach(z=>z.innerHTML='');
+  const pool=document.getElementById('sortPool');
+  pool.innerHTML='';
+  const copy=[...sortData].sort(()=>0.5-Math.random());
+  copy.forEach((item,idx)=>{
+    const chip=document.createElement('div');
+    chip.className='sort-chip';
+    chip.draggable=true;
+    chip.textContent=item.text;
+    chip.dataset.cat=item.cat;
+    chip.dataset.idx=idx;
+    chip.ondragstart=(e)=>{e.dataTransfer.setData('text/plain',item.cat); e.dataTransfer.setData('chipId',idx); selectedChip=chip;};
+    chip.onclick=()=>{selectChip(chip);};
+    pool.appendChild(chip);
+  });
+  document.getElementById('sortFeedback').textContent='';
+}
+function selectChip(chip){
+  document.querySelectorAll('.sort-chip').forEach(c=>c.style.outline='none');
+  selectedChip=chip;
+  chip.style.outline='3px solid var(--primary)';
+}
+function selectZone(zone){
+  if(!selectedChip)return;
+  zone.querySelector('.zone-content').appendChild(selectedChip);
+  selectedChip.style.outline='none'; selectedChip=null;
+}
+function allowDrop(e){e.preventDefault(); e.currentTarget.classList.add('hover');}
+function drop(e){
+  e.preventDefault(); e.currentTarget.classList.remove('hover');
+  const chip=selectedChip||document.querySelector('.sort-chip[data-idx="'+e.dataTransfer.getData('chipId')+'"]');
+  if(chip) e.currentTarget.querySelector('.zone-content').appendChild(chip);
+}
+document.querySelectorAll('.drop-zone').forEach(z=>{
+  z.addEventListener('dragleave',()=>z.classList.remove('hover'));
+});
+
+function checkSort(){
+  let correct=0, total=sortData.length;
+  document.querySelectorAll('.drop-zone').forEach(zone=>{
+    const cat=zone.dataset.cat;
+    zone.querySelectorAll('.sort-chip').forEach(chip=>{
+      if(chip.dataset.cat===cat){chip.style.background='#e9f7ec'; chip.style.borderColor='var(--success)'; correct++;}
+      else {chip.style.background='#fbe9eb'; chip.style.borderColor='var(--danger)';}
+    });
+  });
+  const gained=Math.round((correct/total)*3); // макс +3 за систематизацию
+  updateScore(gained);
+  document.getElementById('sortFeedback').innerHTML=`Результат: ${correct} из ${total} — <b>+${gained} балла</b>`;
+}
+
+/* ================= ПЕЧАТЬ ================= */
+function preparePrint(){
+  const grid=document.getElementById('printGrid');
+  grid.innerHTML='';
+  const all=[
+    ...chronology.map(c=>({front:`${c.date}<br><b>${c.title}</b>`, back:c.desc})),
+    ...concepts.map(c=>({front:`<b>${c.term}</b>`, back:c.def})),
+    ...persons.map(c=>({front:`<b>${c.name}</b><br>${c.years}`, back:c.activity}))
+  ];
+  all.forEach(item=>{
+    const card=document.createElement('div'); card.className='print-card';
+    card.innerHTML=`<div class="print-side front">${item.front}</div><div class="print-divider"></div><div class="print-side">${item.back}</div>`;
+    grid.appendChild(card);
+  });
+}
+
+/* ================= УТИЛИТЫ ================= */
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+
+function openModal(title,html,options,correct,points){
+  document.getElementById('modalTitle').textContent=title;
+  const body=document.getElementById('modalBody');
+  let htmlContent=`<p>${html}</p><div class="quiz-options">`;
+  options.forEach(opt=>{
+    htmlContent+=`<button class="opt-btn" onclick="modalAnswer(this,'${correct.replace(/'/g,"\\'")}',${points})">${opt}</button>`;
+  });
+  htmlContent+=`</div><div class="quiz-feedback" id="modalFb"></div>`;
+  body.innerHTML=htmlContent;
+  document.getElementById('wheelModal').classList.add('active');
+}
+function modalAnswer(btn,correct,points){
+  const parent=btn.parentElement.parentElement;
+  if(parent.dataset.answered)return;
+  parent.dataset.answered='1';
+  const isCorrect=btn.textContent===correct;
+  btn.classList.add(isCorrect?'correct':'wrong');
+  if(!isCorrect){ [...parent.querySelectorAll('.opt-btn')].forEach(ch=>{if(ch.textContent===correct)ch.classList.add('correct');}); }
+  parent.querySelector('#modalFb').innerHTML=isCorrect?`<span style="color:var(--success)">Верно! +${points} балл(а)</span>`:`<span style="color:var(--danger)">Неверно.</span>`;
+  if(isCorrect)updateScore(points);
+}
+function closeModal(){document.getElementById('wheelModal').classList.remove('active');}
+
+/* ================= ИНИЦИАЛИЗАЦИЯ ================= */
+initSort();
+preparePrint();
+</script>
+
+
+```</body></html>

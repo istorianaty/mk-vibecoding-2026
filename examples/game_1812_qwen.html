@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Мини-викторина: 1812 г.</title>
+<style>
+  :root {
+    --gold: #d8b45a;
+    --panel: rgba(255, 255, 255, .055);
+    --text: #f6f1e7;
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    height: 100%;
+  }
+
+  body {
+    margin: 0;
+    font-family: Georgia, "Times New Roman", serif;
+    color: var(--text);
+    background:
+      radial-gradient(circle at top, #243252 0%, #151b28 52%, #0f131d 100%);
+  }
+
+  button {
+    font: inherit;
+    cursor: pointer;
+  }
+
+  [hidden] {
+    display: none !important;
+  }
+
+  .screen {
+    display: none;
+    min-height: 100vh;
+    padding: 20px;
+    flex-direction: column;
+  }
+
+  .screen.active {
+    display: flex;
+  }
+
+  #splash {
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .hero {
+    width: min(92vw, 820px);
+    padding: 36px 28px;
+    border: 3px double var(--gold);
+    border-radius: 24px;
+    background: var(--panel);
+    box-shadow: 0 18px 50px rgba(0, 0, 0, .35);
+  }
+
+  h1 {
+    margin: 0 0 10px;
+    font-size: clamp(2.6rem, 7vw, 5.2rem);
+    color: #eccb72;
+  }
+
+  .subtitle {
+    margin: 0 0 24px;
+    font-size: clamp(1.1rem, 2.4vw, 1.5rem);
+    color: #efe5cf;
+  }
+
+  .big-btn {
+    padding: 14px 32px;
+    font-size: 1.35rem;
+    border: 2px solid var(--gold);
+    border-radius: 14px;
+    background: #24304d;
+    color: #fff;
+  }
+
+  .big-btn:hover {
+    background: #2f3f66;
+  }
+
+  .subtle-btn {
+    padding: 9px 14px;
+    border: 1px solid rgba(255, 255, 255, .35);
+    border-radius: 10px;
+    background: rgba(255, 255, 255, .06);
+    color: var(--text);
+  }
+
+  .subtle-btn:hover,
+  .big-btn:hover {
+    filter: brightness(1.12);
+  }
+
+  .topbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 18px;
+    padding: 12px 14px;
+    border: 1px solid rgba(216, 180, 90, .4);
+    border-radius: 16px;
+    background: rgba(255, 255, 255, .045);
+  }
+
+  .scoreboard {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .team-chip {
+    padding: 7px 11px;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, .2);
+    background: rgba(255, 255, 255, .07);
+    font-weight: bold;
+  }
+
+  .controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .board {
+    flex: 1;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(280px, 1fr));
+    gap: 18px;
+    align-content: start;
+  }
+
+  @media (max-width: 760px) {
+    .board {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .cat-card {
+    border: 2px solid rgba(216, 180, 90, .55);
+    border-radius: 18px;
+    padding: 16px;
+    background: var(--panel);
+  }
+
+  .cat-card h2 {
+    margin: 0 0 14px;
+    text-align: center;
+    font-size: 1.55rem;
+    color: #eccb72;
+  }
+
+  .points {
+    display: grid;
+    gap: 10px;
+  }
+
+  .point-btn {
+    width: 100%;
+    padding: 17px 10px;
+    font-size: 1.55rem;
+    font-weight: bold;
+    border: 2px solid var(--gold);
+    border-radius: 14px;
+    background: #22304f;
+    color: #fff;
+  }
+
+  .point-btn:hover:not(:disabled) {
+    background: #2e3f67;
+  }
+
+  .point-btn.done {
+    opacity: .35;
+    text-decoration: line-through;
+    cursor: not-allowed;
+  }
+
+  .question-wrap {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 22px;
+    padding: 10px 0 20px;
+  }
+
+  .meta {
+    font-size: 1.05rem;
+    letter-spacing: .07em;
+    text-transform: uppercase;
+    color: #e4bf67;
+  }
+
+  #qText {
+    margin: 0;
+    width: min(96vw, 1100px);
+    font-size: clamp(2rem, 4.7vw, 4.2rem);
+    line-height: 1.18;
+  }
+
+  .answer-box {
+    width: min(94vw, 1000px);
+    padding: 22px;
+    border: 2px solid rgba(216, 180, 90, .55);
+    border-radius: 20px;
+    background: rgba(255, 255, 255, .055);
+  }
+
+  #answerText {
+    margin: 0 0 18px;
+    font-size: clamp(2.1rem, 5.2vw, 4.8rem);
+    font-weight: bold;
+    color: #fff8e0;
+    line-height: 1.15;
+  }
+
+  .team-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+  }
+
+  .team-btn {
+    padding: 12px 18px;
+    font-size: 1.08rem;
+    border-radius: 12px;
+    border: 2px solid #8fb7ff;
+    background: #1d2e52;
+    color: #fff;
+  }
+
+  .team-btn.none {
+    border-color: #b8b8b8;
+    background: #39404d;
+  }
+
+  .team-btn:hover {
+    filter: brightness(1.16);
+  }
+
+  #resultText {
+    margin: 0 0 16px;
+    font-size: 1.35rem;
+    font-weight: bold;
+  }
+
+  .final-wrap {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .final-card {
+    width: min(94vw, 860px);
+    padding: 30px 24px;
+    text-align: center;
+    border: 3px double var(--gold);
+    border-radius: 24px;
+    background: var(--panel);
+  }
+
+  .final-card h2 {
+    margin: 0 0 18px;
+    font-size: clamp(2.2rem, 5vw, 3.8rem);
+    color: #eccb72;
+  }
+
+  .final-list {
+    font-size: 1.55rem;
+    line-height: 1.75;
+    margin-bottom: 18px;
+  }
+
+  .final-winner {
+    margin: 0 0 22px;
+    font-size: 1.75rem;
+    font-weight: bold;
+    color: #ffe49a;
+  }
+
+  .center {
+    justify-content: center;
+  }
+</style>
+</head>
+<body>
+
+<section id="splash" class="screen active">
+  <div class="hero">
+    <h1>1812 г.</h1>
+    <p class="subtitle">Историческая мини-викторина для команд</p>
+    <button id="startBtn" class="big-btn" type="button">Начать</button>
+  </div>
+</section>
+
+<section id="board" class="screen">
+  <div class="topbar">
+    <div class="scoreboard" aria-label="Счёт">
+      <span class="team-chip">Команда 1: <b data-team-score="0">0</b></span>
+      <span class="team-chip">Команда 2: <b data-team-score="1">0</b></span>
+      <span class="team-chip">Команда 3: <b data-team-score="2">0</b></span>
+    </div>
+    <div class="controls">
+      <button id="showFinalBtn" class="subtle-btn" type="button">Итог</button>
+      <button id="resetBoardBtn" class="subtle-btn" type="button">Играть заново</button>
+    </div>
+  </div>
+
+  <main id="categories" class="board"></main>
+</section>
+
+<section id="question" class="screen">
+  <div class="topbar">
+    <div id="qMeta" class="meta"></div>
+    <div class="scoreboard" aria-label="Счёт">
+      <span class="team-chip">Команда 1: <b data-team-score="0">0</b></span>
+      <span class="team-chip">Команда 2: <b data-team-score="1">0</b></span>
+      <span class="team-chip">Команда 3: <b data-team-score="2">0</b></span>
+    </div>
+  </div>
+
+  <main class="question-wrap">
+    <p id="qText"></p>
+
+    <button id="showAnswerBtn" class="big-btn" type="button">Показать ответ</button>
+    <button id="exitBtn" class="subtle-btn" type="button">Вернуться к полю</button>
+
+    <div id="answerBlock" class="answer-box" hidden>
+      <p id="answerText"></p>
+
+      <div id="teamPanel" class="team-buttons" hidden>
+        <button class="team-btn" type="button" data-team="0">Команда 1</button>
+        <button class="team-btn" type="button" data-team="1">Команда 2</button>
+        <button class="team-btn" type="button" data-team="2">Команда 3</button>
+        <button class="team-btn none" type="button" data-team="none">Никто</button>
+      </div>
+
+      <div id="resultBlock" hidden>
+        <p id="resultText"></p>
+        <button id="returnBtn" class="big-btn" type="button">К полю</button>
+      </div>
+    </div>
+  </main>
+</section>
+
+<section id="final" class="screen">
+  <div class="final-wrap">
+    <div class="final-card">
+      <h2>Итог</h2>
+      <div id="finalList" class="final-list"></div>
+      <p id="finalWinner" class="final-winner"></p>
+      <div class="controls center">
+        <button id="backFromFinalBtn" class="big-btn" type="button">К полю</button>
+        <button id="resetFinalBtn" class="big-btn" type="button">Играть заново</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  const QUESTIONS = [
+    {
+      id: "p100",
+      category: "Личности",
+      points: 100,
+      text: "Кто возглавлял французскую армию в походе 1812 г.?",
+      a: "трапаноБ ноелопаН"
+    },
+    {
+      id: "p200",
+      category: "Личности",
+      points: 200,
+      text: "Кто был императором Российской империи в период войны 1812 г.?",
+      a: "I рднскелА"
+    },
+    {
+      id: "p300",
+      category: "Личности",
+      points: 300,
+      text: "Кто командовал 2-й Западной армией?",
+      a: "ноитаргаБ ртеП"
+    },
+    {
+      id: "s100",
+      category: "Сражения и события",
+      points: 100,
+      text: "На какие земли, входившие тогда в состав Российской империи, летом 1812 г. вступили войска Наполеона?",
+      a: "илмез еикссуролеб"
+    },
+    {
+      id: "s200",
+      category: "Сражения и события",
+      points: 200,
+      text: "Под каким населённым пунктом русские войска под командованием Александра Тормасова одержали победу?",
+      a: "нирбоК"
+    },
+    {
+      id: "s300",
+      category: "Сражения и события",
+      points: 300,
+      text: "В каком сражении, согласно карточке, русскими войсками командовал Пётр Витгенштейн?",
+      a: "имацитсялК доП"
+    }
+  ];
+
+  let scores = [0, 0, 0];
+  let answered = new Set();
+  let currentId = null;
+
+  function $(selector) {
+    return document.querySelector(selector);
+  }
+
+  function $$(selector) {
+    return Array.prototype.slice.call(document.querySelectorAll(selector));
+  }
+
+  function reverseString(value) {
+    return value.split("").reverse().join("");
+  }
+
+  function getQuestion(id) {
+    return QUESTIONS.find(function (item) {
+      return item.id === id;
+    });
+  }
+
+  function showScreen(id) {
+    $$(".screen").forEach(function (screen) {
+      screen.classList.toggle("active", screen.id === id);
+    });
+  }
+
+  function updateScoreDisplays() {
+    $$("[data-team-score]").forEach(function (node) {
+      const teamIndex = Number(node.dataset.teamScore);
+      node.textContent = scores[teamIndex];
+    });
+  }
+
+  function renderBoard() {
+    const wrap = $("#categories");
+    wrap.innerHTML = "";
+
+    const categories = QUESTIONS.map(function (q) {
+      return q.category;
+    }).filter(function (value, index, self) {
+      return self.indexOf(value) === index;
+    });
+
+    categories.forEach(function (category) {
+      const card = document.createElement("section");
+      card.className = "cat-card";
+
+      const title = document.createElement("h2");
+      title.textContent = category;
+      card.appendChild(title);
+
+      const grid = document.createElement("div");
+      grid.className = "points";
+
+      QUESTIONS
+        .filter(function (q) {
+          return q.category === category;
+        })
+        .sort(function (a, b) {
+          return a.points - b.points;
+        })
+        .forEach(function (q) {
+          const btn = document.createElement("button");
+          btn.type = "button";
+          btn.className = "point-btn";
+          btn.textContent = q.points;
+
+          if (answered.has(q.id)) {
+            btn.disabled = true;
+            btn.classList.add("done");
+            btn.setAttribute("aria-disabled", "true");
+          } else {
+            btn.addEventListener("click", function () {
+              openQuestion(q.id);
+            });
+          }
+
+          grid.appendChild(btn);
+        });
+
+      card.appendChild(grid);
+      wrap.appendChild(card);
+    });
+
+    updateScoreDisplays();
+  }
+
+  function openQuestion(id) {
+    const q = getQuestion(id);
+    if (!q || answered.has(id)) {
+      return;
+    }
+
+    currentId = id;
+
+    $("#qMeta").textContent = q.category + " · " + q.points + " баллов";
+    $("#qText").textContent = q.text;
+
+    $("#showAnswerBtn").hidden = false;
+    $("#exitBtn").hidden = false;
+    $("#answerBlock").hidden = true;
+    $("#teamPanel").hidden = true;
+    $("#resultBlock").hidden = true;
+    $("#answerText").textContent = "";
+    $("#resultText").textContent = "";
+
+    showScreen("question");
+  }
+
+  function showAnswer() {
+    const q = getQuestion(currentId);
+    if (!q) {
+      return;
+    }
+
+    $("#answerText").textContent = reverseString(q.a);
+    $("#showAnswerBtn").hidden = true;
+    $("#exitBtn").hidden = true;
+    $("#answerBlock").hidden = false;
+    $("#teamPanel").hidden = false;
+    $("#resultBlock").hidden = true;
+  }
+
+  function chooseTeam(teamIndex) {
+    const q = getQuestion(currentId);
+    if (!q || answered.has(currentId)) {
+      return;
+    }
+
+    if (teamIndex === null) {
+      $("#resultText").textContent = "Баллы не добавлены.";
+    } else {
+      scores[teamIndex] += q.points;
+      $("#resultText").textContent =
+        "+" + q.points + " команде " + (teamIndex + 1) + ".";
+    }
+
+    answered.add(currentId);
+    updateScoreDisplays();
+
+    $("#teamPanel").hidden = true;
+    $("#resultBlock").hidden = false;
+  }
+
+  function returnToBoard() {
+    currentId = null;
+    renderBoard();
+
+    if (answered.size === QUESTIONS.length) {
+      showFinal();
+    } else {
+      showScreen("board");
+    }
+  }
+
+  function showFinal() {
+    const list = $("#finalList");
+    list.textContent = "";
+
+    scores.forEach(function (score, index) {
+      const row = document.createElement("div");
+      row.textContent = "Команда " + (index + 1) + ": " + score;
+      list.appendChild(row);
+    });
+
+    const max = Math.max.apply(null, scores);
+    const winners = [];
+
+    scores.forEach(function (score, index) {
+      if (score === max) {
+        winners.push(index);
+      }
+    });
+
+    let winnerText = "";
+
+    if (max === 0) {
+      winnerText = "Баллы пока не набраны.";
+    } else if (winners.length === 1) {
+      winnerText = "Побеждает Команда " + (winners[0] + 1) + "!";
+    } else {
+      winnerText = "Ничья между командами: " +
+        winners.map(function (index) {
+          return "Команда " + (index + 1);
+        }).join(", ") + ".";
+    }
+
+    $("#finalWinner").textContent = winnerText;
+    showScreen("final");
+  }
+
+  function resetGame() {
+    scores = [0, 0, 0];
+    answered.clear();
+    currentId = null;
+
+    updateScoreDisplays();
+    renderBoard();
+    showScreen("board");
+  }
+
+  $("#startBtn").addEventListener("click", function () {
+    resetGame();
+  });
+
+  $("#resetBoardBtn").addEventListener("click", function () {
+    resetGame();
+  });
+
+  $("#showFinalBtn").addEventListener("click", function () {
+    showFinal();
+  });
+
+  $("#showAnswerBtn").addEventListener("click", function () {
+    showAnswer();
+  });
+
+  $("#exitBtn").addEventListener("click", function () {
+    returnToBoard();
+  });
+
+  $("#returnBtn").addEventListener("click", function () {
+    returnToBoard();
+  });
+
+  $$("#teamPanel .team-btn").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      const value = btn.dataset.team;
+      chooseTeam(value === "none" ? null : Number(value));
+    });
+  });
+
+  $("#backFromFinalBtn").addEventListener("click", function () {
+    showScreen("board");
+  });
+
+  $("#resetFinalBtn").addEventListener("click", function () {
+    resetGame();
+  });
+
+  renderBoard();
+  updateScoreDisplays();
+</script>
+</body>
+</html>
